@@ -22,7 +22,7 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.AppButton
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 
 @Composable
-fun LocalTimeCardView() {
+fun LocalTimeView() {
     AppCard(
         modifier = Modifier
             .fillMaxWidth()
@@ -109,5 +109,5 @@ fun SendTimeButton(modifier: Modifier = Modifier, text: String) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewLocalTimeCard() {
-    LocalTimeCardView()
+    LocalTimeView()
 }

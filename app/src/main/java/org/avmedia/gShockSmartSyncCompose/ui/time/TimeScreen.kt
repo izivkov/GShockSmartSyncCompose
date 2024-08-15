@@ -26,9 +26,13 @@ fun TimeScreen(navController: NavController) {
             {
                 ScreenTitle(stringResource(id = R.string.time))
 
-                ItemList(listOf(
-                    LocalTimeCardView(),
-                    ))
+                ItemList(
+                    listOf(
+                        LocalTimeView(),
+                        TimerView(modifier = Modifier, onSendClick = { println("Timer Clicked") }),
+                        WatchNameView(Modifier, "Casio GW-5600")
+                    )
+                )
             }
         }
     }
