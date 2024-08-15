@@ -1,0 +1,156 @@
+<resources>
+    <string name="app_name" translatable="false">Casio G-Shock Smart Sync Compose</string>
+    <string name="title_time">Time</string>
+    <string name="title_alarms">Alarms</string>
+    <string name="title_events">Events</string>
+    <string name="title_settings">Settings</string>
+    <string name="events">Events</string>
+    <string name="alarms">Alarms</string>
+    <string name="time">Time</string>
+    <string name="send_alarms_to_watch">Send to\n Watch</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
+    <string name="send_alarms_to_phone">Send to\nPhone</string>
+    <string name="send_events_to_watch">Send to Watch\n Reminders</string>
+    <string name="connection_screen_info"><![CDATA[To proceed to the next screen, press and hold the <b>LOWER-LEFT</b> button on the watch for 3 seconds.
+    After the second double-beep, the app will display the time-setting screen.
+    <p><b>Make sure the official Casio app is not running, as it will interfere with this app.</b></p>
+    <p>To run Actions defined in the <b>Actions</b> screen, short-press the <b>LOWER-RIGHT</b> button. Actions are apps on your phone, like <b>Take a photo</b>.
+    Using actions, the watch acts like a remote control for your phone.</p>]]>
+    </string>
+    <string name="alarms_screen_info"><![CDATA[The <b>B5600/B5000/B2100</b> watches have 5 alarms and a "signal" (hourly chime) settings shown here.
+    The alarms can be updated by pressing on the time value of each alarm. A new dialog will appear, which allows you to set the alarm\'s time.
+    Once the alarms have been set, you can send them to the watch, or send them to the Alarm Clock app on the phone.]]></string>
+    <string name="events_screen_info"><![CDATA[This screen displays Events from your <b>Google Calendar</b> and allows you to send them to the watch\'s
+    <b>reminders</b>.\n\nIf no events appear, make sure you have future events, or non-expired repeating events in your Google calendar.]]>
+</string>
+    <string name="actions">Actions</string>
+    <string name="title_actions">Actions</string>
+    <string name="actions_screen_info"><![CDATA[The selected actions are run when the user <b>short-presses</b> the <b>LOWER-RIGHT</b> watch button from the initial screen. With these actions, the watch acts as a remote control for your phone.]]></string>
+    <string name="feb_22_mar_24">Feb-22 - Mar-24</string>
+    <string name="weekly">WEEKLY</string>
+    <string name="action_item">Action Item</string>
+    <string name="voice_assistant">Voice Assistant</string>
+    <string name="front_cam">Front Cam</string>
+    <string name="back_cam">Back Cam</string>
+    <string name="take_a_photo">Take a photo</string>
+    <string name="info">Info</string>
+    <string name="daily">Daily</string>
+    <string name="_12_00">12:00</string>
+    <string name="email_item">Email Item</string>
+    <string name="email_example_com">me@example.com</string>
+    <string name="watch_alarms">Watch Alarms</string>
+    <string name="signal_chime">Signal (chime)</string>
+    <string name="google_calendar_events">Google Calendar Events</string>
+    <string name="local_time">Local Time</string>
+    <string name="send_to_watch">Send to Watch</string>
+    <string name="_416_555_6789">416–555–6789</string>
+    <string name="phonecall_item">PhoneCall Item</string>
+    <string name="home_time">Home Time</string>
+    <string name="running_actions">Running Actions</string>
+    <string name="title_placeholder">Title Placeholder</string>
+    <string name="settings">Settings</string>
+    <string name="send_to_watch_settings">Send to\nWatch</string>
+    <string name="auto_configure_settings">Auto Fill\nValues</string>
+    <string name="time_format">Time Format</string>
+    <string name="_12h">12h</string>
+    <string name="_24h">24h</string>
+    <string name="date_format">Date Format</string>
+    <string name="language">Language</string>
+    <string name="operational_sound">Button Operation Tone</string>
+    <string name="power_saving_mode">Power Saving Mode</string>
+    <string name="select_language">Select Language</string>
+    <string name="auto_fill_help"><![CDATA[The auto-fill values are derived as follows:
+        <li>Time/Date format and Language, are obtained from the Phone\'s setting.</li>
+        <li>Button tone is turned OFF if the phone is in DnD mode, ON otherwise.</li>
+        <li>Power Saving will be set to ON if the battery\'s level is at 15% or less.</li>
+        Note: <i>The values will not change until sent again, even if the conditions change (i.e DnD is turned ON/OFF)</i>
+        ]]>
+    </string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="timerDialogTitle">Timer</string>
+    <string name="info_home_time">
+        <![CDATA[<b>Home Time</b> shows the watch\'s time zone.
+        When the app sets the watch\'s time (either manually or automatically), it will also set the <b>Home Time,
+        Time Offset</b> and <b>DST</b> (if applicable) to the current time zone. So there is no need for swapping your <b>World Time</b> and <b>Home Time</b>
+        when travelling to another timezone.]]>
+    </string>
+    <string name="time_adjustment_info" ><![CDATA[
+    <li><b>Time Adjustment</b> setting enables the App to automatically update the watch\'s time 4 times per day.</li>
+    <li>At the same time, the App will update the watch\'s <b>Reminders (Events)</b> from your <b>Google Calendar</b> if the <b>Set Reminders from Google Calendar</b> action is enabled</li>
+    ]]></string>
+    <string name="image_of_casio_watch">Casio Watch</string>
+    <string name="connection_screen_device"> <![CDATA[
+        <li>By default, the app will try to connect to a previously connected watch. If you like to connect to a different watch,
+        press the <b>FORGET</b> button, and then connect the new watch as usual. From then on, the app will try to connect
+        to this new watch.</li>
+
+        <li>The app will auto-detect the model of the watch.</li>
+        ]]></string>
+    <string name="forget">Forget</string>
+    <string name="hand_adjustment">Hand Adjustment</string>
+    <string name="move_hand_to_the_left">Move hand to the Left</string>
+    <string name="reset_hand_at_12_position">Reset hand at 12 position</string>
+    <string name="move_hand_to_the_right">Move hand to the Right</string>
+    <string name="auto_light">Auto Light</string>
+    <string name="off">Off</string>
+    <string name="on">On</string>
+    <string name="illumination_period">Illumination Period</string>
+    <string name="mm_dd">MM:DD</string>
+    <string name="dd_mm">DD:MM</string>
+    <string name="time_adjustment">Time Adjustment</string>
+    <string name="notify_me">Notify me</string>
+    <string name="timer">Timer</string>
+    <string name="_00_00_00">00:00:00</string>
+    <string name="_00">00</string>
+    <string name="semi_column">:</string>
+    <string name="no_watch">No Watch</string>
+    <string name="set_time">Set Time</string>
+    <string name="find_phone">Find Phone</string>
+    <string name="set_reminders">Set Reminders from Google Calendar</string>
+    <string name="take_photo">Take a photo</string>
+    <string name="toggle_flashlight">Toggle Flashlight</string>
+    <string name="start_voice_assistant">Start Voice Assist</string>
+    <string name="next_track">Skip to next track</string>
+    <string name="emergency_actions">Emergency Actions:</string>
+    <string name="make_phonecall">Make a phone call</string>
+    <string name="adjustment_time_info"><![CDATA[
+        <li>Automatic time adjustment occurs 4 times per day, sometime after the hours of 12:00AM, 6:00AM, 12:00PM and 6:00PM.</li>
+        <li>This setting sets the number of minutes after the hour when time adjustment occurs. So if you set this value to 25, time adjustment will happen at 12:25AM, 6:25AM, 12:25PM and 6:25PM.</li>
+        <li>If you have multiple watches, you can control when to set their time individually.</li>
+        ]]></string>
+    <string name="adjustment_time_minutes">When to run\n(minutes after hour)</string>
+    <string name="skip_to_next_track_info"><![CDATA[
+        If you are playing music or a video in a media player such as Spotify, YouTube, or YTMusic on your phone, this action will skip to the next song or video.
+        It also works with Android Auto
+        ]]></string>
+    <string name="set_prayer_alarms">Set Prayer Alarms</string>
+    <string name="prayer_times_info"><![CDATA[
+        <li>This action will set the 5 alarms on the watch to the Muslim prayers <b>Fajr</b>, <b>Dhuhr</b>, <b>Asr</b>, <b>Maghrib</b>, and <b>Isha</b> times.</li>
+        <li>The times vary based on your location and current date, so for best accuracy, run this action daily.
+        If this action is enabled, the alarms will also be automatically updated during the auto-time adjustment, 4 times per day.</li>
+        <li>The following calculation methods are used, based on your location:
+            <b>NORTH AMERICA</b>,
+            <b>DİYANET</b>,
+            <b>EGYPTIAN</b>,
+            <b>DUBAI</b>,
+            <b>UMM AL QURA</b>,
+            <b>QATAR</b>,
+            <b>SINGAPORE</b>,
+            <b>KUWAIT</b> and
+            <b>MUSLIM WORLD LEAGUE</b> everywhere else.
+        </li>
+        <li>For suggestions and corrections contact <a href="mailto:izivkov@gmail.com">izivkov@gmail.com</a></li>
+    ]]></string>
+    <string name="do_not_disturb_dnd">Do Not Disturb (DnD)</string>
+    <string name="mirror_phone_s_dnd">Mirror Phone\'s DnD</string>
+    <string name="DnD_info_message"><![CDATA[
+    When selected, all alarms, timers, hourly chimes on the watch will be silenced.
+    <li>When manually turning ON/OFF, the DnD will take effect after the <b>Send to Watch</b> button is pressed.<\li>
+    <li>When mirroring, it will take effect immediately upon changing the DnD setting on the phone, no matter what screen you are in currently.<\li>
+    ]]></string>
+    <string name="auto_light_at_night_only">Auto-light at night only</string>
+    <string name="keep_alive">Keep Alive (uses more battery)</string>
+</resources>
+
