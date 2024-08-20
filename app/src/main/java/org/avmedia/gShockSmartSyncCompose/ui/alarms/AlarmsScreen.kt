@@ -5,10 +5,7 @@ import android.annotation.SuppressLint
 import android.icu.text.SimpleDateFormat
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -106,22 +103,11 @@ fun AlarmsScreen(navController: NavController) {
                         .fillMaxSize(),
                     verticalArrangement = Arrangement.Bottom,
                 ) {
-                    ButtonsRow(
-                        modifier = Modifier
-                            .padding(4.dp),
-                        onSendAlarmsToPhoneClick = {
-                            // Handle send alarms to phone button click
-                            println("Send alarms to phone clicked")
-                        },
-                        onSendAlarmsToWatchClick = {
-                            // Handle send alarms to watch button click
-                            println("Send alarms to watch clicked")
-                        },
-                        onInfoClick = {
-                            // Handle info button click
-                            println("Info button clicked")
-                        }
+                    val buttons = arrayListOf(ButtonData(text = stringResource(id = R.string.send_alarms_to_phone), onClick = { println("Send alarms to phone clicked") }),
+                    ButtonData(text = stringResource(id = R.string.send_alarms_to_watch), onClick = { println("Send alarms to watch clicked") })
                     )
+
+                    ButtonsRow(buttons = buttons)
                 }
             }
         }
