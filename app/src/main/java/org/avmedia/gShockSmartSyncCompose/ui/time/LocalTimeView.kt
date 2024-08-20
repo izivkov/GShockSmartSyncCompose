@@ -1,13 +1,17 @@
 package org.avmedia.gShockSmartSyncCompose.ui.time
 
 import AppText
+import AppTextExtraLarge
+import AppTextLarge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,36 +26,33 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.AppButton
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 
 @Composable
-fun LocalTimeView() {
+fun LocalTimeView(modifier: Modifier) {
     AppCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 0.dp), // Adjust padding as needed
+        modifier = modifier
     ) {
         Row(
-            modifier = Modifier.padding(12.dp),
+            modifier = Modifier.padding(vertical = 20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // First Column: Local Time and TimeZoneTextView
             Column(
                 modifier = Modifier
-                    .weight(2f)
-                    .padding(12.dp)
+                    .weight(1.5f)
+                    .padding(6.dp)
             ) {
-                AppText(
+                AppTextLarge(
+                    modifier = Modifier.padding(start = 6.dp),
                     text = stringResource(id = R.string.local_time),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontSize = 20.sp
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 TextClockComposable(
-                    modifier = Modifier.align(Alignment.Start),
-                    fontSize = 34.sp
+                    modifier = Modifier.align(Alignment.Start)
                 )
 
                 Box {
                     TimeZoneTextView(
-                        modifier = Modifier.align(Alignment.CenterStart),
+                        modifier = Modifier.align(Alignment.CenterStart).padding(start = 6.dp),
                         textSize = 16.sp
                     )
                 }
@@ -77,13 +78,12 @@ fun LocalTimeView() {
 }
 
 @Composable
-fun TextClockComposable(modifier: Modifier = Modifier, fontSize: TextUnit) {
+fun TextClockComposable(modifier: Modifier = Modifier) {
     // Custom implementation for TextClock
     // This is where you might implement a Composable that mimics the TextClock's behavior
     // using remember, LaunchedEffect, etc., to keep time updated.
-    AppText(
+    AppTextExtraLarge(
         text = "12:00:00 PM", // Placeholder, replace with actual clock logic
-        fontSize = fontSize,
         modifier = modifier
     )
 }
@@ -109,5 +109,10 @@ fun SendTimeButton(modifier: Modifier = Modifier, text: String) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewLocalTimeCard() {
-    LocalTimeView()
+    LocalTimeView(
+        Modifier
+            .wrapContentHeight()
+            .fillMaxWidth()
+            .padding(vertical = 0.dp) // Adjust padding as needed
+    )
 }

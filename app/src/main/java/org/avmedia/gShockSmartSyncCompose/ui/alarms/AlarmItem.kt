@@ -2,6 +2,7 @@ package org.avmedia.gShockSmartSyncCompose.ui.alarms
 
 import AppSwitch
 import AppText
+import AppTextExtraLarge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,7 +37,7 @@ fun AlarmItem(
     AppCard(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(0.dp),
+            .padding(0.dp)
     ) {
         Row(
             modifier = Modifier
@@ -51,9 +52,8 @@ fun AlarmItem(
                     .padding(end = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                AppText(
+                AppTextExtraLarge(
                     text = time,
-                    fontSize = 34.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier

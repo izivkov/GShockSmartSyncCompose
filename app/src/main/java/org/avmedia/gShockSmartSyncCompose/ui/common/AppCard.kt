@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 fun AppCard(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    padding: Dp = 0.dp,
+    padding: Dp = 2.dp,
     onClick: (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {

@@ -15,7 +15,7 @@ fun ScreenContainer(
 ) {
     Column(
         modifier = Modifier
-            .padding(4.dp)
+            .padding(0.dp)
             .fillMaxSize(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.End,

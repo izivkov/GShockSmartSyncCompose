@@ -1,5 +1,6 @@
 package org.avmedia.gShockSmartSyncCompose
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,9 +11,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
+import org.avmedia.gshockapi.GShockAPI
 
 class MainActivity : ComponentActivity() {
+    private val api = GShockAPI(this)
+
+    init {
+        instance = this
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -22,6 +32,19 @@ class MainActivity : ComponentActivity() {
                   BottomNavigationBar()
                 }
             }
+        }
+    }
+    companion object {
+
+        private var instance: MainActivity? = null
+
+        // Make context available from anywhere in the code (not yet used).
+        fun applicationContext(): Context {
+            return instance!!.applicationContext
+        }
+
+        fun api(): GShockAPI {
+            return instance!!.api
         }
     }
 }

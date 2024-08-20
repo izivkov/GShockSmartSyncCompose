@@ -3,6 +3,7 @@ package org.avmedia.gShockSmartSyncCompose.ui.alarms
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -23,33 +24,36 @@ fun ButtonsRow(
     onSendAlarmsToWatchClick: () -> Unit,
     onInfoClick: () -> Unit
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(5.dp),
-        horizontalArrangement = Arrangement.spacedBy(5.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        AppButton(
-            text = stringResource(id = R.string.send_alarms_to_phone),
-            onClick = onSendAlarmsToPhoneClick,
-            modifier = Modifier
-                .weight(1f)
+    Box(modifier = Modifier.fillMaxSize()) {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
                 .padding(5.dp)
-        )
+                .align(Alignment.BottomCenter),
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            AppButton(
+                text = stringResource(id = R.string.send_alarms_to_phone),
+                onClick = onSendAlarmsToPhoneClick,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(5.dp)
+            )
 
-        AppButton(
-            text = stringResource(id = R.string.send_alarms_to_watch),
-            onClick = onSendAlarmsToWatchClick,
-            modifier = Modifier
-                .weight(1f)
-                .padding(0.dp)
-        )
+            AppButton(
+                text = stringResource(id = R.string.send_alarms_to_watch),
+                onClick = onSendAlarmsToWatchClick,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(0.dp)
+            )
 
-        InfoButton(
-            infoText = stringResource(id = R.string.alarms_screen_info),
-        )
-        Box(modifier = Modifier.width(16.dp))
+            InfoButton(
+                infoText = stringResource(id = R.string.alarms_screen_info),
+            )
+            Box(modifier = Modifier.width(16.dp))
+        }
     }
 }
 
