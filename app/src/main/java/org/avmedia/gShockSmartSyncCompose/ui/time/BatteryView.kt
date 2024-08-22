@@ -2,8 +2,6 @@ package org.avmedia.gShockSmartSyncCompose.ui.time
 
 import android.graphics.Bitmap
 import android.graphics.RectF
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size

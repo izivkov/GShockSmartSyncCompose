@@ -85,8 +85,7 @@ fun WatchInfoView(modifier: Modifier) {
                     verticalArrangement = Arrangement.SpaceBetween, // Space between the Row and HomeTime
                     horizontalAlignment = Alignment.CenterHorizontally // Center content horizontally
                 ) {
-                    Row(
-                    ) {
+                    Row {
                         BatteryView(
                             modifier = Modifier
                                 .size(90.dp)

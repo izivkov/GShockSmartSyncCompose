@@ -1,10 +1,10 @@
 package org.avmedia.gShockSmartSyncCompose
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.DirectionsRun
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.icons.filled.DirectionsRun
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
@@ -18,14 +18,9 @@ data class BottomNavigationItem(
     @Composable
     fun bottomNavigationItems(): List<BottomNavigationItem> {
 
-//        val imageVector: ImageVector = ImageVector.vectorResource(id = R.drawable.ic_actions)
-//        val actionIcon = Image(imageVector = imageVector, contentDescription = "Actions")
-
         return listOf(
             BottomNavigationItem(
                 label = "Time",
-                // icon = Icons.Filled.Home,
-                // icon = { Icon(painterResource(id = R.drawable.time), contentDescription = "Time") },
                 icon = Icons.Filled.AccessTime,
                 route = Screens.Time.route
             ),
@@ -41,7 +36,7 @@ data class BottomNavigationItem(
             ),
             BottomNavigationItem(
                 label = "Actions",
-                icon =  Icons.Filled.DirectionsRun,
+                icon =  Icons.AutoMirrored.Filled.DirectionsRun,
                 route = Screens.Actions.route
             ),
             BottomNavigationItem(

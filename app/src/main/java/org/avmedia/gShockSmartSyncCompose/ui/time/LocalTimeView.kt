@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
@@ -52,7 +51,9 @@ fun LocalTimeView(modifier: Modifier) {
 
                 Box {
                     TimeZoneTextView(
-                        modifier = Modifier.align(Alignment.CenterStart).padding(start = 6.dp),
+                        modifier = Modifier
+                            .align(Alignment.CenterStart)
+                            .padding(start = 6.dp),
                         textSize = 16.sp
                     )
                 }

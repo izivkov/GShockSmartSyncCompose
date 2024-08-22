@@ -1,9 +1,7 @@
 package org.avmedia.gShockSmartSyncCompose.ui.time
 
-import AppText
 import AppTextExtraLarge
 import AppTextLarge
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppButton
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
@@ -30,11 +27,12 @@ fun TimerView(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            //.clickable { /* Handle click if needed */ }
+        //.clickable { /* Handle click if needed */ }
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth().padding(vertical = 14.dp),
+                .fillMaxWidth()
+                .padding(vertical = 14.dp),
 
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -42,7 +40,7 @@ fun TimerView(
                 modifier = Modifier
                     .weight(1.5f)
                     .padding(horizontal = 12.dp),
-            verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center
             ) {
                 AppTextLarge(
                     text = stringResource(R.string.timer),

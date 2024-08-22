@@ -103,8 +103,13 @@ fun AlarmsScreen(navController: NavController) {
                         .fillMaxSize(),
                     verticalArrangement = Arrangement.Bottom,
                 ) {
-                    val buttons = arrayListOf(ButtonData(text = stringResource(id = R.string.send_alarms_to_phone), onClick = { println("Send alarms to phone clicked") }),
-                    ButtonData(text = stringResource(id = R.string.send_alarms_to_watch), onClick = { println("Send alarms to watch clicked") })
+                    val buttons = arrayListOf(
+                        ButtonData(
+                            text = stringResource(id = R.string.send_alarms_to_phone),
+                            onClick = { println("Send alarms to phone clicked") }),
+                        ButtonData(
+                            text = stringResource(id = R.string.send_alarms_to_watch),
+                            onClick = { println("Send alarms to watch clicked") })
                     )
 
                     ButtonsRow(buttons = buttons)

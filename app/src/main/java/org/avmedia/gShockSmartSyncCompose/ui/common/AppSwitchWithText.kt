@@ -31,7 +31,8 @@ fun AppSwitchWithText(
             text = text,
             style = MaterialTheme.typography.bodyMedium,
             fontSize = 22.sp,
-            modifier = Modifier.padding(end = 4.dp)
+            modifier = Modifier
+                .padding(end = 4.dp)
                 .wrapContentWidth()
         )
         AppSwitch(
