@@ -1,4 +1,4 @@
-package org.avmedia.gShockSmartSyncCompose.ui.alarms
+package org.avmedia.gShockSmartSyncCompose.ui.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,7 +13,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.avmedia.gShockSmartSyncCompose.R
-import org.avmedia.gShockSmartSyncCompose.ui.common.AppButton
 
 data class ButtonData(val text: String, val onClick: () -> Unit)
 
@@ -25,8 +24,8 @@ fun ButtonsRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(5.dp),
-        horizontalArrangement = Arrangement.spacedBy(5.dp),
+            .padding(top=5.dp, bottom=5.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
         buttons.forEach { buttonData ->
@@ -34,11 +33,9 @@ fun ButtonsRow(
                 text = buttonData.text,
                 onClick = buttonData.onClick,
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(5.dp)
+                    .padding(top=5.dp, bottom=5.dp)
             )
         }
-        Box(modifier = Modifier.width(16.dp))
     }
 }
 
