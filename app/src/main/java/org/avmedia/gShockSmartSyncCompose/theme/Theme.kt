@@ -1,6 +1,5 @@
 package org.avmedia.gShockSmartSyncCompose.theme
 
-import android.R.id.primary
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

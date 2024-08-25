@@ -11,8 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
 import org.avmedia.gshockapi.GShockAPI
 

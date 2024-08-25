@@ -60,7 +60,7 @@ fun Locale(
                     fontSize = 20.sp,
                     modifier = Modifier
                         .weight(1f)
-                        .padding(end = 6.dp)
+                        .padding(end = 12.dp)
                 )
 
                 Row(

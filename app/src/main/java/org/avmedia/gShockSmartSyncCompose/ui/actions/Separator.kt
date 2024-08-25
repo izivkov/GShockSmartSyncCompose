@@ -1,6 +1,5 @@
 package org.avmedia.gShockSmartSyncCompose.ui.actions
 
-import AppText
 import AppTextLarge
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

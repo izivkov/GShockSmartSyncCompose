@@ -4,6 +4,10 @@ import PhoneCall
 import Photo
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -11,12 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
-import org.avmedia.gShockSmartSyncCompose.ui.alarms.AlarmsScreen
 import org.avmedia.gShockSmartSyncCompose.ui.common.ItemList
-import org.avmedia.gShockSmartSyncCompose.ui.common.ScreenContainer
 import org.avmedia.gShockSmartSyncCompose.ui.common.ScreenTitle
 
 @Composable
@@ -26,10 +31,31 @@ fun ActionsScreen(navController: NavController) {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            ScreenContainer()
-            {
-                ScreenTitle(stringResource(id = R.string.actions), Modifier)
-                ActionList()
+            ConstraintLayout(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                val (title, actions) = createRefs()
+
+                ScreenTitle(stringResource(id = R.string.settings), Modifier
+                    .constrainAs(title) {
+                        top.linkTo(parent.top)  // Link top of content to parent top
+                        bottom.linkTo(actions.top)  // Link bottom of content to top of buttonsRow
+                    })
+
+                Column(
+                    modifier = Modifier
+                        .constrainAs(actions) {
+                            top.linkTo(title.bottom)
+                            bottom.linkTo(parent.bottom)
+                            height = Dimension.fillToConstraints
+                        }
+                        .verticalScroll(rememberScrollState())  // Make content scrollable
+                        .padding(0.dp)
+                        .fillMaxWidth()
+                        .fillMaxSize()
+                ) {
+                    ActionList()
+                }
             }
         }
     }

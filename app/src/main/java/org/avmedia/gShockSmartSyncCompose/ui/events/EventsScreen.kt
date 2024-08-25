@@ -3,6 +3,10 @@ package org.avmedia.gShockSmartSyncCompose.ui.events
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -12,6 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import org.avmedia.gShockSmartSyncCompose.R
@@ -31,16 +38,40 @@ fun EventsScreen(navController: NavController) {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            ScreenContainer()
-            {
-                ScreenTitle(stringResource(id = R.string.events), Modifier)
+            ConstraintLayout(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                val (title, events, buttonsRow) = createRefs()
 
-                EventList()
+                ScreenTitle(stringResource(id = R.string.events), Modifier
+                    .constrainAs(title) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(events.top)
+                    })
 
                 Column(
                     modifier = Modifier
-                        .fillMaxSize(),
-                    verticalArrangement = Arrangement.Bottom,
+                        .constrainAs(events) {
+                            top.linkTo(title.bottom)
+                            bottom.linkTo(buttonsRow.top)
+                            height = Dimension.fillToConstraints
+                        }
+                        .verticalScroll(rememberScrollState())  // Make content scrollable
+                        .padding(0.dp)
+                        .fillMaxWidth()
+                        .fillMaxSize()
+                ) {
+                    EventList()
+                }
+
+                Column(modifier = Modifier
+                    .constrainAs(buttonsRow) {
+                    top.linkTo(events.bottom)  // Link top of buttonsRow to bottom of content
+                    bottom.linkTo(parent.bottom)  // Keep buttons at the bottom
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                    .fillMaxWidth()
                 ) {
 
                     val buttons = arrayListOf(

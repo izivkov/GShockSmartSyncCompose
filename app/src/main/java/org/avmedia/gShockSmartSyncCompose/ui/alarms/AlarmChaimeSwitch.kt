@@ -2,6 +2,7 @@ package org.avmedia.gShockSmartSyncCompose.ui.alarms
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,7 +42,7 @@ fun AlarmChimeSwitch(
 
     Column(
         modifier = Modifier
-            .padding(4.dp),
+            .padding(0.dp).fillMaxWidth(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.End,
     ) {

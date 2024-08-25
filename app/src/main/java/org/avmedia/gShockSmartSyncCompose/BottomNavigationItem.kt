@@ -7,7 +7,7 @@ import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 
 data class BottomNavigationItem(
