@@ -69,6 +69,7 @@ fun TimeScreen(navController: NavController) {
                 WatchInfoView(modifier = Modifier
                     .fillMaxWidth()
                     .constrainAs(watchInfo) {
+                        top.linkTo(watchName.bottom)
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
