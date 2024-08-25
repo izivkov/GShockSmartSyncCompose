@@ -36,7 +36,7 @@ fun ActionsScreen(navController: NavController) {
             ) {
                 val (title, actions) = createRefs()
 
-                ScreenTitle(stringResource(id = R.string.settings), Modifier
+                ScreenTitle(stringResource(id = R.string.actions), Modifier
                     .constrainAs(title) {
                         top.linkTo(parent.top)  // Link top of content to parent top
                         bottom.linkTo(actions.top)  // Link bottom of content to top of buttonsRow
