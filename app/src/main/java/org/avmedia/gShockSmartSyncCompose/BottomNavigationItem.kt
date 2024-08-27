@@ -4,7 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.DirectionsRun
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Alarm
-import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
@@ -31,12 +31,12 @@ data class BottomNavigationItem(
             ),
             BottomNavigationItem(
                 label = "Events",
-                icon = Icons.Filled.CalendarToday,
+                icon = Icons.Filled.Event,
                 route = Screens.Events.route
             ),
             BottomNavigationItem(
                 label = "Actions",
-                icon =  Icons.AutoMirrored.Filled.DirectionsRun,
+                icon = Icons.AutoMirrored.Filled.DirectionsRun,
                 route = Screens.Actions.route
             ),
             BottomNavigationItem(

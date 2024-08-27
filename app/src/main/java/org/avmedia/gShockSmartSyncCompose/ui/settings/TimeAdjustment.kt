@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,7 +45,7 @@ fun TimeAdjustment(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(6.dp)
+                .padding(0.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -79,6 +80,7 @@ fun TimeAdjustment(
                     modifier = Modifier.padding(end = 6.dp)
                 )
                 InfoButton(infoText = stringResource(id = R.string.adjustment_time_info))
+
                 Spacer(modifier = Modifier.weight(1f))
 
                 TextField(
@@ -88,7 +90,7 @@ fun TimeAdjustment(
                         .width(IntrinsicSize.Min)
                         .align(Alignment.CenterVertically)
                         .padding(end = 12.dp)
-                        .weight(1f),
+                        .weight(1.5f),
                     placeholder = {
                         AppText(text = stringResource(id = R.string._00))
                     },
@@ -96,6 +98,7 @@ fun TimeAdjustment(
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                     textStyle = TextStyle(
                         fontSize = 24.sp,
+                        textAlign = TextAlign.End
                     )
                 )
             }

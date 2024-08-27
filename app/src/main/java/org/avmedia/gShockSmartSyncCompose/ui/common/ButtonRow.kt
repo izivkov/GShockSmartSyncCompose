@@ -22,7 +22,7 @@ fun ButtonsRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top=5.dp, bottom=5.dp),
+            .padding(top = 5.dp, bottom = 5.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -31,7 +31,7 @@ fun ButtonsRow(
                 text = buttonData.text,
                 onClick = buttonData.onClick,
                 modifier = Modifier
-                    .padding(top=5.dp, bottom=5.dp)
+                    .padding(top = 5.dp, bottom = 5.dp)
             )
         }
     }

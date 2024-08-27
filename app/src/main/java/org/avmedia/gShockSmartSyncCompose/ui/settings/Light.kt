@@ -35,7 +35,7 @@ fun Light(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 12.dp, top = 8.dp, end = 12.dp, bottom = 0.dp)
+                .padding(start = 12.dp, top = 4.dp, end = 12.dp, bottom = 4.dp)
         ) {
             // Auto Light Layout
             Row(
@@ -54,10 +54,10 @@ fun Light(
                         modifier = Modifier.padding(end = 6.dp)
                     )
                 }
-                    AppSwitch(
-                        checked = autoLightOn,
-                        onCheckedChange = onAutoLightToggle
-                    )
+                AppSwitch(
+                    checked = autoLightOn,
+                    onCheckedChange = onAutoLightToggle
+                )
 
             }
 
@@ -65,7 +65,7 @@ fun Light(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 6.dp),
+                    .padding(vertical = 0.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {

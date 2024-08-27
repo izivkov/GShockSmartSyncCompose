@@ -1,6 +1,5 @@
 package org.avmedia.gShockSmartSyncCompose.ui.events
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,7 +26,6 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.ButtonData
 import org.avmedia.gShockSmartSyncCompose.ui.common.ButtonsRow
 import org.avmedia.gShockSmartSyncCompose.ui.common.ItemList
 import org.avmedia.gShockSmartSyncCompose.ui.common.ItemView
-import org.avmedia.gShockSmartSyncCompose.ui.common.ScreenContainer
 import org.avmedia.gShockSmartSyncCompose.ui.common.ScreenTitle
 import org.avmedia.gshockapi.Event
 
@@ -66,11 +64,11 @@ fun EventsScreen(navController: NavController) {
 
                 Column(modifier = Modifier
                     .constrainAs(buttonsRow) {
-                    top.linkTo(events.bottom)  // Link top of buttonsRow to bottom of content
-                    bottom.linkTo(parent.bottom)  // Keep buttons at the bottom
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
+                        top.linkTo(events.bottom)  // Link top of buttonsRow to bottom of content
+                        bottom.linkTo(parent.bottom)  // Keep buttons at the bottom
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
                     .fillMaxWidth()
                 ) {
 

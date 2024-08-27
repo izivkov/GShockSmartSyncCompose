@@ -55,20 +55,21 @@ fun BottomNavigationBar() {
                 }
             }
         }
-    ) {paddingValues ->
+    ) { paddingValues ->
         NavHost(
             navController = navController,
             startDestination = Screens.Time.route,
-            modifier = Modifier.padding(paddingValues = paddingValues)) {
+            modifier = Modifier.padding(paddingValues = paddingValues)
+        ) {
             composable(Screens.Time.route) {
-              TimeScreen(
-                  navController
-              )
+                TimeScreen(
+                    navController
+                )
             }
             composable(Screens.Alarms.route) {
-               AlarmsScreen(
-                   navController
-               )
+                AlarmsScreen(
+                    navController
+                )
             }
             composable(Screens.Events.route) {
                 EventsScreen(

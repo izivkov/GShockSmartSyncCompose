@@ -42,7 +42,8 @@ fun AlarmChimeSwitch(
 
     Column(
         modifier = Modifier
-            .padding(0.dp).fillMaxWidth(),
+            .padding(0.dp)
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.End,
     ) {

@@ -1,6 +1,6 @@
 package org.avmedia.gShockSmartSyncCompose
 
-sealed class Screens(val route : String) {
+sealed class Screens(val route: String) {
     object Time : Screens("Time")
     object Alarms : Screens("Alarms")
     object Events : Screens("Events")

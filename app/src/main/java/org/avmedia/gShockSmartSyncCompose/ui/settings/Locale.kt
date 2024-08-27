@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -48,7 +47,7 @@ fun Locale(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp)
+                .padding(start = 12.dp, end = 12.dp, top = 2.dp, bottom = 2.dp)
         ) {
             // Time Format Section
             Row(
@@ -79,9 +78,6 @@ fun Locale(
                     AppText(text = stringResource(id = R.string._24h))
                 }
             }
-
-            // Date Format Section
-            Spacer(modifier = Modifier.height(8.dp))
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -114,9 +110,6 @@ fun Locale(
                 }
             }
 
-            // Language Selection Section
-            Spacer(modifier = Modifier.height(8.dp))
-
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -128,11 +121,12 @@ fun Locale(
                     fontSize = 20.sp,
                     modifier = Modifier
                         .weight(1f)
-                        .padding(end = 6.dp)
+                        .padding(end = 0.dp)
                 )
 
-                LanguageDropdownMenu(modifier = Modifier
-                    .weight(1.5f)
+                LanguageDropdownMenu(
+                    modifier = Modifier
+                        .weight(1.5f)
                 )
             }
         }

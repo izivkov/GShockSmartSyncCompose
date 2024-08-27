@@ -36,9 +36,12 @@ import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gshockapi.WatchInfo
 
 @Composable
-fun Battery () {
+fun Battery() {
     AndroidView(
-        modifier = Modifier.width(20.dp).rotate(90f).wrapContentHeight(),
+        modifier = Modifier
+            .width(20.dp)
+            .rotate(90f)
+            .wrapContentHeight(),
         factory = { context ->
             BatteryView(context)
         }
@@ -72,7 +75,7 @@ class BatteryView @JvmOverloads constructor(
 
     private var percentRect = RectF()
     private var percentRectTopMin = 0f
-    private var percent: Int = 75
+    private var percent: Int = 0
     private var percentageBitmap: Bitmap? = null
 
     init {

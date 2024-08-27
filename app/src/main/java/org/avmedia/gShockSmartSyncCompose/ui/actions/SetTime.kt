@@ -12,7 +12,7 @@ fun SetTime(
 ) {
     ActionItem(
         title = stringResource(id = R.string.set_time),
-        resourceId = R.drawable.events,
+        resourceId = R.drawable.ic_watch_later_black_24dp,
         isEnabled = true,
         onEnabledChange = {}
     )

@@ -13,7 +13,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -62,13 +61,12 @@ fun SettingsScreen(navController: NavController) {
                     SettingsList()
                 }
 
-                BottomRow (modifier = Modifier.
-                    constrainAs(buttonsRow) {
-                        top.linkTo(settings.bottom)  // Link top of buttonsRow to bottom of content
-                        bottom.linkTo(parent.bottom)  // Keep buttons at the bottom
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    }
+                BottomRow(modifier = Modifier.constrainAs(buttonsRow) {
+                    top.linkTo(settings.bottom)  // Link top of buttonsRow to bottom of content
+                    bottom.linkTo(parent.bottom)  // Keep buttons at the bottom
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
                 )
             }
         }
@@ -125,7 +123,7 @@ fun SettingsList() {
 }
 
 @Composable
-fun BottomRow (modifier: Modifier) {
+fun BottomRow(modifier: Modifier) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Bottom,
