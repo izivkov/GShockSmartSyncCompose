@@ -49,7 +49,6 @@ fun PhoneCall(
             ) {
                 Text(
                     text = stringResource(id = R.string.make_phonecall),
-                    fontSize = 24.sp
                 )
                 TextField(
                     value = "", //stringResource(id = R.string._416_555_6789),

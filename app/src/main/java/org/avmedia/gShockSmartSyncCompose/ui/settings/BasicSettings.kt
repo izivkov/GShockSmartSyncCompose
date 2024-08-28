@@ -1,6 +1,7 @@
 package org.avmedia.gShockSmartSyncCompose.ui.settings
 
 import AppSwitch
+import AppTextLarge
 import AppTextVeryLarge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,7 +37,7 @@ fun BasicSettings(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.Center
             ) {
-                AppTextVeryLarge(
+                AppTextLarge(
                     text = title,
                     modifier = Modifier.padding(end = 6.dp)
                 )

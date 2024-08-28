@@ -49,7 +49,7 @@ fun Light(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.Center
                 ) {
-                    AppTextVeryLarge(
+                    AppTextLarge(
                         text = stringResource(id = R.string.auto_light),
                         modifier = Modifier.padding(end = 6.dp)
                     )

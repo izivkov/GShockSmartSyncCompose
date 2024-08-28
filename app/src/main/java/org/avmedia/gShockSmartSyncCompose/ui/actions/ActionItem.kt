@@ -2,6 +2,7 @@ package org.avmedia.gShockSmartSyncCompose.ui.actions
 
 import AppSwitch
 import AppText
+import AppTextLarge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -48,9 +49,8 @@ fun ActionItem(
 
                 HorizontalSeparator(width = 4.dp)
 
-                AppText(
+                AppTextLarge(
                     text = title,
-                    fontSize = 24.sp
                 )
 
                 infoText?.let {

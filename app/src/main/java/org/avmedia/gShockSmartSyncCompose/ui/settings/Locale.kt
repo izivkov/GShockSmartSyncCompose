@@ -1,6 +1,7 @@
 package org.avmedia.gShockSmartSyncCompose.ui.settings
 
 import AppText
+import AppTextLarge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -54,9 +55,8 @@ fun Locale(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                AppText(
+                AppTextLarge(
                     text = stringResource(id = R.string.time_format),
-                    fontSize = 20.sp,
                     modifier = Modifier
                         .weight(1f)
                         .padding(end = 12.dp)
@@ -69,13 +69,13 @@ fun Locale(
                         selected = timeFormat == "12h",
                         onClick = { onTimeFormatChange("12h") }
                     )
-                    AppText(text = stringResource(id = R.string._12h))
+                    AppTextLarge(text = stringResource(id = R.string._12h))
                     Spacer(modifier = Modifier.width(10.dp))
                     RadioButton(
                         selected = timeFormat == "24h",
                         onClick = { onTimeFormatChange("24h") }
                     )
-                    AppText(text = stringResource(id = R.string._24h))
+                    AppTextLarge(text = stringResource(id = R.string._24h))
                 }
             }
 
@@ -85,7 +85,6 @@ fun Locale(
             ) {
                 Text(
                     text = stringResource(id = R.string.date_format),
-                    fontSize = 20.sp,
                     modifier = Modifier
                         .weight(1f)
                         .padding(end = 6.dp)
@@ -118,7 +117,6 @@ fun Locale(
             ) {
                 AppText(
                     text = stringResource(id = R.string.language),
-                    fontSize = 20.sp,
                     modifier = Modifier
                         .weight(1f)
                         .padding(end = 0.dp)

@@ -12,6 +12,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalDensity
 
 @Composable
 fun AppText(
@@ -33,6 +34,16 @@ fun AppText(
     style: TextStyle = TextStyle.Default,
     color: Color = Color.Unspecified
 ) {
+    val currentFontScale = LocalDensity.current.fontScale
+    val fixedFontSizeStyle = TextStyle(
+        fontSize = (16.sp / currentFontScale)  // Fixed font size
+    )
+
+    val additionalStyle = TextStyle(
+        color = color,
+    )
+    val combinedStyle = fixedFontSizeStyle.merge(additionalStyle)
+
     Text(
         text = text,
         modifier = modifier,
@@ -49,6 +60,6 @@ fun AppText(
         maxLines = maxLines,
         minLines = minLines,
         onTextLayout = onTextLayout,
-        style = style.copy(color = color)
+        style = fixedFontSizeStyle // combinedStyle
     )
 }

@@ -1,3 +1,4 @@
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -34,9 +35,11 @@ fun Photo(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             // Icon/ImageView equivalent
-            AppIconFromResource(
-                resourceId = R.drawable.camera,
-            )
+            Box (modifier = Modifier.padding(4.dp),) {
+                AppIconFromResource(
+                    resourceId = R.drawable.camera,
+                )
+            }
 
             // Text and Radio Buttons in a Row with weight
             Row(
@@ -45,9 +48,8 @@ fun Photo(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Title TextView equivalent
-                Text(
+                AppTextLarge(
                     text = stringResource(id = R.string.take_photo),
-                    fontSize = 24.sp,
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                 )
@@ -64,7 +66,7 @@ fun Photo(
                         RadioButton(
                             selected = cameraOrientation == "front",
                             onClick = { onOrientationChange("front") },
-                            modifier = Modifier.padding(4.dp)
+                            modifier = Modifier// .padding(4.dp)
                         )
                         Text(text = stringResource(id = R.string.front_cam))
                     }
@@ -74,7 +76,7 @@ fun Photo(
                         RadioButton(
                             selected = cameraOrientation == "back",
                             onClick = { onOrientationChange("back") },
-                            modifier = Modifier.padding(4.dp)
+                            modifier = Modifier//.padding(4.dp)
                         )
                         Text(text = stringResource(id = R.string.back_cam))
                     }
