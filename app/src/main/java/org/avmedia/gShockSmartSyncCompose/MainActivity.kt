@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -13,10 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
-import org.avmedia.gshockapi.GShockAPI
+import org.avmedia.gshockapi.GShockAPIMock
 
 class MainActivity : ComponentActivity() {
-    private val api = GShockAPI(this)
+    private val api = GShockAPIMock(this)
 
     init {
         instance = this
@@ -46,7 +45,7 @@ class MainActivity : ComponentActivity() {
             return instance!!.applicationContext
         }
 
-        fun api(): GShockAPI {
+        fun api(): GShockAPIMock {
             return instance!!.api
         }
     }

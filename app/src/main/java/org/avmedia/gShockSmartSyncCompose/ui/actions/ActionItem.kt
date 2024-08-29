@@ -1,7 +1,6 @@
 package org.avmedia.gShockSmartSyncCompose.ui.actions
 
 import AppSwitch
-import AppText
 import AppTextLarge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -13,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppIconFromResource

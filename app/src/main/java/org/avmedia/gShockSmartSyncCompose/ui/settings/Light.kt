@@ -3,7 +3,6 @@ package org.avmedia.gShockSmartSyncCompose.ui.settings
 import AppSwitch
 import AppText
 import AppTextLarge
-import AppTextVeryLarge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppIconFromResource
@@ -35,7 +34,7 @@ fun Photo(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             // Icon/ImageView equivalent
-            Box (modifier = Modifier.padding(4.dp),) {
+            Box(modifier = Modifier.padding(4.dp)) {
                 AppIconFromResource(
                     resourceId = R.drawable.camera,
                 )

@@ -1,7 +1,6 @@
 package org.avmedia.gShockSmartSyncCompose
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -31,7 +30,7 @@ fun BottomNavigationBar() {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            NavigationBar (
+            NavigationBar(
                 modifier = Modifier.padding(0.dp)
             ) {
                 BottomNavigationItem().bottomNavigationItems().forEachIndexed { _, navigationItem ->
