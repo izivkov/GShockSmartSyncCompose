@@ -98,7 +98,7 @@ class GShockAPIMock(private val context: Context) {
     }
 
     suspend fun getHomeTime(): String {
-        return "TORONTO"
+        return "SOFIA"
     }
 
     suspend fun getBatteryLevel(): Int {
@@ -106,7 +106,7 @@ class GShockAPIMock(private val context: Context) {
     }
 
     suspend fun getWatchTemperature(): Int {
-        return 23
+        return 36
     }
 
     suspend fun getTimer(): Int {

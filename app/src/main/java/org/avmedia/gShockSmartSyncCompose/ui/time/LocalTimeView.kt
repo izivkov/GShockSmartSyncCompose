@@ -1,8 +1,10 @@
 package org.avmedia.gShockSmartSyncCompose.ui.time
 
 import AppText
-import AppTextExtraLarge
 import AppTextLarge
+import RealTimeClock
+import TimeFormat
+import android.widget.TextClock
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -20,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppButton
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
@@ -36,7 +40,7 @@ fun LocalTimeView(modifier: Modifier) {
             // First Column: Local Time and TimeZoneTextView
             Column(
                 modifier = Modifier
-                    .weight(1.5f)
+                    .weight(2f)
                     .padding(6.dp)
             ) {
                 AppTextLarge(
@@ -79,14 +83,8 @@ fun LocalTimeView(modifier: Modifier) {
 }
 
 @Composable
-fun TextClockComposable(modifier: Modifier = Modifier) {
-    // Custom implementation for TextClock
-    // This is where you might implement a Composable that mimics the TextClock's behavior
-    // using remember, LaunchedEffect, etc., to keep time updated.
-    AppTextExtraLarge(
-        text = "12:00:00 PM", // Placeholder, replace with actual clock logic
-        modifier = modifier
-    )
+fun TextClockComposable(modifier: Modifier = Modifier, format: TimeFormat = TimeFormat.TwentyFourHour) {
+    RealTimeClock(modifier= modifier.padding(start = 6.dp))
 }
 
 @Composable

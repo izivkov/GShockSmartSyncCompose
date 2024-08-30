@@ -63,7 +63,7 @@ fun TimeScreen(navController: NavController) {
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                             height = Dimension.fillToConstraints
-                        }, watchName = "Casio GW-5600"
+                        }
                 )
 
                 WatchInfoView(modifier = Modifier

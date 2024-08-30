@@ -22,6 +22,13 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
@@ -37,13 +44,26 @@ import org.avmedia.gshockapi.WatchInfo
 
 @Composable
 fun Battery() {
+
+    val coroutineScope = rememberCoroutineScope()
+    var result by remember { mutableIntStateOf(0) }
+    // lateinit var batteryView: BatteryView
+
+    // Launch the coroutine to call the suspend function
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            val percent = api().getBatteryLevel()
+            result = percent
+        }
+    }
+
     AndroidView(
         modifier = Modifier
             .width(20.dp)
             .rotate(90f)
             .wrapContentHeight(),
         factory = { context ->
-            BatteryView(context)
+            BatteryView(context, percent = result)
         }
     )
 }
@@ -52,7 +72,8 @@ fun Battery() {
 class BatteryView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = 0,
+    percent: Int = 0
 ) : View(context, attrs, defStyleAttr) {
     private var radius: Float = 0f
 
@@ -85,24 +106,6 @@ class BatteryView @JvmOverloads constructor(
         } else {
             visibility = GONE
         }
-    }
-
-    // Wait for layout be be loaded, otherwise the layout will overwrite the values when loaded.
-    override fun onFinishInflate() {
-        super.onFinishInflate()
-
-        if (!WatchInfo.hasBatteryLevel) {
-            return
-        }
-
-        if (api().isConnected() && api().isNormalButtonPressed()) {
-            val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
-            scope.launch(Dispatchers.IO) { // mist be Main because it is updating the UI
-                val percent = api().getBatteryLevel()
-                setPercent(percent)
-            }
-        }
-
     }
 
     @SuppressLint("DrawAllocation")
