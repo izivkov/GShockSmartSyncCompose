@@ -1,8 +1,12 @@
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
 import org.avmedia.gShockSmartSyncCompose.ui.alarms.AlarmsModel
 import org.avmedia.gshockapi.Alarm
+import org.avmedia.gshockapi.ProgressEvents
 
 class AlarmViewModel : ViewModel() {
     private val _alarms = MutableStateFlow<List<Alarm>>(emptyList())
@@ -13,17 +17,16 @@ class AlarmViewModel : ViewModel() {
     }
 
     private fun loadAlarms() {
-        // Simulate loading data
-        _alarms.value = listOf(
-            Alarm(6, 45, enabled = true, hasHourlyChime = true),
-            Alarm(8, 0, enabled = true, hasHourlyChime = false),
-            Alarm(20, 0, enabled = true, hasHourlyChime = false),
-            Alarm(0, 0, enabled = false, hasHourlyChime = false),
-            Alarm(0, 0, enabled = false, hasHourlyChime = false),
-        )
-
-        AlarmsModel.clear()
-        AlarmsModel.addAll(ArrayList(_alarms.value))
+        viewModelScope.launch {
+            try {
+                val loadedAlarms = api().getAlarms() // Call your suspend function here
+                _alarms.value = loadedAlarms
+                AlarmsModel.clear()
+                AlarmsModel.addAll(ArrayList(_alarms.value))
+            } catch (e: Exception) {
+                ProgressEvents.onNext("ApiError")
+            }
+        }
     }
 
     fun toggleAlarm(index: Int, isEnabled: Boolean) {
@@ -32,5 +35,3 @@ class AlarmViewModel : ViewModel() {
         _alarms.value = updatedAlarms
     }
 }
-
-// data class Alarm(val time: String, val isEnabled: Boolean)

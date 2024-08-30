@@ -47,7 +47,6 @@ fun Battery() {
 
     val coroutineScope = rememberCoroutineScope()
     var result by remember { mutableIntStateOf(0) }
-    // lateinit var batteryView: BatteryView
 
     // Launch the coroutine to call the suspend function
     LaunchedEffect(Unit) {
@@ -64,6 +63,10 @@ fun Battery() {
             .wrapContentHeight(),
         factory = { context ->
             BatteryView(context, percent = result)
+        },
+        update = { batteryView ->
+            // Update the percent value when result changes
+            batteryView.setPercent(result)
         }
     )
 }
@@ -188,7 +191,7 @@ class BatteryView @JvmOverloads constructor(
         return bitmap
     }
 
-    private fun setPercent(percent: Int) {
+    fun setPercent(percent: Int) {
         this.percent = percent
         invalidate()
     }
