@@ -12,10 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
+import org.avmedia.gShockSmartSyncCompose.utils.PermissionManager
 import org.avmedia.gshockapi.GShockAPIMock
 
 class MainActivity : ComponentActivity() {
     private val api = GShockAPIMock(this)
+    private lateinit var permissionManager: PermissionManager
 
     init {
         instance = this
@@ -34,6 +36,20 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        permissionManager = PermissionManager(this)
+    }
+
+    private fun runWithChecks() {
+
+        if (!permissionManager.hasAllPermissions()) {
+            permissionManager.setupPermissions()
+            return
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        runWithChecks()
     }
 
     companion object {

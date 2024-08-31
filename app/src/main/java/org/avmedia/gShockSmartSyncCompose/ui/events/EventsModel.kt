@@ -6,25 +6,36 @@
 
 package org.avmedia.gShockSmartSyncCompose.ui.events
 
+import android.content.Context
 import org.avmedia.gshockapi.Event
+import org.avmedia.gshockapi.EventDate
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 
 object EventsModel {
 
-    private val events = ArrayList<Event>()
+    const val MAX_REMINDERS = 5
 
-    fun isEmpty(): Boolean {
-        return events.size == 0
-    }
+    val events = ArrayList<Event>()
 
-    fun getEvents(): ArrayList<Event> {
-        return events
-    }
-
-    fun clear() {
+    fun refresh(context: Context) {
         events.clear()
+        events.addAll(CalendarEvents.getEventsFromCalendar(context))
     }
 
-    fun addAll(alarms: ArrayList<Event>) {
-        this.events.addAll(alarms)
+    fun getEnabledCount(): Int {
+        return (events.filter { it.enabled } as ArrayList<Event>).size
+    }
+
+    fun createEventDate(timeMs: Long, zone: ZoneId): EventDate {
+        val start: LocalDate =
+            Instant.ofEpochMilli(timeMs).atZone(zone)
+                .toLocalDate()
+        return EventDate(
+            start.year,
+            start.month,
+            start.dayOfMonth
+        )
     }
 }

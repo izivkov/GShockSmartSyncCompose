@@ -1,5 +1,10 @@
 package org.avmedia.gShockSmartSyncCompose.ui.events
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,8 +14,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -28,9 +35,14 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.ItemList
 import org.avmedia.gShockSmartSyncCompose.ui.common.ItemView
 import org.avmedia.gShockSmartSyncCompose.ui.common.ScreenTitle
 import org.avmedia.gshockapi.Event
+import org.avmedia.gshockapi.EventAction
+import org.avmedia.gshockapi.ProgressEvents
 
 @Composable
 fun EventsScreen(navController: NavController) {
+
+    RequestPermissions()
+
     GShockSmartSyncTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -85,8 +97,47 @@ fun EventsScreen(navController: NavController) {
 }
 
 @Composable
-fun EventList(eventViewModel: EventViewModel = viewModel()) {
+fun RequestPermissions() {
+    val requestMultiplePermissions = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        // Check if all permissions are granted
+        if (permissions.all { it.value }) {
+            ProgressEvents.onNext("CalendarPermissionsGranted")
+        } else {
+            ProgressEvents.onNext("CalendarPermissionsNotGranted")
+        }
+    }
+
+    // Trigger permission request
+    LaunchedEffect(Unit) {
+        requestMultiplePermissions.launch(
+            arrayOf(
+                Manifest.permission.READ_CALENDAR,
+            )
+        )
+    }
+}
+
+
+@Composable
+fun EventList() {
+    val eventViewModel: EventViewModel = viewModel()
     val events by eventViewModel.events.collectAsState()
+
+    fun waitForPermissions(context: Context) {
+        val eventActions = arrayOf(
+            EventAction("CalendarPermissionsGranted") {
+                if (EventsModel.events.isEmpty()) {
+                    eventViewModel.loadEvents(context)
+                }
+            },
+        )
+
+        val functionName = object {}.javaClass.enclosingMethod!!.name
+        ProgressEvents.runEventActions(functionName, eventActions)
+    }
+    waitForPermissions(LocalContext.current)
 
     @Composable
     fun createEvent(): List<Any> {
