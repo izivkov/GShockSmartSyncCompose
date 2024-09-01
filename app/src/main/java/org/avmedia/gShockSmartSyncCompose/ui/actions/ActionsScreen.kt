@@ -1,7 +1,7 @@
 package org.avmedia.gShockSmartSyncCompose.ui.actions
 
-import PhoneCall
-import Photo
+import PhoneView
+import PhotoView
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -67,15 +67,15 @@ fun ActionList() {
     @Composable
     fun createActions(): List<Any> {
         val actions = listOf(
-            SetTime(),
-            Reminders(),
-            Photo(modifier = Modifier, onActionEnabledChange = {}, onOrientationChange = {}),
-            Flashlight(),
-            VoiceAssist(),
-            SkipToNextTrack(),
-            PrayerAlarms(),
-            Separator(modifier = Modifier),
-            PhoneCall(
+            SetTimeView(),
+            RemindersView(),
+            PhotoView(modifier = Modifier, onActionEnabledChange = {}, onOrientationChange = {}),
+            FlashlightView(),
+            VoiceAssistView(),
+            SkipToNextTrackView(),
+            PrayerAlarmsView(),
+            SeparatorView(modifier = Modifier),
+            PhoneView(
                 modifier = Modifier,
                 onPhoneNumberChange = {},
                 isActionEnabled = true,

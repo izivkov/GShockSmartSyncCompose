@@ -7,12 +7,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
-fun Reminders(
+fun FlashlightView(
     modifier: Modifier = Modifier,
 ) {
     ActionItem(
-        title = stringResource(id = R.string.set_reminders),
-        resourceId = R.drawable.events,
+        title = stringResource(id = R.string.toggle_flashlight),
+        resourceId = R.drawable.flashlight,
         isEnabled = true,
         onEnabledChange = {}
     )
@@ -20,7 +20,7 @@ fun Reminders(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewReminders() {
-    Reminders(modifier = Modifier)
+fun PreviewFlashlight() {
+    FlashlightView(modifier = Modifier)
 }
 

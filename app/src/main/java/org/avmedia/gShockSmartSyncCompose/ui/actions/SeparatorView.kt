@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
-fun Separator(
+fun SeparatorView(
     modifier: Modifier,
 ) {
     Row(
@@ -33,6 +33,6 @@ fun Separator(
 @Preview(showBackground = true)
 @Composable
 fun PreviewSeparator() {
-    Separator(modifier = Modifier)
+    SeparatorView(modifier = Modifier)
 }
 

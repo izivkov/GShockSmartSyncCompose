@@ -7,7 +7,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
-fun SetTime(
+fun SetTimeView(
     modifier: Modifier = Modifier,
 ) {
     ActionItem(
@@ -21,6 +21,6 @@ fun SetTime(
 @Preview(showBackground = true)
 @Composable
 fun PreviewSetTime() {
-    SetTime(modifier = Modifier)
+    SetTimeView(modifier = Modifier)
 }
 

@@ -7,7 +7,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
-fun VoiceAssist(
+fun VoiceAssistView(
     modifier: Modifier = Modifier,
 ) {
     ActionItem(
@@ -21,6 +21,6 @@ fun VoiceAssist(
 @Preview(showBackground = true)
 @Composable
 fun PreviewVoiceAssist() {
-    VoiceAssist(modifier = Modifier)
+    VoiceAssistView(modifier = Modifier)
 }
 

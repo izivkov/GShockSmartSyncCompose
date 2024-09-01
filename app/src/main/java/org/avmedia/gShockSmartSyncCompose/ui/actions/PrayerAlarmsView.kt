@@ -7,21 +7,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
-fun SkipToNextTrack(
+fun PrayerAlarmsView(
     modifier: Modifier = Modifier,
 ) {
     ActionItem(
-        title = stringResource(id = R.string.next_track),
-        resourceId = R.drawable.skip_next,
-        infoText = stringResource(id = R.string.skip_to_next_track_info),
+        title = stringResource(id = R.string.set_prayer_alarms),
+        resourceId = R.drawable.prayer_times,
         isEnabled = true,
-        onEnabledChange = {}
+        onEnabledChange = {},
+        infoText = stringResource(id = R.string.prayer_times_info)
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewSkipToNextTrack() {
-    SkipToNextTrack(modifier = Modifier)
+fun PreviewPrayerAction() {
+    PrayerAlarmsView(modifier = Modifier)
 }
 

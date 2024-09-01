@@ -17,7 +17,7 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppIconFromResource
 
 @Composable
-fun Photo(
+fun PhotoView(
     modifier: Modifier = Modifier,
     cameraOrientation: String = "front",
     onOrientationChange: (String) -> Unit,
@@ -95,5 +95,5 @@ fun Photo(
 @Preview(showBackground = true)
 @Composable
 fun PreviewPhoto() {
-    Photo(modifier = Modifier, onActionEnabledChange = {}, onOrientationChange = {})
+    PhotoView(modifier = Modifier, onActionEnabledChange = {}, onOrientationChange = {})
 }
