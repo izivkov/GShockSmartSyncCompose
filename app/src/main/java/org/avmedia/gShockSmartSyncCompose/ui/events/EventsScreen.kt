@@ -1,7 +1,6 @@
 package org.avmedia.gShockSmartSyncCompose.ui.events
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -34,6 +32,7 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.ButtonsRow
 import org.avmedia.gShockSmartSyncCompose.ui.common.ItemList
 import org.avmedia.gShockSmartSyncCompose.ui.common.ItemView
 import org.avmedia.gShockSmartSyncCompose.ui.common.ScreenTitle
+import org.avmedia.gShockSmartSyncCompose.utils.Utils.Companion.AppHashCode
 import org.avmedia.gshockapi.Event
 import org.avmedia.gshockapi.EventAction
 import org.avmedia.gshockapi.ProgressEvents
@@ -134,15 +133,13 @@ fun EventList() {
             },
         )
 
-        val functionName = object {}.javaClass.enclosingMethod!!.name
-        ProgressEvents.runEventActions(functionName, eventActions)
+        ProgressEvents.runEventActions(AppHashCode(), eventActions)
     }
     waitForPermissions(LocalContext.current)
 
     @Composable
     fun createEvent(): List<Any> {
         val eventItems = mutableListOf<Any>()
-
         events.forEachIndexed { index: Int, event: Event ->
             ItemView {
                 EventItem(

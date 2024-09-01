@@ -1,8 +1,12 @@
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -17,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppIconFromResource
+import org.avmedia.gShockSmartSyncCompose.ui.common.HorizontalSeparator
 
 @Composable
 fun PhoneCall(
@@ -32,7 +37,7 @@ fun PhoneCall(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(6.dp),
+                .padding(start = 12.dp, end = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Icon
@@ -47,27 +52,30 @@ fun PhoneCall(
                     .weight(1f)
                     .padding(6.dp)
             ) {
-                Text(
-                    text = stringResource(id = R.string.make_phonecall),
-                )
-                TextField(
-                    value = "", //stringResource(id = R.string._416_555_6789),
-                    onValueChange = onPhoneNumberChange,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    textStyle = TextStyle(fontSize = 20.sp),
-                    placeholder = {
-                        AppTextLarge(stringResource(id = R.string._416_555_6789)) // Placeholder text
-                    }
-                )
+                AppTextLarge(
+                        text = stringResource(id = R.string.make_phonecall),
+                    )
+                Row {
+                    OutlinedTextField(
+                        value = "",
+                        onValueChange = onPhoneNumberChange,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 80.dp),
+                        textStyle = TextStyle(fontSize = 20.sp),
+                        placeholder = {
+                            AppTextLarge(stringResource(id = R.string._416_555_6789)) // Placeholder text
+                        }
+                    )
+                }
             }
 
             // Switch for Action Enable/Disable
             AppSwitch(
                 checked = isActionEnabled,
                 onCheckedChange = onActionEnabledChange,
-                modifier = Modifier.padding(0.dp)
+                modifier = Modifier.padding(end=0.dp)
             )
         }
     }

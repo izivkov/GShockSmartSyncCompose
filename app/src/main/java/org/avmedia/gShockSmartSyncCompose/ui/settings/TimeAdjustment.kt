@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -83,7 +84,7 @@ fun TimeAdjustment(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                TextField(
+                OutlinedTextField(
                     value = adjustmentMinutes,
                     onValueChange = onAdjustmentMinutesChange,
                     modifier = Modifier

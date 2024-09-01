@@ -13,9 +13,12 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -123,7 +126,8 @@ fun Locale(
 
                 LanguageDropdownMenu(
                     modifier = Modifier
-                        .weight(1.5f)
+                        .weight(1.5f),
+                    selectedOption = "English"
                 )
             }
         }
@@ -132,26 +136,39 @@ fun Locale(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LanguageDropdownMenu(modifier: Modifier) {
-    val languages = listOf("English", "French", "German", "Italian", "Spanish", "Russian")
-    var expanded by remember { mutableStateOf(false) }
-    var selectedLanguage by remember { mutableStateOf(languages[0]) }
+fun LanguageDropdownMenu(
+    selectedOption: String,
+    modifier: Modifier
+    // onOptionSelected: (String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }  // State to control menu visibility
 
+    // Current selected text for the dropdown
+    val selectedText by remember { mutableStateOf(selectedOption) }
+
+    // ExposedDropdownMenuBox wraps around the TextField and DropdownMenu
     ExposedDropdownMenuBox(
         modifier = modifier,
         expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
+        onExpandedChange = { expanded = !expanded }
     ) {
-        TextField(
-            value = selectedLanguage,
+        // OutlinedTextField to add the border/outline
+        OutlinedTextField(
+            value = selectedText,
             onValueChange = {},
-            readOnly = true,
-            label = { AppText("Select Language") },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            readOnly = true,  // To prevent user from typing in the field
+            label = { Text("Select a language") },
             modifier = Modifier
-                .menuAnchor() // Anchors the dropdown to the text field
                 .fillMaxWidth()
+                .menuAnchor(),  // Attach menu to the OutlinedTextField
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+            },
         )
+
+        // Dropdown menu content
+        val languages = listOf("English", "French", "German", "Italian", "Spanish", "Russian")
+        var selectedLanguage by remember { mutableStateOf(languages[0]) }
 
         ExposedDropdownMenu(
             expanded = expanded,
@@ -163,9 +180,8 @@ fun LanguageDropdownMenu(modifier: Modifier) {
                     onClick = {
                         selectedLanguage = language
                         expanded = false
-                    },
-
-                    )
+                    }
+                )
             }
         }
     }

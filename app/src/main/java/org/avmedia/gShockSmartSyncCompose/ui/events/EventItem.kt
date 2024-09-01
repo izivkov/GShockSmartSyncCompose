@@ -36,24 +36,24 @@ fun EventItem(
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(4.dp)
+                    .padding(start = 6.dp, end = 6.dp)
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(4.dp)
+                        .padding(0.dp)
                 ) {
                     AppText(
                         text = title,
                         fontSize = 24.sp,
                         modifier = Modifier
                             .weight(1f)
-                            .padding(end = 6.dp)
+                            .padding(end = 0.dp, bottom = 0.dp)
                     )
                     Switch(
                         checked = enabled,
                         onCheckedChange = onEnabledChange,
-                        modifier = Modifier.align(Alignment.CenterVertically)
+                        modifier = Modifier.align(Alignment.Top)
                     )
                 }
                 ConstraintLayout(
@@ -66,7 +66,7 @@ fun EventItem(
                     AppText(
                         text = period,
                         modifier = Modifier
-                            .padding(start = 6.dp)
+                            .padding(start = 0.dp)
                             .constrainAs(periodRef) {
                                 start.linkTo(parent.start)
                                 top.linkTo(parent.top)
