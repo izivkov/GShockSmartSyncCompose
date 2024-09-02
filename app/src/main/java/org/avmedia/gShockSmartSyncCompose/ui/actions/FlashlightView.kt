@@ -1,20 +1,35 @@
 package org.avmedia.gShockSmartSyncCompose.ui.actions
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.avmedia.gShockSmartSyncCompose.R
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
+import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationContext
+import kotlin.contracts.contract
 
 @Composable
 fun FlashlightView(
     modifier: Modifier = Modifier,
 ) {
+    val title = stringResource(id = R.string.toggle_flashlight)
+    val action = ActionsModel.actionMap[title] as ActionsModel.ToggleFlashlightAction
+    var isEnabled by remember { mutableStateOf(action.enabled) }
+    val context = LocalContext.current
+
     ActionItem(
-        title = stringResource(id = R.string.toggle_flashlight),
+        title = title,
         resourceId = R.drawable.flashlight,
-        isEnabled = true,
-        onEnabledChange = {}
+        isEnabled = isEnabled,
+        onEnabledChange = { newValue ->
+            isEnabled = newValue // Update the state when the switch is toggled
+            action.enabled = newValue
+            action.save(context)
+        },
     )
 }
 

@@ -38,6 +38,7 @@ import java.util.Date
 object ActionsModel {
 
     private val actions = ArrayList<Action>()
+    val actionMap: MutableMap<String, Action> = mutableMapOf()
 
     enum class RUN_MODE {
         SYNC, ASYNC,
@@ -45,37 +46,56 @@ object ActionsModel {
 
     init {
         val findPhoneText = applicationContext().getString(R.string.find_phone)
-        actions.add(FindPhoneAction(findPhoneText, true))
+        val findPhoneAction = FindPhoneAction(findPhoneText, true)
+        actions.add(findPhoneAction)
+        actionMap[findPhoneText] = findPhoneAction
 
         val setTimeText = applicationContext().getString(R.string.set_time)
         val timeAction = SetTimeAction(setTimeText, true)
-
         actions.add(timeAction)
+        actionMap[setTimeText] = timeAction
 
         val setReminderText = applicationContext().getString(R.string.set_reminders)
-        actions.add(SetEventsAction(setReminderText, false))
+        val setReminderAction = SetEventsAction(setReminderText, false)
+        actions.add(setReminderAction)
+        actionMap[setReminderText] = setReminderAction
 
         val takePhotoText = applicationContext().getString(R.string.take_photo)
-        actions.add(PhotoAction(takePhotoText, false, CAMERA_ORIENTATION.BACK))
+        val takePhotoAction = PhotoAction(takePhotoText, false, CAMERA_ORIENTATION.BACK)
+        actions.add(takePhotoAction)
+        actionMap[takePhotoText] = takePhotoAction
 
         val toggleFlashlightText = applicationContext().getString(R.string.toggle_flashlight)
-        actions.add(ToggleFlashlightAction(toggleFlashlightText, false))
+        val toggleFlashlightAction = ToggleFlashlightAction(toggleFlashlightText, false)
+        actions.add(toggleFlashlightAction)
+        actionMap[toggleFlashlightText] = toggleFlashlightAction
 
         val voiceAssistantText = applicationContext().getString(R.string.start_voice_assistant)
-        actions.add(StartVoiceAssistAction(voiceAssistantText, false))
+        val voiceAssistantAction = StartVoiceAssistAction(voiceAssistantText, false)
+        actions.add(voiceAssistantAction)
+        actionMap[voiceAssistantText] = voiceAssistantAction
 
         val nextTrackText = "Skip to next track"
-        actions.add(NextTrack(nextTrackText, false))
+        val nextTrackAction = NextTrack(nextTrackText, false)
+        actions.add(nextTrackAction)
+        actionMap[nextTrackText] = nextTrackAction
 
         val prayerAlarmsText = "Set Prayer Alarms"
-        actions.add(PrayerAlarmsAction(prayerAlarmsText, false))
+        val prayerAlarmsAction = PrayerAlarmsAction(prayerAlarmsText, false)
+        actions.add(prayerAlarmsAction)
+        actionMap[prayerAlarmsText] = prayerAlarmsAction
 
         val emergencyActionsText = applicationContext().getString(R.string.emergency_actions)
-        actions.add(Separator(emergencyActionsText, false))
+        val emergencyActions = Separator(emergencyActionsText, false)
+        actions.add(emergencyActions)
+        actionMap[emergencyActionsText] = emergencyActions
 
         val makePhoneCallText = applicationContext().getString(R.string.make_phonecall)
-        actions.add(PhoneDialAction(makePhoneCallText, false, ""))
-        // actions.add(EmailLocationAction("Send my location by email", true, "", "Come get me"))
+        val makePhoneCallAction = PhoneDialAction(makePhoneCallText, false, "")
+        actions.add(makePhoneCallAction)
+        actionMap[makePhoneCallText] = makePhoneCallAction
+
+        loadData(applicationContext())
     }
 
     fun getActions(): ArrayList<Action> {

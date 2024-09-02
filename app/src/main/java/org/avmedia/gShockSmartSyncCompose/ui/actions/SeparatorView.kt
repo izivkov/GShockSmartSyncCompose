@@ -14,9 +14,7 @@ import androidx.compose.ui.unit.dp
 import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
-fun SeparatorView(
-    modifier: Modifier,
-) {
+fun SeparatorView() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -33,6 +31,6 @@ fun SeparatorView(
 @Preview(showBackground = true)
 @Composable
 fun PreviewSeparator() {
-    SeparatorView(modifier = Modifier)
+    SeparatorView()
 }
 

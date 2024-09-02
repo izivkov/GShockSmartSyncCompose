@@ -69,17 +69,13 @@ fun ActionList() {
         val actions = listOf(
             SetTimeView(),
             RemindersView(),
-            PhotoView(modifier = Modifier, onActionEnabledChange = {}, onOrientationChange = {}),
+            PhotoView(),
             FlashlightView(),
             VoiceAssistView(),
             SkipToNextTrackView(),
             PrayerAlarmsView(),
-            SeparatorView(modifier = Modifier),
-            PhoneView(
-                modifier = Modifier,
-                onPhoneNumberChange = {},
-                isActionEnabled = true,
-                onActionEnabledChange = {}),
+            SeparatorView(),
+            PhoneView()
         )
 
         return actions

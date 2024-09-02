@@ -58,7 +58,9 @@ fun ActionItem(
             }
             AppSwitch(
                 checked = isEnabled,
-                onCheckedChange = onEnabledChange
+                onCheckedChange = { isChecked ->
+                    onEnabledChange(isChecked) // Update the parent or associated state
+                }
             )
         }
     }
