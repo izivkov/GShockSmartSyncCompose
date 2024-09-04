@@ -15,13 +15,12 @@ import org.avmedia.gShockSmartSyncCompose.R
 fun PrayerAlarmsView(
     modifier: Modifier = Modifier,
 ) {
-    val title = stringResource(id = R.string.set_prayer_alarms)
-    val action = ActionsModel.actionMap[title] as ActionsModel.PrayerAlarmsAction
+    val action = ActionsModel.getPrayerAlarmsAction()
     var isEnabled by remember { mutableStateOf(action.enabled) }
     val context = LocalContext.current
 
     ActionItem(
-        title = title,
+        title = stringResource(id = R.string.set_prayer_alarms),
         resourceId = R.drawable.prayer_times,
         isEnabled = isEnabled,
         onEnabledChange = { newValue ->

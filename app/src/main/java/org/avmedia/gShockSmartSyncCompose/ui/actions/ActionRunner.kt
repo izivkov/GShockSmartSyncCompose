@@ -20,11 +20,11 @@ fun ActionRunner(
     LaunchedEffect(Unit) {
         val eventActions = arrayOf(
             EventAction("RunActions") {
-                ActionsModel.loadData(context)
+                // ActionsModel.loadData(context)
                 ActionsModel.runActionsForActionButton(context)
             },
             EventAction("ButtonPressedInfoReceived") {
-                ActionsModel.loadData(context)
+                // ActionsModel.loadData(context)
 
                 when {
                     api().isActionButtonPressed() -> {

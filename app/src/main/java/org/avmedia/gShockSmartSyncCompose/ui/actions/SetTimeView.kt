@@ -16,13 +16,12 @@ import org.avmedia.gShockSmartSyncCompose.R
 fun SetTimeView(
     modifier: Modifier = Modifier,
 ) {
-    val title = stringResource(id = R.string.set_time)
-    val action = ActionsModel.actionMap[title] as ActionsModel.SetTimeAction
+    val action = ActionsModel.getSetTimeAction()
     var isEnabled by remember { mutableStateOf(action.enabled) }
     val context = LocalContext.current
 
     ActionItem(
-        title = title,
+        title = stringResource(id = R.string.set_time),
         resourceId = R.drawable.ic_watch_later_black_24dp,
         isEnabled = isEnabled,
         onEnabledChange = { newValue ->

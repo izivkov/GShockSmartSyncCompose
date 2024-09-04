@@ -15,13 +15,12 @@ import org.avmedia.gShockSmartSyncCompose.R
 fun VoiceAssistView(
     modifier: Modifier = Modifier,
 ) {
-    val title = stringResource(id = R.string.start_voice_assistant)
-    val action = ActionsModel.actionMap[title] as ActionsModel.StartVoiceAssistAction
+    val action = ActionsModel.getVoiceAssistantAction()
     var isEnabled by remember { mutableStateOf(action.enabled) }
     val context = LocalContext.current
 
     ActionItem(
-        title = title,
+        title = stringResource(id = R.string.start_voice_assistant),
         resourceId = R.drawable.voice_assist,
         isEnabled = isEnabled,
         onEnabledChange = { newValue ->

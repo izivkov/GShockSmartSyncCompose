@@ -1,3 +1,4 @@
+
 package org.avmedia.gShockSmartSyncCompose.ui.settings
 
 import AppSwitch
@@ -10,6 +11,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.RadioButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -17,16 +23,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
+import org.avmedia.gshockapi.WatchInfo
 
 @Composable
 fun Light(
     autoLightOn: Boolean,
-    onAutoLightToggle: (Boolean) -> Unit,
     nightOnly: Boolean,
-    onNightOnlyToggle: (Boolean) -> Unit,
     selectedLightDuration: String,
-    onLightDurationChange: (String) -> Unit
+    onSettingChanged: (SettingsModel.Setting) -> Unit
 ) {
+    val settings = SettingsModel.getLight()
+    var autoLight by remember { mutableStateOf(autoLightOn) }
+    var night by remember { mutableStateOf(nightOnly) }
+    var lightDuration by remember { mutableStateOf(selectedLightDuration) }
+
+    LaunchedEffect(autoLightOn, nightOnly, selectedLightDuration) {
+        autoLight = autoLightOn
+        night = nightOnly
+        lightDuration = selectedLightDuration
+    }
+
     AppCard(
         modifier = Modifier
             .fillMaxWidth()
@@ -54,10 +70,13 @@ fun Light(
                     )
                 }
                 AppSwitch(
-                    checked = autoLightOn,
-                    onCheckedChange = onAutoLightToggle
+                    checked = autoLight,
+                    onCheckedChange = {
+                        autoLight = it
+                        settings.autoLight = it
+                        onSettingChanged(settings)
+                    }
                 )
-
             }
 
             // Night Only Auto Light Layout
@@ -86,18 +105,24 @@ fun Light(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     RadioButton(
-                        selected = selectedLightDuration == "short",
-                        onClick = { onLightDurationChange("short") },
+                        selected = lightDuration == SettingsModel.Light.LIGHT_DURATION.TWO_SECONDS.value,
+                        onClick = {
+                            lightDuration = SettingsModel.Light.LIGHT_DURATION.TWO_SECONDS.value
+                            onSettingChanged(settings)
+                        },
                         modifier = Modifier.padding(end = 0.dp)
                     )
-                    AppText(text = "2s")
+                    AppText(text = WatchInfo.shortLightDuration)
 
                     RadioButton(
-                        selected = selectedLightDuration == "long",
-                        onClick = { onLightDurationChange("long") },
+                        selected = lightDuration == SettingsModel.Light.LIGHT_DURATION.FOUR_SECONDS.value,
+                        onClick = {
+                            lightDuration = SettingsModel.Light.LIGHT_DURATION.FOUR_SECONDS.value
+                            onSettingChanged(settings)
+                        },
                         modifier = Modifier.padding(end = 0.dp)
                     )
-                    AppText(text = "4s")
+                    AppText(text = WatchInfo.longLightDuration)
                 }
             }
         }
@@ -110,11 +135,12 @@ fun PreviewSettingsItem() {
     // Providing mock data for the preview
     Light(
         autoLightOn = true,
-        onAutoLightToggle = { /* Handle toggle here */ },
         nightOnly = false,
-        onNightOnlyToggle = { /* Handle toggle here */ },
-        selectedLightDuration = "short",
-        onLightDurationChange = { /* Handle change here */ }
+        selectedLightDuration = "2s",
+        onSettingChanged = { updatedSetting ->
+            // Automatically updates the model when the setting is changed in the UI
+            SettingsModel.settingsMap.toMutableMap()[updatedSetting.title] = updatedSetting
+        }
     )
 }
 

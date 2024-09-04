@@ -15,13 +15,12 @@ import org.avmedia.gShockSmartSyncCompose.R
 fun RemindersView(
     modifier: Modifier = Modifier,
 ) {
-    val title = stringResource(id = R.string.set_reminders)
-    val action = ActionsModel.actionMap[title] as ActionsModel.SetEventsAction
+    val action = ActionsModel.getSetReminderAction()
     var isEnabled by remember { mutableStateOf(action.enabled) }
     val context = LocalContext.current
 
     ActionItem(
-        title = title,
+        title = stringResource(id = R.string.set_reminders),
         resourceId = R.drawable.events,
         isEnabled = isEnabled,
         onEnabledChange = {newValue ->

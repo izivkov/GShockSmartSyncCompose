@@ -16,13 +16,12 @@ import kotlin.contracts.contract
 fun FlashlightView(
     modifier: Modifier = Modifier,
 ) {
-    val title = stringResource(id = R.string.toggle_flashlight)
-    val action = ActionsModel.actionMap[title] as ActionsModel.ToggleFlashlightAction
+    val action = ActionsModel.getFlashlightAction()
     var isEnabled by remember { mutableStateOf(action.enabled) }
     val context = LocalContext.current
 
     ActionItem(
-        title = title,
+        title = stringResource(id = R.string.toggle_flashlight),
         resourceId = R.drawable.flashlight,
         isEnabled = isEnabled,
         onEnabledChange = { newValue ->

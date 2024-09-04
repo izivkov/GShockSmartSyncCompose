@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Checkbox
@@ -91,7 +92,7 @@ fun TimeAdjustment(
                         .width(IntrinsicSize.Min)
                         .align(Alignment.CenterVertically)
                         .padding(end = 12.dp)
-                        .weight(1.5f),
+                        .weight(1.0f),
                     placeholder = {
                         AppText(text = stringResource(id = R.string._00))
                     },

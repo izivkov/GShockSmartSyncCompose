@@ -26,8 +26,7 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.AppIconFromResource
 fun PhotoView(
     cameraOrientation: String = "front",
 ) {
-    val title = stringResource(id = R.string.take_photo)
-    val action = ActionsModel.actionMap[title] as ActionsModel.PhotoAction
+    val action = ActionsModel.getTakePhotoAction()
     var isEnabled by remember { mutableStateOf(action.enabled) }
     var orientation by remember { mutableStateOf(action.cameraOrientation) }
 
@@ -57,7 +56,7 @@ fun PhotoView(
             ) {
                 // Title TextView equivalent
                 AppTextLarge(
-                    text = title,
+                    text = stringResource(id = R.string.take_photo),
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                 )

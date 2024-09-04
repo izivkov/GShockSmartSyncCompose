@@ -38,7 +38,7 @@ import java.util.Date
 object ActionsModel {
 
     private val actions = ArrayList<Action>()
-    val actionMap: MutableMap<String, Action> = mutableMapOf()
+    private val actionMap: MutableMap<String, Action> = mutableMapOf()
 
     enum class RUN_MODE {
         SYNC, ASYNC,
@@ -96,6 +96,42 @@ object ActionsModel {
         actionMap[makePhoneCallText] = makePhoneCallAction
 
         loadData(applicationContext())
+    }
+
+    fun getFlashlightAction(): ToggleFlashlightAction {
+        return actionMap[applicationContext().getString(R.string.toggle_flashlight)] as ToggleFlashlightAction
+    }
+
+    fun getSetTimeAction(): SetTimeAction {
+        return actionMap[applicationContext().getString(R.string.set_time)] as SetTimeAction
+    }
+
+    fun getSetReminderAction(): SetEventsAction {
+        return actionMap[applicationContext().getString(R.string.set_reminders)] as SetEventsAction
+    }
+
+    fun getTakePhotoAction(): PhotoAction {
+        return actionMap[applicationContext().getString(R.string.take_photo)] as PhotoAction
+    }
+
+    fun getVoiceAssistantAction(): StartVoiceAssistAction {
+        return actionMap[applicationContext().getString(R.string.start_voice_assistant)] as StartVoiceAssistAction
+    }
+
+    fun getNextTrackAction(): NextTrack {
+        return actionMap["Skip to next track"] as NextTrack
+    }
+
+    fun getPrayerAlarmsAction(): PrayerAlarmsAction {
+        return actionMap["Set Prayer Alarms"] as PrayerAlarmsAction
+    }
+
+    fun getEmergencyActions(): Separator {
+        return actionMap[applicationContext().getString(R.string.emergency_actions)] as Separator
+    }
+
+    fun getMakePhoneCallAction(): PhoneDialAction {
+        return actionMap[applicationContext().getString(R.string.make_phonecall)] as PhoneDialAction
     }
 
     fun getActions(): ArrayList<Action> {

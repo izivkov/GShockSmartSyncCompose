@@ -25,8 +25,7 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.AppIconFromResource
 
 @Composable
 fun PhoneView() {
-    val title = stringResource(id = R.string.make_phonecall)
-    val action = ActionsModel.actionMap[title] as ActionsModel.PhoneDialAction
+    val action = ActionsModel.getMakePhoneCallAction()
     var isEnabled by remember { mutableStateOf(action.enabled) }
     val context = LocalContext.current
 
@@ -53,7 +52,7 @@ fun PhoneView() {
                     .padding(6.dp)
             ) {
                 AppTextLarge(
-                    text = title,
+                    text = stringResource(id = R.string.make_phonecall),
                 )
                 Row {
                     var phoneNumber by remember { mutableStateOf(action.phoneNumber) }

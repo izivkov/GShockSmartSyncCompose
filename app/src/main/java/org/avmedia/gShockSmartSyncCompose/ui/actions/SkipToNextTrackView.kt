@@ -15,13 +15,12 @@ import org.avmedia.gShockSmartSyncCompose.R
 fun SkipToNextTrackView(
     modifier: Modifier = Modifier,
 ) {
-    val title = stringResource(id = R.string.next_track)
-    val action = ActionsModel.actionMap[title] as ActionsModel.NextTrack
+    val action = ActionsModel.getNextTrackAction()
     var isEnabled by remember { mutableStateOf(action.enabled) }
     val context = LocalContext.current
 
     ActionItem(
-        title = title,
+        title = stringResource(id = R.string.next_track),
         resourceId = R.drawable.skip_next,
         infoText = stringResource(id = R.string.skip_to_next_track_info),
         isEnabled = isEnabled,
