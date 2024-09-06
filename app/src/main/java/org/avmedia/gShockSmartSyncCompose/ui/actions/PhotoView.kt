@@ -7,26 +7,39 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.avmedia.gShockSmartSyncCompose.R
-import org.avmedia.gShockSmartSyncCompose.ui.actions.ActionsModel
+import org.avmedia.gShockSmartSyncCompose.ui.actions.ActionsViewModel
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppIconFromResource
 
 @Composable
 fun PhotoView(
     cameraOrientation: String = "front",
+    actionsViewModel: ActionsViewModel = viewModel()
 ) {
-    val action = ActionsModel.getTakePhotoAction()
+    var action = actionsViewModel.getAction(ActionsViewModel.PhotoAction::class.java)
+    val currentAction by remember { mutableStateOf(action) }
+
+    LaunchedEffect(action) {
+        snapshotFlow { actionsViewModel.getAction(ActionsViewModel.PhotoAction::class.java) }
+            .collect { newAction ->
+                action = currentAction
+            }
+    }
+
     var isEnabled by remember { mutableStateOf(action.enabled) }
     var orientation by remember { mutableStateOf(action.cameraOrientation) }
 
@@ -71,11 +84,11 @@ fun PhotoView(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         RadioButton(
-                            selected = orientation == ActionsModel.CAMERA_ORIENTATION.FRONT,
+                            selected = orientation == ActionsViewModel.CAMERA_ORIENTATION.FRONT,
                             onClick = {
-                                action.cameraOrientation = ActionsModel.CAMERA_ORIENTATION.FRONT
+                                action.cameraOrientation = ActionsViewModel.CAMERA_ORIENTATION.FRONT
                                 action.save(context)
-                                orientation = ActionsModel.CAMERA_ORIENTATION.FRONT
+                                orientation = ActionsViewModel.CAMERA_ORIENTATION.FRONT
                             },
                             modifier = Modifier
                         )
@@ -85,11 +98,11 @@ fun PhotoView(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         RadioButton(
-                            selected = orientation == ActionsModel.CAMERA_ORIENTATION.BACK,
+                            selected = orientation == ActionsViewModel.CAMERA_ORIENTATION.BACK,
                             onClick = {
-                                action.cameraOrientation = ActionsModel.CAMERA_ORIENTATION.BACK
+                                action.cameraOrientation = ActionsViewModel.CAMERA_ORIENTATION.BACK
                                 action.save(context)
-                                orientation = ActionsModel.CAMERA_ORIENTATION.BACK
+                                orientation = ActionsViewModel.CAMERA_ORIENTATION.BACK
                             },
                             modifier = Modifier
                         )

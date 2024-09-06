@@ -5,10 +5,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -18,14 +20,28 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.avmedia.gShockSmartSyncCompose.R
-import org.avmedia.gShockSmartSyncCompose.ui.actions.ActionsModel
+import org.avmedia.gShockSmartSyncCompose.ui.actions.ActionsViewModel
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppIconFromResource
 
 @Composable
-fun PhoneView() {
-    val action = ActionsModel.getMakePhoneCallAction()
+fun PhoneView(
+    actionsViewModel: ActionsViewModel = viewModel()
+) {
+    val classType = ActionsViewModel.PhoneDialAction::class.java
+
+    var action = actionsViewModel.getAction(classType)
+    val currentAction by remember { mutableStateOf(action) }
+
+    LaunchedEffect(action) {
+        snapshotFlow { actionsViewModel.getAction(classType) }
+            .collect { newAction ->
+                action = currentAction
+            }
+    }
+
     var isEnabled by remember { mutableStateOf(action.enabled) }
     val context = LocalContext.current
 

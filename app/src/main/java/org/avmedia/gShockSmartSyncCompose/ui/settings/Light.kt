@@ -1,4 +1,3 @@
-
 package org.avmedia.gShockSmartSyncCompose.ui.settings
 
 import AppSwitch

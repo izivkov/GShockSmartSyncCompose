@@ -13,8 +13,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,8 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
-import com.google.gson.Gson
-import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
 import org.avmedia.gShockSmartSyncCompose.ui.common.ButtonData
@@ -34,15 +32,20 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.ButtonsRow
 import org.avmedia.gShockSmartSyncCompose.ui.common.InfoButton
 import org.avmedia.gShockSmartSyncCompose.ui.common.ItemList
 import org.avmedia.gShockSmartSyncCompose.ui.common.ScreenTitle
-import org.avmedia.gShockSmartSyncCompose.ui.settings.SettingsModel.fromJson
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
 fun SettingsScreen(navController: NavController) {
 
-    LaunchedEffect(Unit) {
-        val settingStr = Gson().toJson(api().getSettings())
-        fromJson(settingStr)
+    val settings by SettingsModel.settings.collectAsState()
+    val settingsMap = remember(settings) {
+        settings.associateBy { it.title }.toMutableMap()
+    }
+
+    LaunchedEffect(settings) {
+        // This block will be called every time `settings` changes
+        // You can perform any action when settings changes
+        println("Settings have changed: $settings")
     }
 
     GShockSmartSyncTheme {
@@ -73,7 +76,7 @@ fun SettingsScreen(navController: NavController) {
                         .fillMaxWidth()
                         .fillMaxSize()
                 ) {
-                    SettingsList()
+                    SettingsList(settingsMap)
                 }
 
                 BottomRow(modifier = Modifier.constrainAs(buttonsRow) {
@@ -89,12 +92,10 @@ fun SettingsScreen(navController: NavController) {
 }
 
 @Composable
-fun SettingsList() {
+fun SettingsList(settingsMap: MutableMap<String, SettingsModel.Setting>) {
 
     @Composable
     fun createSettings(): List<Any> {
-        val settingsMap by remember { mutableStateOf(SettingsModel.settingsMap) }
-
         val settings = listOf(
             Locale(
                 dateFormat = "MM:DD",
@@ -109,15 +110,15 @@ fun SettingsList() {
             ),
 
             Light(
-                autoLightOn = SettingsModel.getLight().autoLight,
-                nightOnly = SettingsModel.getLight().nightOnly,
-                selectedLightDuration = SettingsModel.getLight().duration.value,
+                autoLightOn = (settingsMap["Light"] as SettingsModel.Light).autoLight,
+                nightOnly = (settingsMap["Light"] as SettingsModel.Light).nightOnly,
+                selectedLightDuration = (settingsMap["Light"] as SettingsModel.Light).duration.value,
                 onSettingChanged = { updatedSetting ->
-                    SettingsModel.settingsMap[updatedSetting.title] = updatedSetting
+                    settingsMap[updatedSetting.title] = updatedSetting
                 }
             ),
 
-            PowerSavings(isSwitchOn = (SettingsModel.powerSavingMode as SettingsModel.PowerSavingMode).powerSavingMode),
+            PowerSavings(isSwitchOn = (settingsMap["Power Saving Mode"] as SettingsModel.PowerSavingMode).powerSavingMode),
 
             TimeAdjustment(
                 timeAdjustmentOnOffChecked = true,

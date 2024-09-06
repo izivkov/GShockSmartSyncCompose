@@ -1,22 +1,36 @@
 package org.avmedia.gShockSmartSyncCompose.ui.actions
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
 fun SetTimeView(
     modifier: Modifier = Modifier,
+    actionsViewModel: ActionsViewModel = viewModel(),
 ) {
-    val action = ActionsModel.getSetTimeAction()
+    val classType = ActionsViewModel.SetTimeAction::class.java
+
+    var action = actionsViewModel.getAction(classType)
+    val currentAction by remember { mutableStateOf(action) }
+
+    LaunchedEffect(action) {
+        snapshotFlow { actionsViewModel.getAction(classType) }
+            .collect { newAction ->
+                action = currentAction
+            }
+    }
+
     var isEnabled by remember { mutableStateOf(action.enabled) }
     val context = LocalContext.current
 

@@ -4,6 +4,7 @@ import android.icu.util.MeasureUnit
 import android.telephony.TelephonyManager
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -12,9 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
+import org.avmedia.gShockSmartSyncCompose.ui.time.TimeModel
 import java.util.Locale
 
 @Composable
@@ -22,15 +24,17 @@ fun WatchTemperature(
     modifier: Modifier = Modifier,
     hasTemperature: Boolean,
     isConnected: Boolean,
-    isNormalButtonPressed: Boolean
+    isNormalButtonPressed: Boolean,
+    timeModel: TimeModel = viewModel()
 ) {
     var temperatureText by remember { mutableStateOf("N/A") }
+    val temperature by timeModel.temperature.collectAsState()
+
     val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(temperature) {
         if (hasTemperature && isConnected && isNormalButtonPressed) {
             launch(Dispatchers.IO) {
-                val temperature = api().getWatchTemperature()
 
                 val tm = getSystemService(context, TelephonyManager::class.java)
                 val countryCodeValue = tm?.networkCountryIso ?: ""

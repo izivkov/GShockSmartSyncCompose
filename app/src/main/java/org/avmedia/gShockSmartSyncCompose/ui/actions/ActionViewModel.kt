@@ -1,9 +1,3 @@
-/*
- * Created by Ivo Zivkov (izivkov@gmail.com) on 2022-03-30, 12:06 a.m.
- * Copyright (c) 2022 . All rights reserved.
- * Last modified 2022-03-20, 7:47 p.m.
- */
-
 package org.avmedia.gShockSmartSyncCompose.ui.actions
 
 import android.app.NotificationManager
@@ -14,15 +8,18 @@ import android.media.AudioManager
 import android.net.Uri
 import android.os.SystemClock
 import android.view.KeyEvent
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationContext
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.services.NotificationProvider
-import org.avmedia.gShockSmartSyncCompose.ui.actions.ActionsModel.CoroutineScopes.mainScope
+import org.avmedia.gShockSmartSyncCompose.ui.actions.ActionsViewModel.CoroutineScopes.mainScope
 import org.avmedia.gShockSmartSyncCompose.ui.events.EventsModel
 import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
 import org.avmedia.gShockSmartSyncCompose.utils.Utils
@@ -32,120 +29,62 @@ import java.text.DateFormat
 import java.time.Clock
 import java.util.Date
 
-@Suppress(
-    "ClassName",
-)
-object ActionsModel {
+object ActionsViewModel : ViewModel() {
+    private val _actions = MutableStateFlow<List<Action>>(emptyList())
+    val actions: StateFlow<List<Action>> = _actions
 
-    private val actions = ArrayList<Action>()
-    private val actionMap: MutableMap<String, Action> = mutableMapOf()
+    private val actionMap = mutableMapOf<Class<out Action>, Action>()
 
     enum class RUN_MODE {
         SYNC, ASYNC,
     }
 
+    // Initialize or update the map when actions are loaded
+    private fun updateActionTypeMap() {
+        actionMap.clear()
+        _actions.value.forEach { action ->
+            actionMap[action::class.java] = action
+        }
+    }
+
+    fun <T : Action> getAction(type: Class<T>): T {
+        return actionMap[type] as T
+    }
+
     init {
-        val findPhoneText = applicationContext().getString(R.string.find_phone)
-        val findPhoneAction = FindPhoneAction(findPhoneText, true)
-        actions.add(findPhoneAction)
-        actionMap[findPhoneText] = findPhoneAction
-
-        val setTimeText = applicationContext().getString(R.string.set_time)
-        val timeAction = SetTimeAction(setTimeText, true)
-        actions.add(timeAction)
-        actionMap[setTimeText] = timeAction
-
-        val setReminderText = applicationContext().getString(R.string.set_reminders)
-        val setReminderAction = SetEventsAction(setReminderText, false)
-        actions.add(setReminderAction)
-        actionMap[setReminderText] = setReminderAction
-
-        val takePhotoText = applicationContext().getString(R.string.take_photo)
-        val takePhotoAction = PhotoAction(takePhotoText, false, CAMERA_ORIENTATION.BACK)
-        actions.add(takePhotoAction)
-        actionMap[takePhotoText] = takePhotoAction
-
-        val toggleFlashlightText = applicationContext().getString(R.string.toggle_flashlight)
-        val toggleFlashlightAction = ToggleFlashlightAction(toggleFlashlightText, false)
-        actions.add(toggleFlashlightAction)
-        actionMap[toggleFlashlightText] = toggleFlashlightAction
-
-        val voiceAssistantText = applicationContext().getString(R.string.start_voice_assistant)
-        val voiceAssistantAction = StartVoiceAssistAction(voiceAssistantText, false)
-        actions.add(voiceAssistantAction)
-        actionMap[voiceAssistantText] = voiceAssistantAction
-
-        val nextTrackText = "Skip to next track"
-        val nextTrackAction = NextTrack(nextTrackText, false)
-        actions.add(nextTrackAction)
-        actionMap[nextTrackText] = nextTrackAction
-
-        val prayerAlarmsText = "Set Prayer Alarms"
-        val prayerAlarmsAction = PrayerAlarmsAction(prayerAlarmsText, false)
-        actions.add(prayerAlarmsAction)
-        actionMap[prayerAlarmsText] = prayerAlarmsAction
-
-        val emergencyActionsText = applicationContext().getString(R.string.emergency_actions)
-        val emergencyActions = Separator(emergencyActionsText, false)
-        actions.add(emergencyActions)
-        actionMap[emergencyActionsText] = emergencyActions
-
-        val makePhoneCallText = applicationContext().getString(R.string.make_phonecall)
-        val makePhoneCallAction = PhoneDialAction(makePhoneCallText, false, "")
-        actions.add(makePhoneCallAction)
-        actionMap[makePhoneCallText] = makePhoneCallAction
-
+        loadInitialActions()
         loadData(applicationContext())
+        updateActionTypeMap()
     }
 
-    fun getFlashlightAction(): ToggleFlashlightAction {
-        return actionMap[applicationContext().getString(R.string.toggle_flashlight)] as ToggleFlashlightAction
+    // Method to load the initial list of actions
+    private fun loadInitialActions() {
+        val initialActions = listOf(
+            ToggleFlashlightAction("Toggle Flashlight", false),
+            StartVoiceAssistAction("Start Voice Assistant", false),
+            NextTrack("Skip to next track", false),
+
+            FindPhoneAction(applicationContext().getString(R.string.find_phone), true),
+            SetTimeAction(applicationContext().getString(R.string.set_time), true),
+            SetEventsAction(applicationContext().getString(R.string.set_reminders), false),
+            PhotoAction(
+                applicationContext().getString(R.string.take_photo),
+                false,
+                CAMERA_ORIENTATION.BACK
+            ),
+            PrayerAlarmsAction("Set Prayer Alarms", true),
+            Separator(applicationContext().getString(R.string.emergency_actions), false),
+            PhoneDialAction(applicationContext().getString(R.string.make_phonecall), false, ""),
+        )
+
+        _actions.value = initialActions
     }
 
-    fun getSetTimeAction(): SetTimeAction {
-        return actionMap[applicationContext().getString(R.string.set_time)] as SetTimeAction
-    }
-
-    fun getSetReminderAction(): SetEventsAction {
-        return actionMap[applicationContext().getString(R.string.set_reminders)] as SetEventsAction
-    }
-
-    fun getTakePhotoAction(): PhotoAction {
-        return actionMap[applicationContext().getString(R.string.take_photo)] as PhotoAction
-    }
-
-    fun getVoiceAssistantAction(): StartVoiceAssistAction {
-        return actionMap[applicationContext().getString(R.string.start_voice_assistant)] as StartVoiceAssistAction
-    }
-
-    fun getNextTrackAction(): NextTrack {
-        return actionMap["Skip to next track"] as NextTrack
-    }
-
-    fun getPrayerAlarmsAction(): PrayerAlarmsAction {
-        return actionMap["Set Prayer Alarms"] as PrayerAlarmsAction
-    }
-
-    fun getEmergencyActions(): Separator {
-        return actionMap[applicationContext().getString(R.string.emergency_actions)] as Separator
-    }
-
-    fun getMakePhoneCallAction(): PhoneDialAction {
-        return actionMap[applicationContext().getString(R.string.make_phonecall)] as PhoneDialAction
-    }
-
-    fun getActions(): ArrayList<Action> {
-        return filter(actions)
-    }
-
-    private fun filter(actions: ArrayList<Action>): ArrayList<Action> {
-        return actions.filter { action ->
-            when (action) {
-                is FindPhoneAction -> WatchInfo.findButtonUserDefined
-                is SetEventsAction -> WatchInfo.hasReminders
-                else -> true
-            }
-        } as ArrayList<Action>
+    // Function to update a specific action
+    fun updateAction(updatedAction: Action) {
+        _actions.value = _actions.value.map { action ->
+            if (action.title == updatedAction.title) updatedAction else action
+        }
     }
 
     enum class RunEnvironment {
@@ -206,12 +145,15 @@ object ActionsModel {
             Timber.d("running ${this.javaClass.simpleName}")
             EventsModel.refresh(context)
             api().setEvents(EventsModel.events)
-            // Utils.snackBar(context, "Events Sent to Watch")
         }
 
         override fun load(context: Context) {
             val key = this.javaClass.simpleName + ".enabled"
             enabled = LocalDataStorage.get(context, key, "false").toBoolean()
+        }
+
+        companion object {
+            fun empty() = SetEventsAction("", false)
         }
     }
 
@@ -226,6 +168,10 @@ object ActionsModel {
         override fun load(context: Context) {
             val key = this.javaClass.simpleName + ".enabled"
             enabled = LocalDataStorage.get(context, key, "false").toBoolean()
+        }
+
+        companion object {
+            fun empty() = ToggleFlashlightAction("", false)
         }
     }
 
@@ -255,6 +201,10 @@ object ActionsModel {
                     if (WatchInfo.findButtonUserDefined) "true" else "false"
                 )
                     .toBoolean()
+        }
+
+        companion object {
+            fun empty() = FindPhoneAction("", false)
         }
     }
 
@@ -295,6 +245,10 @@ object ActionsModel {
                 )
                     .toBoolean()
         }
+
+        companion object {
+            fun empty() = SetTimeAction("", false)
+        }
     }
 
     class SetLocationAction(override var title: String, override var enabled: Boolean) :
@@ -313,6 +267,10 @@ object ActionsModel {
             } catch (e: ActivityNotFoundException) {
                 Utils.snackBar(context, "Voice Assistant not available on this device!")
             }
+        }
+
+        companion object {
+            fun empty() = StartVoiceAssistAction("", false)
         }
     }
 
@@ -346,6 +304,10 @@ object ActionsModel {
                 Utils.snackBar(context, "Cannot go to Next Track!")
             }
         }
+
+        companion object {
+            fun empty() = NextTrack("", false)
+        }
     }
 
     class PrayerAlarmsAction(
@@ -373,8 +335,11 @@ object ActionsModel {
                 // getAlarms need to be run first, otherwise setAlarms() will not work
                 api().getAlarms()
                 api().setAlarms(alarms)
-                // Utils.snackBar(context, "Set Prayer Alarms")
             }
+        }
+
+        companion object {
+            fun empty() = PrayerAlarmsAction("", true)
         }
     }
 
@@ -432,6 +397,10 @@ object ActionsModel {
 
             return true
         }
+
+        companion object {
+            fun empty() = PhoneDialAction("", false, phoneNumber = "")
+        }
     }
 
     enum class CAMERA_ORIENTATION {
@@ -485,6 +454,10 @@ object ActionsModel {
                     .toString() == "BACK"
             ) CAMERA_ORIENTATION.BACK else CAMERA_ORIENTATION.FRONT
         }
+
+        companion object {
+            fun empty() = PhotoAction("", false, cameraOrientation = CAMERA_ORIENTATION.BACK)
+        }
     }
 
     class EmailLocationAction(
@@ -519,19 +492,14 @@ object ActionsModel {
         }
     }
 
-    object FileSpecs {
-        const val RATIO_4_3_VALUE = 4.0 / 3.0
-        const val RATIO_16_9_VALUE = 16.0 / 9.0
-    }
-
     /*
-    Note: Alternatively, actions can run autonomously, when certain conditions were met:
-    1. User pressed Action button (lower-right) on the watch
-    2. The action is enabled
-    3. Certain progress event received.
+Note: Alternatively, actions can run autonomously, when certain conditions were met:
+1. User pressed Action button (lower-right) on the watch
+2. The action is enabled
+3. Certain progress event received.
 
-    However, this way gives us more control on how to start the actions.
-     */
+However, this way gives us more control on how to start the actions.
+ */
     private fun runIt(action: Action, context: Context) {
         try {
             action.run(context)
@@ -547,11 +515,11 @@ object ActionsModel {
     fun runActionsForActionButton(context: Context) {
         runFilteredActions(
             context,
-            actions.filter { it.shouldRun(RunEnvironment.ACTION_BUTTON_PRESSED) })
+            _actions.value.filter { it.shouldRun(RunEnvironment.ACTION_BUTTON_PRESSED) })
     }
 
     fun runActionForConnection(context: Context) {
-        runFilteredActions(context, actions.filter {
+        runFilteredActions(context, _actions.value.filter {
             it.shouldRun(RunEnvironment.NORMAL_CONNECTION)
         })
     }
@@ -559,7 +527,7 @@ object ActionsModel {
     fun runActionsForAutoTimeSetting(context: Context) {
         runFilteredActions(
             context,
-            actions.filter { it.shouldRun(RunEnvironment.AUTO_TIME_ADJUSTMENT) })
+            _actions.value.filter { it.shouldRun(RunEnvironment.AUTO_TIME_ADJUSTMENT) })
 
         // show notification if configured
         if (LocalDataStorage.getTimeAdjustmentNotification(context)
@@ -570,7 +538,7 @@ object ActionsModel {
     }
 
     fun runActionFindPhone(context: Context) {
-        runFilteredActions(context, actions.filter {
+        runFilteredActions(context, _actions.value.filter {
             it.shouldRun(RunEnvironment.FIND_PHONE_PRESSED)
         })
     }
@@ -608,13 +576,13 @@ object ActionsModel {
     }
 
     fun loadData(context: Context) {
-        actions.forEach {
+        _actions.value.forEach {
             it.load(context)
         }
     }
 
     fun saveData(context: Context) {
-        actions.forEach {
+        _actions.value.forEach {
             it.save(context)
         }
     }

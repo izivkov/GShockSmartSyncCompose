@@ -4,7 +4,12 @@ import AppText
 import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
 import org.avmedia.gshockapi.EventAction
@@ -21,7 +26,7 @@ fun ActionRunner(
         val eventActions = arrayOf(
             EventAction("RunActions") {
                 // ActionsModel.loadData(context)
-                ActionsModel.runActionsForActionButton(context)
+                ActionsViewModel.runActionsForActionButton(context)
             },
             EventAction("ButtonPressedInfoReceived") {
                 // ActionsModel.loadData(context)
@@ -29,17 +34,20 @@ fun ActionRunner(
                 when {
                     api().isActionButtonPressed() -> {
                         isVisible = true
-                        ActionsModel.runActionsForActionButton(context)
+                        ActionsViewModel.runActionsForActionButton(context)
                     }
+
                     api().isAutoTimeStarted() -> {
-                        ActionsModel.runActionsForAutoTimeSetting(context)
+                        ActionsViewModel.runActionsForAutoTimeSetting(context)
                     }
+
                     api().isFindPhoneButtonPressed() -> {
                         isVisible = true
-                        ActionsModel.runActionFindPhone(context)
+                        ActionsViewModel.runActionFindPhone(context)
                     }
+
                     api().isNormalButtonPressed() -> {
-                        ActionsModel.runActionForConnection(context)
+                        ActionsViewModel.runActionForConnection(context)
                     }
                 }
             },

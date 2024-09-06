@@ -4,7 +4,6 @@ import AppText
 import AppTextLarge
 import RealTimeClock
 import TimeFormat
-import android.widget.TextClock
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -23,7 +21,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppButton
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
@@ -83,8 +80,11 @@ fun LocalTimeView(modifier: Modifier) {
 }
 
 @Composable
-fun TextClockComposable(modifier: Modifier = Modifier, format: TimeFormat = TimeFormat.TwentyFourHour) {
-    RealTimeClock(modifier= modifier.padding(start = 6.dp))
+fun TextClockComposable(
+    modifier: Modifier = Modifier,
+    format: TimeFormat = TimeFormat.TwentyFourHour
+) {
+    RealTimeClock(modifier = modifier.padding(start = 6.dp))
 }
 
 @Composable

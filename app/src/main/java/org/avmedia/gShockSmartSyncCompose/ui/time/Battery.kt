@@ -23,37 +23,29 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
-import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gshockapi.WatchInfo
 
 @Composable
-fun Battery() {
+fun Battery(timeModel: TimeModel = viewModel()) {
 
-    val coroutineScope = rememberCoroutineScope()
+    val batteryLevel by timeModel.batteryLevel.collectAsState()
     var result by remember { mutableIntStateOf(0) }
 
-    // Launch the coroutine to call the suspend function
-    LaunchedEffect(Unit) {
-        coroutineScope.launch {
-            val percent = api().getBatteryLevel()
-            result = percent
-        }
+    LaunchedEffect(batteryLevel) {
+        val percent = batteryLevel
+        result = percent
     }
 
     AndroidView(

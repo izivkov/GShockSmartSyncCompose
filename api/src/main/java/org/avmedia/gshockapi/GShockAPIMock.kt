@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import kotlinx.coroutines.delay
 import org.avmedia.gshockapi.ble.Connection
 import org.avmedia.gshockapi.casio.*
 import org.avmedia.gshockapi.io.*
@@ -106,7 +107,7 @@ class GShockAPIMock(private val context: Context) {
     }
 
     suspend fun getWatchTemperature(): Int {
-        return 36
+        return 37
     }
 
     suspend fun getTimer(): Int {
@@ -210,7 +211,7 @@ class GShockAPIMock(private val context: Context) {
         setting.buttonTone = false
         setting.powerSavingMode = false
         setting.timeAdjustment = true
-        setting.autoLight = false
+        setting.autoLight = true
         setting.lightDuration = "4s"
 
         return setting

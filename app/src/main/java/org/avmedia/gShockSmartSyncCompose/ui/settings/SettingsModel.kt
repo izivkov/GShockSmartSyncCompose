@@ -1,31 +1,31 @@
 package org.avmedia.gShockSmartSyncCompose.ui.settings
 
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.snapshots.SnapshotStateMap
-import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationContext
 import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
-import org.avmedia.gshockapi.Alarm
-import org.avmedia.gshockapi.Settings
 import org.avmedia.gshockapi.WatchInfo
 import org.json.JSONObject
 import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 
 object SettingsModel {
-    private val settings = ArrayList<Setting>()
     abstract class Setting(open var title: String)
 
+    private val _settings = MutableStateFlow<ArrayList<Setting>>(arrayListOf())
+    val settings: StateFlow<ArrayList<Setting>> = _settings
+    private val settingsList = _settings.value
+
     val settingsMap by lazy {
-        settings.associateBy { it.title }.toMutableMap()
+        settingsList.associateBy { it.title }.toMutableMap()
     }
 
     val locale by lazy { settingsMap["Locale"] }
@@ -120,16 +120,36 @@ object SettingsModel {
     class HandAdjustment : Setting("Hand Adjustment")
 
     init {
-        settings.add(Locale())
-        settings.add(OperationSound())
-        settings.add(Light())
-        settings.add(PowerSavingMode())
-        settings.add(TimeAdjustment())
-        settings.add(DnD())
+        settingsList.clear()
+        settingsList.add(Locale())
+        settingsList.add(OperationSound())
+        settingsList.add(Light())
+        settingsList.add(PowerSavingMode())
+        settingsList.add(TimeAdjustment())
+        settingsList.add(DnD())
 
-        settingsMap.clear()
-        settings.forEach { setting ->
-            settingsMap[setting.title] = setting
+        val coroutineContext: CoroutineContext = Dispatchers.Default + SupervisorJob()
+        CoroutineScope(coroutineContext).launch {
+            val settingStr = Gson().toJson(api().getSettings())
+            fromJson(settingStr)
+        }
+
+        repeatEverySecond()
+    }
+
+    private fun repeatEverySecond() {
+
+        val coroutineContext: CoroutineContext = Dispatchers.Default + SupervisorJob()
+        CoroutineScope(coroutineContext).launch {
+            val setting = api().getSettings()
+
+            while (isActive) { // Ensure the coroutine can be cancelled
+                val settingStr = Gson().toJson(setting)
+                fromJson(settingStr)
+                delay(1000)
+
+                setting.autoLight = !setting.autoLight
+            }
         }
     }
 
@@ -239,14 +259,21 @@ object SettingsModel {
             }
         }
 
+        println("Settings updated: ${_settings.value}")
+        _settings.value.forEach { setting ->
+            if (setting.title == "Light") {
+                println("------------> " + setting.title + ": " + (setting as Light).autoLight)
+            }
+        }
+
         settingsMap.clear()
-        settings.forEach { setting ->
+        settingsList.forEach { setting ->
             settingsMap[setting.title] = setting
         }
     }
 
     fun getSettings(): ArrayList<Setting> {
-        return filter(settings)
+        return filter(settingsList)
     }
 
     private fun filter(settings: ArrayList<Setting>): ArrayList<Setting> {

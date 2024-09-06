@@ -1,7 +1,5 @@
 package org.avmedia.gShockSmartSyncCompose.ui.alarms
 
-import AlarmViewModel
-import android.annotation.SuppressLint
 import android.icu.text.SimpleDateFormat
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +10,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -38,7 +37,9 @@ import java.util.Date
 fun AlarmList(alarmViewModel: AlarmViewModel = viewModel()) {
     val alarms by alarmViewModel.alarms.collectAsState()
 
-    @SuppressLint("SimpleDateFormat")
+    LaunchedEffect(alarms) {
+    }
+
     fun getTime(alarm: Alarm): String {
 
         fun from0to12(formattedTime: String): String {
@@ -65,6 +66,7 @@ fun AlarmList(alarmViewModel: AlarmViewModel = viewModel()) {
         val alarmItems = mutableListOf<Any>()
 
         alarms.forEachIndexed { index, alarm ->
+            println("Alarm ${index}: ${alarm.enabled}")
             ItemView {
                 AlarmItem(
                     time = getTime(alarm),

@@ -1,10 +1,11 @@
+package org.avmedia.gShockSmartSyncCompose.ui.alarms
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
-import org.avmedia.gShockSmartSyncCompose.ui.alarms.AlarmsModel
 import org.avmedia.gshockapi.Alarm
 import org.avmedia.gshockapi.ProgressEvents
 
@@ -19,6 +20,7 @@ class AlarmViewModel : ViewModel() {
     private fun loadAlarms() {
         viewModelScope.launch {
             try {
+                // Load the alarms initially
                 val loadedAlarms = api().getAlarms() // Call your suspend function here
                 _alarms.value = loadedAlarms
                 AlarmsModel.clear()
