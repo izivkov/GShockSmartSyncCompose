@@ -24,9 +24,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
+import org.avmedia.gShockSmartSyncCompose.ui.actions.FlashlightView
 import org.avmedia.gShockSmartSyncCompose.ui.common.ButtonData
 import org.avmedia.gShockSmartSyncCompose.ui.common.ButtonsRow
 import org.avmedia.gShockSmartSyncCompose.ui.common.InfoButton
@@ -35,19 +37,9 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.ScreenTitle
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
-fun SettingsScreen(navController: NavController) {
-
-    val settings by SettingsModel.settings.collectAsState()
-    val settingsMap = remember(settings) {
-        settings.associateBy { it.title }.toMutableMap()
-    }
-
-    LaunchedEffect(settings) {
-        // This block will be called every time `settings` changes
-        // You can perform any action when settings changes
-        println("Settings have changed: $settings")
-    }
-
+fun SettingsScreen(
+    navController: NavController,
+) {
     GShockSmartSyncTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -76,7 +68,7 @@ fun SettingsScreen(navController: NavController) {
                         .fillMaxWidth()
                         .fillMaxSize()
                 ) {
-                    SettingsList(settingsMap)
+                    SettingsList()
                 }
 
                 BottomRow(modifier = Modifier.constrainAs(buttonsRow) {
@@ -92,51 +84,29 @@ fun SettingsScreen(navController: NavController) {
 }
 
 @Composable
-fun SettingsList(settingsMap: MutableMap<String, SettingsModel.Setting>) {
+fun SettingsList() {
 
-    @Composable
-    fun createSettings(): List<Any> {
-        val settings = listOf(
-            Locale(
-                dateFormat = "MM:DD",
-                timeFormat = "12h",
-                selectedLanguage = "Spanish",
-                onDateFormatChange = {},
-                onTimeFormatChange = {},
-                onLanguageChange = {}),
+    val settingsViews = arrayListOf (
+        Locale(onTimeFormatChange = {}, onDateFormatChange = {}, onLanguageChange = {}),
+        OperationalTone(isSwitchOn = true),
+        Light(onSettingChanged = {}),
+        PowerSavings(isSwitchOn = true),
 
-            OperationalTone(
-                isSwitchOn = (SettingsModel.buttonSound as SettingsModel.OperationSound).sound
-            ),
-
-            Light(
-                autoLightOn = (settingsMap["Light"] as SettingsModel.Light).autoLight,
-                nightOnly = (settingsMap["Light"] as SettingsModel.Light).nightOnly,
-                selectedLightDuration = (settingsMap["Light"] as SettingsModel.Light).duration.value,
-                onSettingChanged = { updatedSetting ->
-                    settingsMap[updatedSetting.title] = updatedSetting
-                }
-            ),
-
-            PowerSavings(isSwitchOn = (settingsMap["Power Saving Mode"] as SettingsModel.PowerSavingMode).powerSavingMode),
-
-            TimeAdjustment(
-                timeAdjustmentOnOffChecked = true,
-                notifyMeChecked = false,
-                adjustmentMinutes = "30",
-                onTimeAdjustmentSwitchToggle = {},
-                onNotifyMeCheckedChange = {},
-                onAdjustmentMinutesChange = {}),
+        TimeAdjustment(
+            timeAdjustmentOnOffChecked = true,
+            notifyMeChecked = false,
+            adjustmentMinutes = "15",
+            onTimeAdjustmentSwitchToggle = {},
+            onNotifyMeCheckedChange = {},
+            onAdjustmentMinutesChange = {}
         )
-        return settings
-    }
+    )
 
     Column(
         modifier = Modifier
     ) {
-        ItemList(createSettings())
+        ItemList(settingsViews)
     }
-
 }
 
 @Composable

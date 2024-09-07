@@ -32,9 +32,9 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Locale(
-    timeFormat: String,
-    dateFormat: String,
-    selectedLanguage: String,
+    timeFormat: String = "12h",
+    dateFormat: String = "MM/DD",
+    selectedLanguage: String = "English",
     onTimeFormatChange: (String) -> Unit,
     onDateFormatChange: (String) -> Unit,
     onLanguageChange: (String) -> Unit,

@@ -7,13 +7,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
 fun OperationalTone(
     isSwitchOn: Boolean,
+    settingsViewModel: SettingsViewModel = viewModel()
 ) {
-    val settings = SettingsModel.getButtonSound()
+    val setting = settingsViewModel.getSetting(SettingsViewModel.OperationSound::class.java)
     var sound by remember { mutableStateOf(isSwitchOn) }
 
     val title = stringResource(id = R.string.operational_sound)
@@ -21,7 +23,7 @@ fun OperationalTone(
         isSwitchOn = sound,
         onSwitchToggle = { newValue ->
             sound = newValue // Update the state when the switch is toggled
-            settings.sound = newValue
+            setting.sound = newValue
         }
     )
 }

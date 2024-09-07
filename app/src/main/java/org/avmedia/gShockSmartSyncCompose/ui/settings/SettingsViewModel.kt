@@ -1,70 +1,39 @@
 package org.avmedia.gShockSmartSyncCompose.ui.settings
 
+import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationContext
 import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
 import org.avmedia.gshockapi.WatchInfo
 import org.json.JSONObject
-import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 
-object SettingsModel {
+object SettingsViewModel  : ViewModel() {
     abstract class Setting(open var title: String)
 
     private val _settings = MutableStateFlow<ArrayList<Setting>>(arrayListOf())
     val settings: StateFlow<ArrayList<Setting>> = _settings
-    private val settingsList = _settings.value
+    private val settingsMap: MutableMap<Class<out Setting>, Setting> = _settings.value.associateBy { it::class.java }.toMutableMap()
 
-    val settingsMap by lazy {
-        settingsList.associateBy { it.title }.toMutableMap()
+    private fun updateSettingsAndMap(newSettings: ArrayList<Setting>) {
+        settingsMap.clear()
+        _settings.value = arrayListOf()
+
+        newSettings.forEach { setting ->
+            _settings.value.add(setting)
+            settingsMap[setting::class.java] = setting
+        }
     }
 
-    val locale by lazy { settingsMap["Locale"] }
-    val buttonSound by lazy { settingsMap["Button Sound"] }
-    val powerSavingMode by lazy { settingsMap["Power Saving Mode"] }
-    val timeAdjustment by lazy { settingsMap["Time Adjustment"] }
-    val dnd by lazy { settingsMap["DnD"] }
-    val light by lazy { settingsMap["Light"] }
-    val keep_alive by lazy { settingsMap["Keep Alive"] }
-    val autoLightNightOnly by lazy { settingsMap["Auto Light Night Only"] }
-
-    fun getLocale(): Locale {
-        return settingsMap["Locale"] as Locale
-    }
-
-    fun getButtonSound(): OperationSound {
-        return settingsMap["Button Sound"] as OperationSound
-    }
-
-    fun getPowerSavingMode(): PowerSavingMode {
-        return settingsMap["Power Saving Mode"] as PowerSavingMode
-    }
-
-    fun getTimeAdjustment(): TimeAdjustment {
-        return settingsMap["Time Adjustment"] as TimeAdjustment
-    }
-
-    fun getLight(): Light {
-        return settingsMap["Light"] as Light
-    }
-
-    fun getDnD(): DnD {
-        return settingsMap["DnD"] as DnD
-    }
-    // fun getKeepAlive(): KeepAlive {return settingsMap["Keep Alive"] as KeepAlive}
-    // fun getAutoLightNightOnly(): AutoLightNightOnly {return settingsMap["Auto Light Night Only"] as AutoLightNightOnly}
-
-    fun updateSetting(setting: Setting) {
-        settingsMap[setting.title] = setting
+    fun <T : Setting> getSetting(type: Class<T>): T {
+        return settingsMap[type] as T
     }
 
     class Locale : Setting("Locale") {
@@ -120,160 +89,131 @@ object SettingsModel {
     class HandAdjustment : Setting("Hand Adjustment")
 
     init {
-        settingsList.clear()
-        settingsList.add(Locale())
-        settingsList.add(OperationSound())
-        settingsList.add(Light())
-        settingsList.add(PowerSavingMode())
-        settingsList.add(TimeAdjustment())
-        settingsList.add(DnD())
+        val newSettings = arrayListOf(Locale(), OperationSound(), Light(), PowerSavingMode(), TimeAdjustment(), DnD())
+        updateSettingsAndMap(newSettings)
 
         val coroutineContext: CoroutineContext = Dispatchers.Default + SupervisorJob()
         CoroutineScope(coroutineContext).launch {
             val settingStr = Gson().toJson(api().getSettings())
-            fromJson(settingStr)
-        }
-
-        repeatEverySecond()
-    }
-
-    private fun repeatEverySecond() {
-
-        val coroutineContext: CoroutineContext = Dispatchers.Default + SupervisorJob()
-        CoroutineScope(coroutineContext).launch {
-            val setting = api().getSettings()
-
-            while (isActive) { // Ensure the coroutine can be cancelled
-                val settingStr = Gson().toJson(setting)
-                fromJson(settingStr)
-                delay(1000)
-
-                setting.autoLight = !setting.autoLight
-            }
+            updateSettingsAndMap(fromJson(settingStr))
         }
     }
 
     @Synchronized
-    fun fromJson(jsonStr: String) {
+    fun fromJson(jsonStr: String): ArrayList<Setting> {
         /*
         jsonStr:
         {"adjustmentTimeMinutes":23, "autoLight":true,"dateFormat":"MM:DD",
         "language":"Spanish","lightDuration":"4s","powerSavingMode":true,
         "timeAdjustment":true, "timeFormat":"12h","timeTone":false, "DnD": "false"}
-         */
+        */
+
+        // Create a Set to store updated objects and avoid duplicates
+        val updatedObjects = mutableSetOf<Setting>()
 
         val jsonObj = JSONObject(jsonStr)
         val keys = jsonObj.keys()
+
         while (keys.hasNext()) {
             val key: String = keys.next()
-            Timber.i("Key: $key")
             val value = jsonObj.get(key)
             when (key) {
                 "powerSavingMode" -> {
                     if (WatchInfo.hasPowerSavingMode) {
-                        val setting: PowerSavingMode = getPowerSavingMode()
+                        val setting: PowerSavingMode = settingsMap[PowerSavingMode::class.java] as PowerSavingMode
                         setting.powerSavingMode = value == true
+                        updatedObjects.add(setting)
                     }
                 }
 
                 "timeAdjustment" -> {
-                    if (!WatchInfo.alwaysConnected) { // Auto-time-adjustment does not apply for always-connected watches
-                        val setting: TimeAdjustment = getTimeAdjustment()
+                    if (!WatchInfo.alwaysConnected) {
+                        val setting: TimeAdjustment = settingsMap[TimeAdjustment::class.java] as TimeAdjustment
                         setting.timeAdjustment = value == true
+                        updatedObjects.add(setting)
                     }
                 }
 
                 "adjustmentTimeMinutes" -> {
-                    if (!WatchInfo.alwaysConnected) { // Auto-time-adjustment does not apply for always-connected watches
-                        val setting: TimeAdjustment = getTimeAdjustment()
+                    if (!WatchInfo.alwaysConnected) {
+                        val setting: TimeAdjustment = settingsMap[TimeAdjustment::class.java] as TimeAdjustment
                         setting.adjustmentTimeMinutes = value as Int
+                        updatedObjects.add(setting)
                     }
                 }
 
                 "DnD" -> {
                     if (WatchInfo.hasDnD) {
-                        val setting: DnD = getDnD()
+                        val setting: DnD = settingsMap[DnD::class.java] as DnD
                         setting.dnd = value == true
+                        updatedObjects.add(setting)
                     }
                 }
 
                 "buttonTone" -> {
-                    val setting: OperationSound = getButtonSound()
+                    val setting: OperationSound = settingsMap[OperationSound::class.java] as OperationSound
                     setting.sound = value == true
+                    updatedObjects.add(setting)
                 }
 
                 "autoLight" -> {
-                    val setting: Light = getLight()
+                    val setting: Light = settingsMap[Light::class.java] as Light
                     setting.autoLight = value == true
+                    updatedObjects.add(setting)
                 }
 
                 "lightDuration" -> {
-                    val setting: Light = getLight()
+                    val setting: Light = settingsMap[Light::class.java] as Light
                     if (value == Light.LIGHT_DURATION.TWO_SECONDS.value) {
                         setting.duration = Light.LIGHT_DURATION.TWO_SECONDS
                     } else {
                         setting.duration = Light.LIGHT_DURATION.FOUR_SECONDS
                     }
+                    updatedObjects.add(setting)
                 }
 
                 "timeFormat" -> {
-                    val setting: Locale = getLocale()
+                    val setting: Locale = settingsMap[Locale::class.java] as Locale
                     if (value == Locale.TIME_FORMAT.TWELVE_HOURS.value) {
                         setting.timeFormat = Locale.TIME_FORMAT.TWELVE_HOURS
                     } else {
                         setting.timeFormat = Locale.TIME_FORMAT.TWENTY_FOUR_HOURS
                     }
+                    updatedObjects.add(setting)
                 }
 
                 "dateFormat" -> {
-                    val setting: Locale = getLocale()
+                    val setting: Locale = settingsMap[Locale::class.java] as Locale
                     if (value == Locale.DATE_FORMAT.MONTH_DAY.value) {
                         setting.dateFormat = Locale.DATE_FORMAT.MONTH_DAY
                     } else {
                         setting.dateFormat = Locale.DATE_FORMAT.DAY_MONTH
                     }
+                    updatedObjects.add(setting)
                 }
 
                 "language" -> {
-                    val setting: Locale = getLocale()
+                    val setting: Locale = settingsMap[Locale::class.java] as Locale
                     when (value) {
-                        Locale.DAY_OF_WEEK_LANGUAGE.ENGLISH.value -> setting.dayOfWeekLanguage =
-                            Locale.DAY_OF_WEEK_LANGUAGE.ENGLISH
-
-                        Locale.DAY_OF_WEEK_LANGUAGE.SPANISH.value -> setting.dayOfWeekLanguage =
-                            Locale.DAY_OF_WEEK_LANGUAGE.SPANISH
-
-                        Locale.DAY_OF_WEEK_LANGUAGE.FRENCH.value -> setting.dayOfWeekLanguage =
-                            Locale.DAY_OF_WEEK_LANGUAGE.FRENCH
-
-                        Locale.DAY_OF_WEEK_LANGUAGE.GERMAN.value -> setting.dayOfWeekLanguage =
-                            Locale.DAY_OF_WEEK_LANGUAGE.GERMAN
-
-                        Locale.DAY_OF_WEEK_LANGUAGE.ITALIAN.value -> setting.dayOfWeekLanguage =
-                            Locale.DAY_OF_WEEK_LANGUAGE.ITALIAN
-
-                        Locale.DAY_OF_WEEK_LANGUAGE.RUSSIAN.value -> setting.dayOfWeekLanguage =
-                            Locale.DAY_OF_WEEK_LANGUAGE.RUSSIAN
+                        Locale.DAY_OF_WEEK_LANGUAGE.ENGLISH.value -> setting.dayOfWeekLanguage = Locale.DAY_OF_WEEK_LANGUAGE.ENGLISH
+                        Locale.DAY_OF_WEEK_LANGUAGE.SPANISH.value -> setting.dayOfWeekLanguage = Locale.DAY_OF_WEEK_LANGUAGE.SPANISH
+                        Locale.DAY_OF_WEEK_LANGUAGE.FRENCH.value -> setting.dayOfWeekLanguage = Locale.DAY_OF_WEEK_LANGUAGE.FRENCH
+                        Locale.DAY_OF_WEEK_LANGUAGE.GERMAN.value -> setting.dayOfWeekLanguage = Locale.DAY_OF_WEEK_LANGUAGE.GERMAN
+                        Locale.DAY_OF_WEEK_LANGUAGE.ITALIAN.value -> setting.dayOfWeekLanguage = Locale.DAY_OF_WEEK_LANGUAGE.ITALIAN
+                        Locale.DAY_OF_WEEK_LANGUAGE.RUSSIAN.value -> setting.dayOfWeekLanguage = Locale.DAY_OF_WEEK_LANGUAGE.RUSSIAN
                     }
+                    updatedObjects.add(setting)
                 }
             }
         }
 
-        println("Settings updated: ${_settings.value}")
-        _settings.value.forEach { setting ->
-            if (setting.title == "Light") {
-                println("------------> " + setting.title + ": " + (setting as Light).autoLight)
-            }
-        }
-
-        settingsMap.clear()
-        settingsList.forEach { setting ->
-            settingsMap[setting.title] = setting
-        }
+        // Return the updated objects as an ArrayList
+        return ArrayList(updatedObjects)
     }
 
+
     fun getSettings(): ArrayList<Setting> {
-        return filter(settingsList)
+        return filter(_settings.value)
     }
 
     private fun filter(settings: ArrayList<Setting>): ArrayList<Setting> {

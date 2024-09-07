@@ -207,6 +207,8 @@ class GShockAPIMock(private val context: Context) {
     }
 
     suspend fun getSettings(): Settings {
+        delay(0)
+
         val setting = Settings()
         setting.buttonTone = false
         setting.powerSavingMode = false
