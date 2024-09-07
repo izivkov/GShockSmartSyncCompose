@@ -76,7 +76,7 @@ fun Light(
                     checked = autoLight?: false,
                     onCheckedChange = {
                         autoLight = it
-                        lightSetting?.autoLight = it
+                        lightSetting.autoLight = it
                         onSettingChanged(lightSetting as SettingsViewModel.Setting)
                     }
                 )

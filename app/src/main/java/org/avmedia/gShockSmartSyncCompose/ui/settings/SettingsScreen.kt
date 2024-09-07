@@ -87,7 +87,7 @@ fun SettingsScreen(
 fun SettingsList() {
 
     val settingsViews = arrayListOf (
-        Locale(onTimeFormatChange = {}, onDateFormatChange = {}, onLanguageChange = {}),
+        Locale(onTimeFormatChange = {}, onDateFormatChange = {}, onLanguageChange = {}, onSettingChanged = {}),
         OperationalTone(isSwitchOn = true),
         Light(onSettingChanged = {}),
         PowerSavings(isSwitchOn = true),

@@ -17,6 +17,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,19 +28,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Locale(
-    timeFormat: String = "12h",
-    dateFormat: String = "MM/DD",
-    selectedLanguage: String = "English",
     onTimeFormatChange: (String) -> Unit,
     onDateFormatChange: (String) -> Unit,
     onLanguageChange: (String) -> Unit,
+    onSettingChanged: (SettingsViewModel.Setting) -> Unit,
+    settingsViewModel: SettingsViewModel = viewModel()
 ) {
+    val classType = SettingsViewModel.Locale::class.java
+
+    val settings by settingsViewModel.settings.collectAsState()
+    val localeSetting: SettingsViewModel.Locale = settingsViewModel.getSetting(classType)
+
+    var timeFormat by remember { mutableStateOf(localeSetting.timeFormat) }
+    var dateFormat by remember { mutableStateOf(localeSetting.dateFormat) }
+    var selectedLanguage by remember { mutableStateOf(localeSetting.dayOfWeekLanguage) }
+
+    LaunchedEffect(settings, timeFormat, dateFormat, selectedLanguage) {
+        timeFormat = localeSetting.timeFormat
+        dateFormat = localeSetting.dateFormat
+        selectedLanguage = localeSetting.dayOfWeekLanguage
+    }
 
     AppCard(
         modifier = Modifier
@@ -65,13 +81,13 @@ fun Locale(
                     verticalAlignment = Alignment.CenterVertically // Aligns children vertically in the center
                 ) {
                     RadioButton(
-                        selected = timeFormat == "12h",
+                        selected = timeFormat == SettingsViewModel.Locale.TIME_FORMAT.TWELVE_HOURS,
                         onClick = { onTimeFormatChange("12h") }
                     )
                     AppTextLarge(text = stringResource(id = R.string._12h))
                     Spacer(modifier = Modifier.width(10.dp))
                     RadioButton(
-                        selected = timeFormat == "24h",
+                        selected = timeFormat.value == "24h",
                         onClick = { onTimeFormatChange("24h") }
                     )
                     AppTextLarge(text = stringResource(id = R.string._24h))
@@ -93,7 +109,7 @@ fun Locale(
                     verticalAlignment = Alignment.CenterVertically // Aligns children vertically in the center
                 ) {
                     RadioButton(
-                        selected = dateFormat == "MM/DD",
+                        selected = dateFormat == SettingsViewModel.Locale.DATE_FORMAT.MONTH_DAY,
                         onClick = { onDateFormatChange("MM/DD") }
                     )
                     AppText(text = stringResource(id = R.string.mm_dd))
@@ -101,7 +117,7 @@ fun Locale(
                     Spacer(modifier = Modifier.width(10.dp))
 
                     RadioButton(
-                        selected = dateFormat == "DD/MM",
+                        selected = dateFormat == SettingsViewModel.Locale.DATE_FORMAT.DAY_MONTH,
                         onClick = { onDateFormatChange("DD/MM") }
                     )
                     AppText(text = stringResource(id = R.string.dd_mm))
@@ -124,7 +140,7 @@ fun Locale(
                 LanguageDropdownMenu(
                     modifier = Modifier
                         .weight(1.5f),
-                    selectedOption = "English"
+                    initialOption = selectedLanguage.value
                 )
             }
         }
@@ -134,14 +150,16 @@ fun Locale(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LanguageDropdownMenu(
-    selectedOption: String,
+    initialOption: String,
     modifier: Modifier
-    // onOptionSelected: (String) -> Unit
 ) {
+    val languages = listOf("English", "French", "German", "Italian", "Spanish", "Russian")
+    var selectedLanguage by remember { mutableStateOf(initialOption) }
     var expanded by remember { mutableStateOf(false) }  // State to control menu visibility
 
-    // Current selected text for the dropdown
-    val selectedText by remember { mutableStateOf(selectedOption) }
+    LaunchedEffect(initialOption) {
+        selectedLanguage = initialOption
+    }
 
     // ExposedDropdownMenuBox wraps around the TextField and DropdownMenu
     ExposedDropdownMenuBox(
@@ -151,10 +169,10 @@ fun LanguageDropdownMenu(
     ) {
         // OutlinedTextField to add the border/outline
         OutlinedTextField(
-            value = selectedText,
+            value = selectedLanguage,
             onValueChange = {},
             readOnly = true,  // To prevent user from typing in the field
-            label = { Text("Select a language") },
+            label = { AppText(text = "Select a language") },
             modifier = Modifier
                 .fillMaxWidth()
                 .menuAnchor(),  // Attach menu to the OutlinedTextField
@@ -162,11 +180,6 @@ fun LanguageDropdownMenu(
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
         )
-
-        // Dropdown menu content
-        val languages = listOf("English", "French", "German", "Italian", "Spanish", "Russian")
-        var selectedLanguage by remember { mutableStateOf(languages[0]) }
-
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
@@ -188,11 +201,9 @@ fun LanguageDropdownMenu(
 @Composable
 fun PreviewLocale() {
     Locale(
-        dateFormat = "MM:DD",
-        timeFormat = "12h",
-        selectedLanguage = "Spanish",
         onDateFormatChange = {},
         onTimeFormatChange = {},
-        onLanguageChange = {})
+        onLanguageChange = {},
+        onSettingChanged = {})
 }
 

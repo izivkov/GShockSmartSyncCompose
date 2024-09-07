@@ -207,9 +207,13 @@ class GShockAPIMock(private val context: Context) {
     }
 
     suspend fun getSettings(): Settings {
-        delay(0)
+        delay(3000)
 
         val setting = Settings()
+        setting.language = "Spanish"
+        setting.timeFormat = "12h"
+        setting.dateFormat = "MM:DD"
+
         setting.buttonTone = false
         setting.powerSavingMode = false
         setting.timeAdjustment = true
