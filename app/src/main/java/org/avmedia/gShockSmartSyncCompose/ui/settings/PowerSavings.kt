@@ -1,6 +1,8 @@
 package org.avmedia.gShockSmartSyncCompose.ui.settings
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -12,17 +14,23 @@ import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
 fun PowerSavings(
-    isSwitchOn: Boolean,
     settingsViewModel: SettingsViewModel = viewModel()
 ) {
-    val setting = settingsViewModel.getSetting(SettingsViewModel.PowerSavingMode::class.java)
-    var powerSavingMode by remember { mutableStateOf(isSwitchOn) }
+    val classType = SettingsViewModel.PowerSavingMode::class.java
+
+    val settings by settingsViewModel.settings.collectAsState()
+    val powerSavingModeSetting: SettingsViewModel.PowerSavingMode = settingsViewModel.getSetting(classType)
+    var powerSavingMode by remember { mutableStateOf(powerSavingModeSetting.powerSavingMode) }
+
+    LaunchedEffect(settings) {
+        powerSavingMode = powerSavingModeSetting.powerSavingMode
+    }
 
     val title = stringResource(id = R.string.power_saving_mode)
     BasicSettings(title = title, isSwitchOn = powerSavingMode,
         onSwitchToggle = { newValue ->
             powerSavingMode = newValue // Update the state when the switch is toggled
-            setting.powerSavingMode = newValue
+            powerSavingModeSetting.powerSavingMode = newValue
         }
     )
 }
@@ -30,5 +38,5 @@ fun PowerSavings(
 @Preview(showBackground = true)
 @Composable
 fun PreviewPowerSavings() {
-    PowerSavings(isSwitchOn = true)
+    PowerSavings()
 }

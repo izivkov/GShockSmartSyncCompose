@@ -88,18 +88,11 @@ fun SettingsList() {
 
     val settingsViews = arrayListOf (
         Locale(onTimeFormatChange = {}, onDateFormatChange = {}, onLanguageChange = {}, onSettingChanged = {}),
-        OperationalTone(isSwitchOn = true),
+        OperationalTone(),
         Light(onSettingChanged = {}),
-        PowerSavings(isSwitchOn = true),
+        PowerSavings(),
 
-        TimeAdjustment(
-            timeAdjustmentOnOffChecked = true,
-            notifyMeChecked = false,
-            adjustmentMinutes = "15",
-            onTimeAdjustmentSwitchToggle = {},
-            onNotifyMeCheckedChange = {},
-            onAdjustmentMinutesChange = {}
-        )
+        TimeAdjustment()
     )
 
     Column(

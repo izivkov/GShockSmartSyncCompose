@@ -14,7 +14,14 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -24,19 +31,34 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationContext
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 import org.avmedia.gShockSmartSyncCompose.ui.common.InfoButton
+import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
 
 @Composable
 fun TimeAdjustment(
-    timeAdjustmentOnOffChecked: Boolean,
-    notifyMeChecked: Boolean,
-    adjustmentMinutes: String,
-    onTimeAdjustmentSwitchToggle: (Boolean) -> Unit,
-    onNotifyMeCheckedChange: (Boolean) -> Unit,
-    onAdjustmentMinutesChange: (String) -> Unit
+    settingsViewModel: SettingsViewModel = viewModel()
 ) {
+    val classType = SettingsViewModel.TimeAdjustment::class.java
+
+    val settings by settingsViewModel.settings.collectAsState()
+    val timeAdjustmentSetting: SettingsViewModel.TimeAdjustment =
+        settingsViewModel.getSetting(classType)
+
+    var timeAdjustment by remember { mutableStateOf(timeAdjustmentSetting.timeAdjustment) }
+
+    var notifyMe by remember { mutableStateOf(timeAdjustmentSetting.timeAdjustmentNotifications) }
+    var adjustmentMinutes by remember { mutableStateOf(timeAdjustmentSetting.adjustmentTimeMinutes.toString()) }
+
+    LaunchedEffect(settings, timeAdjustment, notifyMe, adjustmentMinutes) {
+        timeAdjustment = timeAdjustmentSetting.timeAdjustment
+        notifyMe = timeAdjustmentSetting.timeAdjustmentNotifications
+        adjustmentMinutes = timeAdjustmentSetting.adjustmentTimeMinutes.toString()
+    }
+
     AppCard(
         modifier = Modifier
             .fillMaxWidth()
@@ -60,8 +82,11 @@ fun TimeAdjustment(
                 InfoButton(infoText = stringResource(id = R.string.time_adjustment_info))
                 Spacer(modifier = Modifier.weight(1f))
                 AppSwitch(
-                    checked = timeAdjustmentOnOffChecked,
-                    onCheckedChange = onTimeAdjustmentSwitchToggle,
+                    checked = timeAdjustment,
+                    onCheckedChange =  { newValue ->
+                        timeAdjustment = newValue // Update the state when the switch is toggled
+                        timeAdjustmentSetting.timeAdjustment = newValue
+                    },
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                         .padding(end = 12.dp)
@@ -85,7 +110,13 @@ fun TimeAdjustment(
 
                 OutlinedTextField(
                     value = adjustmentMinutes,
-                    onValueChange = onAdjustmentMinutesChange,
+                    onValueChange = { newValue ->
+                        // Validate that the input is numeric before updating the state
+                        if (newValue.all { it.isDigit() }) {
+                            adjustmentMinutes = newValue // Update the text field
+                            timeAdjustmentSetting.adjustmentTimeMinutes = newValue.toIntOrNull() ?: 0 // Update the model safely
+                        }
+                    },
                     modifier = Modifier
                         .width(IntrinsicSize.Min)
                         .align(Alignment.CenterVertically)
@@ -114,8 +145,12 @@ fun TimeAdjustment(
                     modifier = Modifier.wrapContentWidth(),
                 )
                 Checkbox(
-                    checked = notifyMeChecked,
-                    onCheckedChange = onNotifyMeCheckedChange
+                    checked = notifyMe,
+                    onCheckedChange = { newValue ->
+                        notifyMe = newValue // Update the state when the switch is toggled
+                        timeAdjustmentSetting.timeAdjustmentNotifications = newValue
+                        LocalDataStorage.setTimeAdjustmentNotification(applicationContext(), newValue)
+                    }
                 )
             }
         }
@@ -125,14 +160,7 @@ fun TimeAdjustment(
 @Preview(showBackground = true)
 @Composable
 fun PreviewTimeAdjustment() {
-    TimeAdjustment(
-        timeAdjustmentOnOffChecked = true,
-        notifyMeChecked = false,
-        adjustmentMinutes = "15",
-        onTimeAdjustmentSwitchToggle = {},
-        onNotifyMeCheckedChange = {},
-        onAdjustmentMinutesChange = {}
-    )
+    TimeAdjustment()
 }
 
 
