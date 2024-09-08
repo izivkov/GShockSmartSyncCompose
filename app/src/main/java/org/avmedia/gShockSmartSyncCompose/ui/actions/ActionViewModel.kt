@@ -151,10 +151,6 @@ object ActionsViewModel : ViewModel() {
             val key = this.javaClass.simpleName + ".enabled"
             enabled = LocalDataStorage.get(context, key, "false").toBoolean()
         }
-
-        companion object {
-            fun empty() = SetEventsAction("", false)
-        }
     }
 
     class ToggleFlashlightAction(override var title: String, override var enabled: Boolean) :
@@ -168,10 +164,6 @@ object ActionsViewModel : ViewModel() {
         override fun load(context: Context) {
             val key = this.javaClass.simpleName + ".enabled"
             enabled = LocalDataStorage.get(context, key, "false").toBoolean()
-        }
-
-        companion object {
-            fun empty() = ToggleFlashlightAction("", false)
         }
     }
 
@@ -201,10 +193,6 @@ object ActionsViewModel : ViewModel() {
                     if (WatchInfo.findButtonUserDefined) "true" else "false"
                 )
                     .toBoolean()
-        }
-
-        companion object {
-            fun empty() = FindPhoneAction("", false)
         }
     }
 
@@ -245,10 +233,6 @@ object ActionsViewModel : ViewModel() {
                 )
                     .toBoolean()
         }
-
-        companion object {
-            fun empty() = SetTimeAction("", false)
-        }
     }
 
     class SetLocationAction(override var title: String, override var enabled: Boolean) :
@@ -267,10 +251,6 @@ object ActionsViewModel : ViewModel() {
             } catch (e: ActivityNotFoundException) {
                 Utils.snackBar(context, "Voice Assistant not available on this device!")
             }
-        }
-
-        companion object {
-            fun empty() = StartVoiceAssistAction("", false)
         }
     }
 
@@ -304,10 +284,6 @@ object ActionsViewModel : ViewModel() {
                 Utils.snackBar(context, "Cannot go to Next Track!")
             }
         }
-
-        companion object {
-            fun empty() = NextTrack("", false)
-        }
     }
 
     class PrayerAlarmsAction(
@@ -336,10 +312,6 @@ object ActionsViewModel : ViewModel() {
                 api().getAlarms()
                 api().setAlarms(alarms)
             }
-        }
-
-        companion object {
-            fun empty() = PrayerAlarmsAction("", true)
         }
     }
 
@@ -397,10 +369,6 @@ object ActionsViewModel : ViewModel() {
 
             return true
         }
-
-        companion object {
-            fun empty() = PhoneDialAction("", false, phoneNumber = "")
-        }
     }
 
     enum class CAMERA_ORIENTATION {
@@ -453,10 +421,6 @@ object ActionsViewModel : ViewModel() {
             cameraOrientation = if (LocalDataStorage.get(context, key, "BACK")
                     .toString() == "BACK"
             ) CAMERA_ORIENTATION.BACK else CAMERA_ORIENTATION.FRONT
-        }
-
-        companion object {
-            fun empty() = PhotoAction("", false, cameraOrientation = CAMERA_ORIENTATION.BACK)
         }
     }
 
