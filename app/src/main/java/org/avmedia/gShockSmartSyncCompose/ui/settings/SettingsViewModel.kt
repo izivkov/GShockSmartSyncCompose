@@ -16,7 +16,9 @@ import org.json.JSONObject
 import kotlin.coroutines.CoroutineContext
 
 object SettingsViewModel : ViewModel() {
-    abstract class Setting(open var title: String)
+    abstract class Setting(open var title: String) {
+        open fun save() {}
+    }
 
     private val _settings = MutableStateFlow<ArrayList<Setting>>(arrayListOf())
     val settings: StateFlow<ArrayList<Setting>> = _settings
@@ -43,6 +45,7 @@ object SettingsViewModel : ViewModel() {
         if (index != -1) {
             currentList[index] = updatedSetting
             updateSettingsAndMap(currentList)
+            updatedSetting.save()
         }
     }
 
@@ -89,7 +92,11 @@ object SettingsViewModel : ViewModel() {
         var adjustmentTimeMinutes: Int = 0,
         var timeAdjustmentNotifications: Boolean =
             LocalDataStorage.getTimeAdjustmentNotification(applicationContext())
-    ) : Setting("Time Adjustment")
+    ) : Setting("Time Adjustment") {
+        override fun save() {
+            LocalDataStorage.setTimeAdjustmentNotification(applicationContext(), timeAdjustmentNotifications)
+        }
+    }
 
     data class DnD(
         var dnd: Boolean = true,

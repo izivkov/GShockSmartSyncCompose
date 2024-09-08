@@ -41,6 +41,7 @@ import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
 
 @Composable
 fun TimeAdjustment(
+    onUpdate: (SettingsViewModel.TimeAdjustment) -> Unit = SettingsViewModel::updateSetting,
     settingsViewModel: SettingsViewModel = viewModel()
 ) {
     val classType = SettingsViewModel.TimeAdjustment::class.java
@@ -87,6 +88,7 @@ fun TimeAdjustment(
                     onCheckedChange =  { newValue ->
                         timeAdjustment = newValue // Update the state when the switch is toggled
                         timeAdjustmentSetting.timeAdjustment = newValue
+                        onUpdate(timeAdjustmentSetting.copy(timeAdjustment = newValue))
                     },
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
@@ -116,6 +118,7 @@ fun TimeAdjustment(
                         if (newValue.all { it.isDigit() }) {
                             adjustmentMinutes = newValue // Update the text field
                             timeAdjustmentSetting.adjustmentTimeMinutes = newValue.toIntOrNull() ?: 0 // Update the model safely
+                            onUpdate(timeAdjustmentSetting.copy(adjustmentTimeMinutes = newValue.toIntOrNull() ?: 0))
                         }
                     },
                     modifier = Modifier
@@ -150,7 +153,7 @@ fun TimeAdjustment(
                     onCheckedChange = { newValue ->
                         notifyMe = newValue // Update the state when the switch is toggled
                         timeAdjustmentSetting.timeAdjustmentNotifications = newValue
-                        // LocalDataStorage.setTimeAdjustmentNotification(applicationContext(), newValue)
+                        onUpdate(timeAdjustmentSetting.copy(timeAdjustmentNotifications = newValue))
                     }
                 )
             }
