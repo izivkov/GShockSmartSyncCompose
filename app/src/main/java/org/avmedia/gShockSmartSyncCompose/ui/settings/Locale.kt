@@ -35,10 +35,7 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Locale(
-    onTimeFormatChange: (String) -> Unit,
-    onDateFormatChange: (String) -> Unit,
-    onLanguageChange: (String) -> Unit,
-    onSettingChanged: (SettingsViewModel.Setting) -> Unit,
+    onUpdate: (SettingsViewModel.Locale) -> Unit = SettingsViewModel::updateSetting,
     settingsViewModel: SettingsViewModel = viewModel()
 ) {
     val classType = SettingsViewModel.Locale::class.java
@@ -82,13 +79,23 @@ fun Locale(
                 ) {
                     RadioButton(
                         selected = timeFormat == SettingsViewModel.Locale.TIME_FORMAT.TWELVE_HOURS,
-                        onClick = { onTimeFormatChange("12h") }
+                        onClick = {
+                            timeFormat = SettingsViewModel.Locale.TIME_FORMAT.TWELVE_HOURS
+                            localeSetting.timeFormat = timeFormat
+                            onUpdate(
+                                localeSetting.copy(timeFormat = timeFormat)
+                            )
+                        }
                     )
                     AppTextLarge(text = stringResource(id = R.string._12h))
                     Spacer(modifier = Modifier.width(10.dp))
                     RadioButton(
-                        selected = timeFormat.value == "24h",
-                        onClick = { onTimeFormatChange("24h") }
+                        selected = timeFormat == SettingsViewModel.Locale.TIME_FORMAT.TWENTY_FOUR_HOURS,
+                        onClick = {
+                            timeFormat = SettingsViewModel.Locale.TIME_FORMAT.TWENTY_FOUR_HOURS
+                            localeSetting.timeFormat = timeFormat
+                            onUpdate(localeSetting.copy(timeFormat = timeFormat))
+                        }
                     )
                     AppTextLarge(text = stringResource(id = R.string._24h))
                 }
@@ -110,7 +117,11 @@ fun Locale(
                 ) {
                     RadioButton(
                         selected = dateFormat == SettingsViewModel.Locale.DATE_FORMAT.MONTH_DAY,
-                        onClick = { onDateFormatChange("MM/DD") }
+                        onClick = {
+                            dateFormat = SettingsViewModel.Locale.DATE_FORMAT.MONTH_DAY
+                            localeSetting.dateFormat = dateFormat
+                            onUpdate(localeSetting.copy(dateFormat = dateFormat))
+                        }
                     )
                     AppText(text = stringResource(id = R.string.mm_dd))
 
@@ -118,7 +129,11 @@ fun Locale(
 
                     RadioButton(
                         selected = dateFormat == SettingsViewModel.Locale.DATE_FORMAT.DAY_MONTH,
-                        onClick = { onDateFormatChange("DD/MM") }
+                        onClick = {
+                            dateFormat = SettingsViewModel.Locale.DATE_FORMAT.DAY_MONTH
+                            localeSetting.dateFormat = dateFormat
+                            onUpdate(localeSetting.copy(dateFormat = dateFormat))
+                        }
                     )
                     AppText(text = stringResource(id = R.string.dd_mm))
                 }
@@ -140,7 +155,9 @@ fun Locale(
                 LanguageDropdownMenu(
                     modifier = Modifier
                         .weight(1.5f),
-                    initialOption = selectedLanguage.value
+                    initialOption = selectedLanguage.value,
+                    onUpdate = onUpdate,
+                    localeSetting = localeSetting
                 )
             }
         }
@@ -151,9 +168,11 @@ fun Locale(
 @Composable
 fun LanguageDropdownMenu(
     initialOption: String,
+    onUpdate: (SettingsViewModel.Locale) -> Unit = SettingsViewModel::updateSetting,
+    localeSetting: SettingsViewModel.Locale,
     modifier: Modifier
 ) {
-    val languages = listOf("English", "French", "German", "Italian", "Spanish", "Russian")
+    val languages = SettingsViewModel.Locale.DAY_OF_WEEK_LANGUAGE.entries.map { it.value }
     var selectedLanguage by remember { mutableStateOf(initialOption) }
     var expanded by remember { mutableStateOf(false) }  // State to control menu visibility
 
@@ -190,6 +209,7 @@ fun LanguageDropdownMenu(
                     onClick = {
                         selectedLanguage = language
                         expanded = false
+                        onUpdate(localeSetting.copy(language = language))
                     }
                 )
             }
@@ -200,10 +220,6 @@ fun LanguageDropdownMenu(
 @Preview(showBackground = true)
 @Composable
 fun PreviewLocale() {
-    Locale(
-        onDateFormatChange = {},
-        onTimeFormatChange = {},
-        onLanguageChange = {},
-        onSettingChanged = {})
+    Locale()
 }
 

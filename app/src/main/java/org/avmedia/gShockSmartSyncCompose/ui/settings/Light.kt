@@ -28,7 +28,7 @@ import org.avmedia.gshockapi.WatchInfo
 
 @Composable
 fun Light(
-    onSettingChanged: (SettingsViewModel.Setting) -> Unit,
+    onUpdate: (SettingsViewModel.Light) -> Unit = SettingsViewModel::updateSetting,
     settingsViewModel: SettingsViewModel = viewModel()
 ) {
     val classType = SettingsViewModel.Light::class.java
@@ -73,11 +73,11 @@ fun Light(
                     )
                 }
                 AppSwitch(
-                    checked = autoLight?: false,
+                    checked = autoLight,
                     onCheckedChange = {
                         autoLight = it
                         lightSetting.autoLight = it
-                        onSettingChanged(lightSetting as SettingsViewModel.Setting)
+                        onUpdate(lightSetting.copy(autoLight = it))
                     }
                 )
             }
@@ -111,7 +111,8 @@ fun Light(
                         selected = lightDuration == SettingsViewModel.Light.LIGHT_DURATION.TWO_SECONDS,
                         onClick = {
                             lightDuration = SettingsViewModel.Light.LIGHT_DURATION.TWO_SECONDS
-                            onSettingChanged(lightSetting as SettingsViewModel.Setting)
+                            lightSetting.duration = SettingsViewModel.Light.LIGHT_DURATION.TWO_SECONDS
+                            onUpdate(lightSetting.copy(duration = lightDuration))
                         },
                         modifier = Modifier.padding(end = 0.dp)
                     )
@@ -121,7 +122,8 @@ fun Light(
                         selected = lightDuration == SettingsViewModel.Light.LIGHT_DURATION.FOUR_SECONDS,
                         onClick = {
                             lightDuration = SettingsViewModel.Light.LIGHT_DURATION.FOUR_SECONDS
-                            onSettingChanged(lightSetting as SettingsViewModel.Setting)
+                            lightSetting.duration = SettingsViewModel.Light.LIGHT_DURATION.FOUR_SECONDS
+                            onUpdate(lightSetting.copy(duration = lightDuration))
                         },
                         modifier = Modifier.padding(end = 0.dp)
                     )
@@ -136,7 +138,7 @@ fun Light(
 @Composable
 fun PreviewSettingsItem() {
     Light(
-        onSettingChanged = { updatedSetting ->
+        onUpdate = { updatedSetting ->
             println("Setting changed: $updatedSetting")
         }
     )

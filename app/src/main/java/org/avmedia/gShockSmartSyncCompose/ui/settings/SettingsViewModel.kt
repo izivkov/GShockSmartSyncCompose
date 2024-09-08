@@ -15,12 +15,13 @@ import org.avmedia.gshockapi.WatchInfo
 import org.json.JSONObject
 import kotlin.coroutines.CoroutineContext
 
-object SettingsViewModel  : ViewModel() {
+object SettingsViewModel : ViewModel() {
     abstract class Setting(open var title: String)
 
     private val _settings = MutableStateFlow<ArrayList<Setting>>(arrayListOf())
     val settings: StateFlow<ArrayList<Setting>> = _settings
-    private val settingsMap: MutableMap<Class<out Setting>, Setting> = _settings.value.associateBy { it::class.java }.toMutableMap()
+    private val settingsMap: MutableMap<Class<out Setting>, Setting> =
+        _settings.value.associateBy { it::class.java }.toMutableMap()
 
     private fun updateSettingsAndMap(newSettings: ArrayList<Setting>) {
         settingsMap.clear()
@@ -36,7 +37,21 @@ object SettingsViewModel  : ViewModel() {
         return settingsMap[type] as T
     }
 
-    class Locale : Setting("Locale") {
+    fun <T : Setting> updateSetting(updatedSetting: T) {
+        val currentList = _settings.value
+        val index = currentList.indexOfFirst { it::class == updatedSetting::class }
+        if (index != -1) {
+            currentList[index] = updatedSetting
+            updateSettingsAndMap(currentList)
+        }
+    }
+
+    data class Locale(
+        var timeFormat: TIME_FORMAT = TIME_FORMAT.TWELVE_HOURS,
+        var dateFormat: DATE_FORMAT = DATE_FORMAT.MONTH_DAY,
+        var dayOfWeekLanguage: DAY_OF_WEEK_LANGUAGE = DAY_OF_WEEK_LANGUAGE.ENGLISH,
+        var language: String = "English",
+    ) : Setting("Locale") {
         enum class TIME_FORMAT(val value: String) {
             TWELVE_HOURS("12h"), TWENTY_FOUR_HOURS("24h"),
         }
@@ -50,46 +65,46 @@ object SettingsViewModel  : ViewModel() {
                 "Russian"
             )
         }
-
-        var timeFormat: TIME_FORMAT = TIME_FORMAT.TWELVE_HOURS
-        var dateFormat: DATE_FORMAT = DATE_FORMAT.MONTH_DAY
-        var dayOfWeekLanguage: DAY_OF_WEEK_LANGUAGE = DAY_OF_WEEK_LANGUAGE.ENGLISH
     }
 
     class OperationSound : Setting("Button Sound") {
         var sound: Boolean = true
     }
 
-    class Light : Setting("Light") {
+    data class Light(
+        var autoLight: Boolean = false,
+        var duration: LIGHT_DURATION = LIGHT_DURATION.TWO_SECONDS,
+        var nightOnly: Boolean = LocalDataStorage.getAutoLightNightOnly(applicationContext())
+    ) : Setting("Light") {
         enum class LIGHT_DURATION(val value: String) {
             TWO_SECONDS("2s"), FOUR_SECONDS("4s")
         }
-
-        var autoLight: Boolean = false
-        var duration: LIGHT_DURATION = LIGHT_DURATION.TWO_SECONDS
-        var nightOnly: Boolean = LocalDataStorage.getAutoLightNightOnly(applicationContext())
     }
 
-    class PowerSavingMode : Setting("Power Saving Mode") {
-        var powerSavingMode: Boolean = false
-    }
+    data class PowerSavingMode(var powerSavingMode: Boolean = false) :
+        Setting("Power Saving Mode")
 
-    class TimeAdjustment : Setting("Time Adjustment") {
-        var timeAdjustment: Boolean = true
-        var adjustmentTimeMinutes: Int = 0
+    data class TimeAdjustment(
+        var timeAdjustment: Boolean = true,
+        var adjustmentTimeMinutes: Int = 0,
         var timeAdjustmentNotifications: Boolean =
             LocalDataStorage.getTimeAdjustmentNotification(applicationContext())
-    }
+    ) : Setting("Time Adjustment")
 
-    class DnD : Setting("DnD") {
-        var dnd: Boolean = true
+    data class DnD(
+        var dnd: Boolean = true,
         var mirrorPhone: Boolean = LocalDataStorage.getMirrorPhoneDnd(applicationContext())
-    }
-
-    class HandAdjustment : Setting("Hand Adjustment")
+    ) : Setting("DnD")
 
     init {
-        val newSettings = arrayListOf(Locale(), OperationSound(), Light(), PowerSavingMode(), TimeAdjustment(), DnD())
+        val newSettings = arrayListOf(
+            Locale(),
+            OperationSound(),
+            Light(),
+            PowerSavingMode(),
+            TimeAdjustment(),
+            DnD()
+        )
         updateSettingsAndMap(newSettings)
 
         val coroutineContext: CoroutineContext = Dispatchers.Default + SupervisorJob()
@@ -120,7 +135,8 @@ object SettingsViewModel  : ViewModel() {
             when (key) {
                 "powerSavingMode" -> {
                     if (WatchInfo.hasPowerSavingMode) {
-                        val setting: PowerSavingMode = settingsMap[PowerSavingMode::class.java] as PowerSavingMode
+                        val setting: PowerSavingMode =
+                            settingsMap[PowerSavingMode::class.java] as PowerSavingMode
                         setting.powerSavingMode = value == true
                         updatedObjects.add(setting)
                     }
@@ -128,7 +144,8 @@ object SettingsViewModel  : ViewModel() {
 
                 "timeAdjustment" -> {
                     if (!WatchInfo.alwaysConnected) {
-                        val setting: TimeAdjustment = settingsMap[TimeAdjustment::class.java] as TimeAdjustment
+                        val setting: TimeAdjustment =
+                            settingsMap[TimeAdjustment::class.java] as TimeAdjustment
                         setting.timeAdjustment = value == true
                         updatedObjects.add(setting)
                     }
@@ -136,7 +153,8 @@ object SettingsViewModel  : ViewModel() {
 
                 "adjustmentTimeMinutes" -> {
                     if (!WatchInfo.alwaysConnected) {
-                        val setting: TimeAdjustment = settingsMap[TimeAdjustment::class.java] as TimeAdjustment
+                        val setting: TimeAdjustment =
+                            settingsMap[TimeAdjustment::class.java] as TimeAdjustment
                         setting.adjustmentTimeMinutes = value as Int
                         updatedObjects.add(setting)
                     }
@@ -151,7 +169,8 @@ object SettingsViewModel  : ViewModel() {
                 }
 
                 "buttonTone" -> {
-                    val setting: OperationSound = settingsMap[OperationSound::class.java] as OperationSound
+                    val setting: OperationSound =
+                        settingsMap[OperationSound::class.java] as OperationSound
                     setting.sound = value == true
                     updatedObjects.add(setting)
                 }
@@ -195,12 +214,23 @@ object SettingsViewModel  : ViewModel() {
                 "language" -> {
                     val setting: Locale = settingsMap[Locale::class.java] as Locale
                     when (value) {
-                        Locale.DAY_OF_WEEK_LANGUAGE.ENGLISH.value -> setting.dayOfWeekLanguage = Locale.DAY_OF_WEEK_LANGUAGE.ENGLISH
-                        Locale.DAY_OF_WEEK_LANGUAGE.SPANISH.value -> setting.dayOfWeekLanguage = Locale.DAY_OF_WEEK_LANGUAGE.SPANISH
-                        Locale.DAY_OF_WEEK_LANGUAGE.FRENCH.value -> setting.dayOfWeekLanguage = Locale.DAY_OF_WEEK_LANGUAGE.FRENCH
-                        Locale.DAY_OF_WEEK_LANGUAGE.GERMAN.value -> setting.dayOfWeekLanguage = Locale.DAY_OF_WEEK_LANGUAGE.GERMAN
-                        Locale.DAY_OF_WEEK_LANGUAGE.ITALIAN.value -> setting.dayOfWeekLanguage = Locale.DAY_OF_WEEK_LANGUAGE.ITALIAN
-                        Locale.DAY_OF_WEEK_LANGUAGE.RUSSIAN.value -> setting.dayOfWeekLanguage = Locale.DAY_OF_WEEK_LANGUAGE.RUSSIAN
+                        Locale.DAY_OF_WEEK_LANGUAGE.ENGLISH.value -> setting.dayOfWeekLanguage =
+                            Locale.DAY_OF_WEEK_LANGUAGE.ENGLISH
+
+                        Locale.DAY_OF_WEEK_LANGUAGE.SPANISH.value -> setting.dayOfWeekLanguage =
+                            Locale.DAY_OF_WEEK_LANGUAGE.SPANISH
+
+                        Locale.DAY_OF_WEEK_LANGUAGE.FRENCH.value -> setting.dayOfWeekLanguage =
+                            Locale.DAY_OF_WEEK_LANGUAGE.FRENCH
+
+                        Locale.DAY_OF_WEEK_LANGUAGE.GERMAN.value -> setting.dayOfWeekLanguage =
+                            Locale.DAY_OF_WEEK_LANGUAGE.GERMAN
+
+                        Locale.DAY_OF_WEEK_LANGUAGE.ITALIAN.value -> setting.dayOfWeekLanguage =
+                            Locale.DAY_OF_WEEK_LANGUAGE.ITALIAN
+
+                        Locale.DAY_OF_WEEK_LANGUAGE.RUSSIAN.value -> setting.dayOfWeekLanguage =
+                            Locale.DAY_OF_WEEK_LANGUAGE.RUSSIAN
                     }
                     updatedObjects.add(setting)
                 }

@@ -12,10 +12,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -24,11 +20,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
-import org.avmedia.gShockSmartSyncCompose.ui.actions.FlashlightView
 import org.avmedia.gShockSmartSyncCompose.ui.common.ButtonData
 import org.avmedia.gShockSmartSyncCompose.ui.common.ButtonsRow
 import org.avmedia.gShockSmartSyncCompose.ui.common.InfoButton
@@ -76,8 +70,7 @@ fun SettingsScreen(
                     bottom.linkTo(parent.bottom)  // Keep buttons at the bottom
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                }
-                )
+                })
             }
         }
     }
@@ -86,10 +79,10 @@ fun SettingsScreen(
 @Composable
 fun SettingsList() {
 
-    val settingsViews = arrayListOf (
-        Locale(onTimeFormatChange = {}, onDateFormatChange = {}, onLanguageChange = {}, onSettingChanged = {}),
+    val settingsViews = arrayListOf(
+        Locale(),
         OperationalTone(),
-        Light(onSettingChanged = {}),
+        Light(),
         PowerSavings(),
 
         TimeAdjustment()

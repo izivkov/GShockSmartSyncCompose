@@ -3,6 +3,7 @@ package org.avmedia.gShockSmartSyncCompose.ui.settings
 import AppSwitch
 import AppText
 import AppTextLarge
+import android.hardware.lights.Light
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -149,7 +150,7 @@ fun TimeAdjustment(
                     onCheckedChange = { newValue ->
                         notifyMe = newValue // Update the state when the switch is toggled
                         timeAdjustmentSetting.timeAdjustmentNotifications = newValue
-                        LocalDataStorage.setTimeAdjustmentNotification(applicationContext(), newValue)
+                        // LocalDataStorage.setTimeAdjustmentNotification(applicationContext(), newValue)
                     }
                 )
             }
