@@ -19,7 +19,8 @@ fun PowerSavings(
     val classType = SettingsViewModel.PowerSavingMode::class.java
 
     val settings by settingsViewModel.settings.collectAsState()
-    val powerSavingModeSetting: SettingsViewModel.PowerSavingMode = settingsViewModel.getSetting(classType)
+    val powerSavingModeSetting: SettingsViewModel.PowerSavingMode =
+        settingsViewModel.getSetting(classType)
     var powerSavingMode by remember { mutableStateOf(powerSavingModeSetting.powerSavingMode) }
 
     LaunchedEffect(settings) {

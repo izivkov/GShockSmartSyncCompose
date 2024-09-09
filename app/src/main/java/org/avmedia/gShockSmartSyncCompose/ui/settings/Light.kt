@@ -111,7 +111,8 @@ fun Light(
                         selected = lightDuration == SettingsViewModel.Light.LIGHT_DURATION.TWO_SECONDS,
                         onClick = {
                             lightDuration = SettingsViewModel.Light.LIGHT_DURATION.TWO_SECONDS
-                            lightSetting.duration = SettingsViewModel.Light.LIGHT_DURATION.TWO_SECONDS
+                            lightSetting.duration =
+                                SettingsViewModel.Light.LIGHT_DURATION.TWO_SECONDS
                             onUpdate(lightSetting.copy(duration = lightDuration))
                         },
                         modifier = Modifier.padding(end = 0.dp)
@@ -122,7 +123,8 @@ fun Light(
                         selected = lightDuration == SettingsViewModel.Light.LIGHT_DURATION.FOUR_SECONDS,
                         onClick = {
                             lightDuration = SettingsViewModel.Light.LIGHT_DURATION.FOUR_SECONDS
-                            lightSetting.duration = SettingsViewModel.Light.LIGHT_DURATION.FOUR_SECONDS
+                            lightSetting.duration =
+                                SettingsViewModel.Light.LIGHT_DURATION.FOUR_SECONDS
                             onUpdate(lightSetting.copy(duration = lightDuration))
                         },
                         modifier = Modifier.padding(end = 0.dp)

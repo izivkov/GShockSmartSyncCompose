@@ -3,7 +3,6 @@ package org.avmedia.gShockSmartSyncCompose.ui.settings
 import AppSwitch
 import AppText
 import AppTextLarge
-import android.hardware.lights.Light
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -33,11 +31,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationContext
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 import org.avmedia.gShockSmartSyncCompose.ui.common.InfoButton
-import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
 
 @Composable
 fun TimeAdjustment(
@@ -85,7 +81,7 @@ fun TimeAdjustment(
                 Spacer(modifier = Modifier.weight(1f))
                 AppSwitch(
                     checked = timeAdjustment,
-                    onCheckedChange =  { newValue ->
+                    onCheckedChange = { newValue ->
                         timeAdjustment = newValue // Update the state when the switch is toggled
                         timeAdjustmentSetting.timeAdjustment = newValue
                         onUpdate(timeAdjustmentSetting.copy(timeAdjustment = newValue))
@@ -117,8 +113,13 @@ fun TimeAdjustment(
                         // Validate that the input is numeric before updating the state
                         if (newValue.all { it.isDigit() }) {
                             adjustmentMinutes = newValue // Update the text field
-                            timeAdjustmentSetting.adjustmentTimeMinutes = newValue.toIntOrNull() ?: 0 // Update the model safely
-                            onUpdate(timeAdjustmentSetting.copy(adjustmentTimeMinutes = newValue.toIntOrNull() ?: 0))
+                            timeAdjustmentSetting.adjustmentTimeMinutes =
+                                newValue.toIntOrNull() ?: 0 // Update the model safely
+                            onUpdate(
+                                timeAdjustmentSetting.copy(
+                                    adjustmentTimeMinutes = newValue.toIntOrNull() ?: 0
+                                )
+                            )
                         }
                     },
                     modifier = Modifier

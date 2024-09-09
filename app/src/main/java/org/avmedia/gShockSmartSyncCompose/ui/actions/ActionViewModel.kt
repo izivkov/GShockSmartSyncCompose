@@ -30,7 +30,7 @@ import java.time.Clock
 import java.util.Date
 
 object ActionsViewModel : ViewModel() {
-    private val _actions = MutableStateFlow<List<Action>>(emptyList())
+    private val _actions = MutableStateFlow<ArrayList<Action>>(arrayListOf())
     val actions: StateFlow<List<Action>> = _actions
 
     private val actionMap = mutableMapOf<Class<out Action>, Action>()
@@ -39,11 +39,24 @@ object ActionsViewModel : ViewModel() {
         SYNC, ASYNC,
     }
 
-    // Initialize or update the map when actions are loaded
-    private fun updateActionTypeMap() {
+    private fun updateActionsAndMap(newActions: List<Action>) {
+        val updatedActions = ArrayList<Action>()
         actionMap.clear()
-        _actions.value.forEach { action ->
+
+        newActions.forEach { action ->
+            updatedActions.add(action)
             actionMap[action::class.java] = action
+        }
+        _actions.value = updatedActions
+    }
+
+    fun <T : Action> updateAction(updatedAction: T) {
+        val currentList = _actions.value
+        val index = currentList.indexOfFirst { it::class == updatedAction::class }
+        if (index != -1) {
+            currentList[index] = updatedAction
+            updateActionsAndMap(currentList)
+            updatedAction.save(applicationContext())
         }
     }
 
@@ -53,13 +66,12 @@ object ActionsViewModel : ViewModel() {
 
     init {
         loadInitialActions()
-        loadData(applicationContext())
-        updateActionTypeMap()
+        updateActionsAndMap(loadData(applicationContext()))
     }
 
     // Method to load the initial list of actions
     private fun loadInitialActions() {
-        val initialActions = listOf(
+        val initialActions = arrayListOf(
             ToggleFlashlightAction("Toggle Flashlight", false),
             StartVoiceAssistAction("Start Voice Assistant", false),
             NextTrack("Skip to next track", false),
@@ -78,13 +90,6 @@ object ActionsViewModel : ViewModel() {
         )
 
         _actions.value = initialActions
-    }
-
-    // Function to update a specific action
-    fun updateAction(updatedAction: Action) {
-        _actions.value = _actions.value.map { action ->
-            if (action.title == updatedAction.title) updatedAction else action
-        }
     }
 
     enum class RunEnvironment {
@@ -127,7 +132,7 @@ object ActionsViewModel : ViewModel() {
         }
     }
 
-    class SetEventsAction(
+    data class SetEventsAction(
         override var title: String, override var enabled: Boolean
     ) :
         Action(title, enabled, RUN_MODE.ASYNC) {
@@ -153,7 +158,7 @@ object ActionsViewModel : ViewModel() {
         }
     }
 
-    class ToggleFlashlightAction(override var title: String, override var enabled: Boolean) :
+    data class ToggleFlashlightAction(override var title: String, override var enabled: Boolean) :
         Action(title, enabled) {
 
         override fun run(context: Context) {
@@ -167,7 +172,7 @@ object ActionsViewModel : ViewModel() {
         }
     }
 
-    class FindPhoneAction(override var title: String, override var enabled: Boolean) :
+    data class FindPhoneAction(override var title: String, override var enabled: Boolean) :
         Action(title, enabled) {
 
         override fun shouldRun(runEnvironment: RunEnvironment): Boolean {
@@ -196,7 +201,7 @@ object ActionsViewModel : ViewModel() {
         }
     }
 
-    class SetTimeAction(
+    data class SetTimeAction(
         override var title: String, override var enabled: Boolean
     ) :
         Action(
@@ -235,14 +240,14 @@ object ActionsViewModel : ViewModel() {
         }
     }
 
-    class SetLocationAction(override var title: String, override var enabled: Boolean) :
+    data class SetLocationAction(override var title: String, override var enabled: Boolean) :
         Action(title, enabled) {
         override fun run(context: Context) {
             Timber.d("running ${this.javaClass.simpleName}")
         }
     }
 
-    class StartVoiceAssistAction(override var title: String, override var enabled: Boolean) :
+    data class StartVoiceAssistAction(override var title: String, override var enabled: Boolean) :
         Action(title, enabled, RUN_MODE.ASYNC) {
         override fun run(context: Context) {
             Timber.d("running ${this.javaClass.simpleName}")
@@ -254,7 +259,7 @@ object ActionsViewModel : ViewModel() {
         }
     }
 
-    class NextTrack(override var title: String, override var enabled: Boolean) :
+    data class NextTrack(override var title: String, override var enabled: Boolean) :
         Action(title, enabled, RUN_MODE.ASYNC) {
         override fun run(context: Context) {
             Timber.d("running ${this.javaClass.simpleName}")
@@ -286,7 +291,7 @@ object ActionsViewModel : ViewModel() {
         }
     }
 
-    class PrayerAlarmsAction(
+    data class PrayerAlarmsAction(
         override var title: String, override var enabled: Boolean
     ) :
         Action(title, enabled, RUN_MODE.ASYNC) {
@@ -315,7 +320,7 @@ object ActionsViewModel : ViewModel() {
         }
     }
 
-    class Separator(override var title: String, override var enabled: Boolean) :
+    data class Separator(override var title: String, override var enabled: Boolean) :
         Action(title, enabled) {
         override fun run(context: Context) {
             Timber.d("running ${this.javaClass.simpleName}")
@@ -326,14 +331,14 @@ object ActionsViewModel : ViewModel() {
         }
     }
 
-    class MapAction(override var title: String, override var enabled: Boolean) :
+    data class MapAction(override var title: String, override var enabled: Boolean) :
         Action(title, enabled) {
         override fun run(context: Context) {
             Timber.d("running ${this.javaClass.simpleName}")
         }
     }
 
-    class PhoneDialAction(
+    data class PhoneDialAction(
         override var title: String, override var enabled: Boolean, var phoneNumber: String
     ) : Action(title, enabled) {
         init {
@@ -539,10 +544,11 @@ However, this way gives us more control on how to start the actions.
             }
     }
 
-    fun loadData(context: Context) {
+    fun loadData(context: Context): List<Action> {
         _actions.value.forEach {
             it.load(context)
         }
+        return _actions.value
     }
 
     fun saveData(context: Context) {

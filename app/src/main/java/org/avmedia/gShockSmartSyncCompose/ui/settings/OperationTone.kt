@@ -19,7 +19,8 @@ fun OperationalTone(
     val classType = SettingsViewModel.OperationSound::class.java
 
     val settings by settingsViewModel.settings.collectAsState()
-    val operationToneSetting: SettingsViewModel.OperationSound = settingsViewModel.getSetting(classType)
+    val operationToneSetting: SettingsViewModel.OperationSound =
+        settingsViewModel.getSetting(classType)
     var sound by remember { mutableStateOf(operationToneSetting.sound) }
 
     LaunchedEffect(settings) {

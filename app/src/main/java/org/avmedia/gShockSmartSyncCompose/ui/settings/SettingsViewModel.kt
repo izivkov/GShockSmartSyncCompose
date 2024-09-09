@@ -94,7 +94,10 @@ object SettingsViewModel : ViewModel() {
             LocalDataStorage.getTimeAdjustmentNotification(applicationContext())
     ) : Setting("Time Adjustment") {
         override fun save() {
-            LocalDataStorage.setTimeAdjustmentNotification(applicationContext(), timeAdjustmentNotifications)
+            LocalDataStorage.setTimeAdjustmentNotification(
+                applicationContext(),
+                timeAdjustmentNotifications
+            )
         }
     }
 
