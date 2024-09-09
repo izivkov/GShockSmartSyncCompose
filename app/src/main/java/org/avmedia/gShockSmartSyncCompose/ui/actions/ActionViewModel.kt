@@ -380,7 +380,7 @@ object ActionsViewModel : ViewModel() {
         FRONT, BACK;
     }
 
-    class PhotoAction(
+    data class PhotoAction(
         override var title: String,
         override var enabled: Boolean,
         var cameraOrientation: CAMERA_ORIENTATION

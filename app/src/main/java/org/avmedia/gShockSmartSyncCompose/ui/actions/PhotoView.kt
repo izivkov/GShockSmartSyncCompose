@@ -8,11 +8,11 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -27,28 +27,26 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.AppIconFromResource
 
 @Composable
 fun PhotoView(
-    cameraOrientation: String = "front",
+    onUpdate: (ActionsViewModel.PhotoAction) -> Unit = ActionsViewModel::updateAction,
     actionsViewModel: ActionsViewModel = viewModel()
 ) {
-    var action = actionsViewModel.getAction(ActionsViewModel.PhotoAction::class.java)
-    val currentAction by remember { mutableStateOf(action) }
+    val classType = ActionsViewModel.PhotoAction::class.java
+    val actions by actionsViewModel.actions.collectAsState()
+    val photoAction: ActionsViewModel.PhotoAction =
+        actionsViewModel.getAction(classType)
 
-    LaunchedEffect(action) {
-        snapshotFlow { actionsViewModel.getAction(ActionsViewModel.PhotoAction::class.java) }
-            .collect { newAction ->
-                action = currentAction
-            }
+    var isEnabled by remember { mutableStateOf(photoAction.enabled) }
+    var cameraOrientation by remember { mutableStateOf(photoAction.cameraOrientation) }
+
+    LaunchedEffect(actions, photoAction) {
+        isEnabled = photoAction.enabled
+        cameraOrientation = photoAction.cameraOrientation
     }
-
-    var isEnabled by remember { mutableStateOf(action.enabled) }
-    var orientation by remember { mutableStateOf(action.cameraOrientation) }
 
     AppCard(
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        val context = LocalContext.current
-
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -84,11 +82,11 @@ fun PhotoView(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         RadioButton(
-                            selected = orientation == ActionsViewModel.CAMERA_ORIENTATION.FRONT,
+                            selected = cameraOrientation == ActionsViewModel.CAMERA_ORIENTATION.FRONT,
                             onClick = {
-                                action.cameraOrientation = ActionsViewModel.CAMERA_ORIENTATION.FRONT
-                                action.save(context)
-                                orientation = ActionsViewModel.CAMERA_ORIENTATION.FRONT
+                                photoAction.cameraOrientation = ActionsViewModel.CAMERA_ORIENTATION.FRONT
+                                cameraOrientation = ActionsViewModel.CAMERA_ORIENTATION.FRONT
+                                onUpdate(photoAction.copy(cameraOrientation = cameraOrientation))
                             },
                             modifier = Modifier
                         )
@@ -98,11 +96,11 @@ fun PhotoView(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         RadioButton(
-                            selected = orientation == ActionsViewModel.CAMERA_ORIENTATION.BACK,
+                            selected = cameraOrientation == ActionsViewModel.CAMERA_ORIENTATION.BACK,
                             onClick = {
-                                action.cameraOrientation = ActionsViewModel.CAMERA_ORIENTATION.BACK
-                                action.save(context)
-                                orientation = ActionsViewModel.CAMERA_ORIENTATION.BACK
+                                photoAction.cameraOrientation = ActionsViewModel.CAMERA_ORIENTATION.BACK
+                                cameraOrientation = ActionsViewModel.CAMERA_ORIENTATION.BACK
+                                onUpdate(photoAction.copy(cameraOrientation = cameraOrientation))
                             },
                             modifier = Modifier
                         )
@@ -116,8 +114,8 @@ fun PhotoView(
                 checked = isEnabled,
                 onCheckedChange = { newValue ->
                     isEnabled = newValue // Update the state when the switch is toggled
-                    action.enabled = newValue
-                    action.save(context)
+                    photoAction.enabled = newValue
+                    onUpdate(photoAction.copy(enabled = isEnabled))
                 },
                 modifier = Modifier.padding(8.dp)
             )

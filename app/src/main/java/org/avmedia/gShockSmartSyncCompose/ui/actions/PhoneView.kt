@@ -6,6 +6,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,22 +29,21 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.AppIconFromResource
 
 @Composable
 fun PhoneView(
-    actionsViewModel: ActionsViewModel = viewModel()
+    onUpdate: (ActionsViewModel.PhoneDialAction) -> Unit = ActionsViewModel::updateAction,
+    actionsViewModel: ActionsViewModel = viewModel(),
 ) {
     val classType = ActionsViewModel.PhoneDialAction::class.java
+    val actions by actionsViewModel.actions.collectAsState()
+    val phoneDialAction: ActionsViewModel.PhoneDialAction =
+        actionsViewModel.getAction(classType)
 
-    var action = actionsViewModel.getAction(classType)
-    val currentAction by remember { mutableStateOf(action) }
+    var isEnabled by remember { mutableStateOf(phoneDialAction.enabled) }
+    var phoneNumber by remember { mutableStateOf(phoneDialAction.phoneNumber) }
 
-    LaunchedEffect(action) {
-        snapshotFlow { actionsViewModel.getAction(classType) }
-            .collect { newAction ->
-                action = currentAction
-            }
+    LaunchedEffect(actions, phoneDialAction) {
+        isEnabled = phoneDialAction.enabled
+        phoneNumber = phoneDialAction.phoneNumber
     }
-
-    var isEnabled by remember { mutableStateOf(action.enabled) }
-    val context = LocalContext.current
 
     AppCard(
         modifier = Modifier
@@ -71,14 +71,12 @@ fun PhoneView(
                     text = stringResource(id = R.string.make_phonecall),
                 )
                 Row {
-                    var phoneNumber by remember { mutableStateOf(action.phoneNumber) }
-
                     OutlinedTextField(
                         value = phoneNumber,
                         onValueChange = { newValue ->
                             phoneNumber = newValue
-                            action.phoneNumber = newValue
-                            action.save(context)
+                            phoneDialAction.phoneNumber = newValue
+                            onUpdate(phoneDialAction.copy(phoneNumber = newValue))
                         },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                         modifier = Modifier
@@ -97,8 +95,8 @@ fun PhoneView(
                 checked = isEnabled,
                 onCheckedChange = { newValue ->
                     isEnabled = newValue // Update the state when the switch is toggled
-                    action.enabled = newValue
-                    action.save(context)
+                    phoneDialAction.enabled = newValue
+                    onUpdate(phoneDialAction.copy(enabled = newValue))
                 },
                 modifier = Modifier.padding(end = 0.dp)
             )
