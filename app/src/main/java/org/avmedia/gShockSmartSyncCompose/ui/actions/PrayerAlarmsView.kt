@@ -2,6 +2,7 @@ package org.avmedia.gShockSmartSyncCompose.ui.actions
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,27 +17,19 @@ import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
 fun PrayerAlarmsView(
-    modifier: Modifier = Modifier,
+    onUpdate: (ActionsViewModel.PrayerAlarmsAction) -> Unit = ActionsViewModel::updateAction,
     actionsViewModel: ActionsViewModel = viewModel(),
 ) {
     val classType = ActionsViewModel.PrayerAlarmsAction::class.java
 
-    var action = actionsViewModel.getAction(classType)
-    val currentAction by remember { mutableStateOf(action) }
+    val actions by actionsViewModel.actions.collectAsState()
+    val prayerAlarmsAction: ActionsViewModel.PrayerAlarmsAction =
+        actionsViewModel.getAction(classType)
 
-    LaunchedEffect(action) {
-        snapshotFlow { actionsViewModel.getAction(classType) }
-            .collect { newAction ->
-                action = currentAction
-            }
-    }
+    var isEnabled by remember { mutableStateOf(prayerAlarmsAction.enabled) }
 
-    var isEnabled by remember { mutableStateOf(action.enabled) }
-    val context = LocalContext.current
-
-    LaunchedEffect(action) {
-        println("------------> PrayerAlarmsView: $action")
-        isEnabled = action.enabled
+    LaunchedEffect(actions, prayerAlarmsAction) {
+        isEnabled = prayerAlarmsAction.enabled
     }
 
     ActionItem(
@@ -45,8 +38,8 @@ fun PrayerAlarmsView(
         isEnabled = isEnabled,
         onEnabledChange = { newValue ->
             isEnabled = newValue // Update the state when the switch is toggled
-            action.enabled = newValue
-            action.save(context)
+            prayerAlarmsAction.enabled = newValue
+            onUpdate(prayerAlarmsAction.copy(enabled = isEnabled))
         },
         infoText = stringResource(id = R.string.prayer_times_info)
     )
@@ -55,6 +48,6 @@ fun PrayerAlarmsView(
 @Preview(showBackground = true)
 @Composable
 fun PreviewPrayerAction() {
-    PrayerAlarmsView(modifier = Modifier)
+    PrayerAlarmsView()
 }
 

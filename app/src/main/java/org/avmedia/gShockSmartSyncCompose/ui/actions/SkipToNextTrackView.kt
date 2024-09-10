@@ -2,6 +2,7 @@ package org.avmedia.gShockSmartSyncCompose.ui.actions
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,23 +17,20 @@ import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
 fun SkipToNextTrackView(
-    modifier: Modifier = Modifier,
+    onUpdate: (ActionsViewModel.NextTrack) -> Unit = ActionsViewModel::updateAction,
     actionsViewModel: ActionsViewModel = viewModel(),
 ) {
     val classType = ActionsViewModel.NextTrack::class.java
 
-    var action = actionsViewModel.getAction(classType)
-    val currentAction by remember { mutableStateOf(action) }
+    val actions by actionsViewModel.actions.collectAsState()
+    val nextTrack: ActionsViewModel.NextTrack =
+        actionsViewModel.getAction(classType)
 
-    LaunchedEffect(action) {
-        snapshotFlow { actionsViewModel.getAction(classType) }
-            .collect { newAction ->
-                action = currentAction
-            }
+    var isEnabled by remember { mutableStateOf(nextTrack.enabled) }
+
+    LaunchedEffect(actions, nextTrack) {
+        isEnabled = nextTrack.enabled
     }
-
-    var isEnabled by remember { mutableStateOf(action.enabled) }
-    val context = LocalContext.current
 
     ActionItem(
         title = stringResource(id = R.string.next_track),
@@ -41,8 +39,8 @@ fun SkipToNextTrackView(
         isEnabled = isEnabled,
         onEnabledChange = { newValue ->
             isEnabled = newValue // Update the state when the switch is toggled
-            action.enabled = newValue
-            action.save(context)
+            nextTrack.enabled = newValue
+            onUpdate(nextTrack.copy(enabled = isEnabled))
         }
     )
 }
@@ -50,6 +48,6 @@ fun SkipToNextTrackView(
 @Preview(showBackground = true)
 @Composable
 fun PreviewSkipToNextTrack() {
-    SkipToNextTrackView(modifier = Modifier)
+    SkipToNextTrackView()
 }
 
