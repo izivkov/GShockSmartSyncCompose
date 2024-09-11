@@ -127,12 +127,14 @@ class GShockAPIMock(private val context: Context) {
     }
 
     suspend fun getAlarms(): ArrayList<Alarm> {
+        delay(0)
+
         val alarmList: ArrayList<Alarm> = arrayListOf(
             Alarm(hour = 6, minute = 45, enabled = true, hasHourlyChime = true),
             Alarm(hour = 8, minute = 0, enabled = true, hasHourlyChime = false),
             Alarm(hour = 20, minute = 0, enabled = true, hasHourlyChime = false),
             Alarm(hour = 20, minute = 50, enabled = false, hasHourlyChime = false),
-            Alarm(hour = 9, minute = 25, enabled = true, hasHourlyChime = false)
+            Alarm(hour = 9, minute = 25, enabled = false, hasHourlyChime = false)
         )
         return alarmList
     }

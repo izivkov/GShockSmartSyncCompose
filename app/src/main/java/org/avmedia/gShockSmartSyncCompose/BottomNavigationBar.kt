@@ -1,5 +1,11 @@
 package org.avmedia.gShockSmartSyncCompose
 
+import android.Manifest.permission.CALL_PHONE
+import android.Manifest.permission.CAMERA
+import android.Manifest.permission.READ_CALENDAR
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -8,8 +14,13 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -21,12 +32,14 @@ import org.avmedia.gShockSmartSyncCompose.ui.alarms.AlarmsScreen
 import org.avmedia.gShockSmartSyncCompose.ui.events.EventsScreen
 import org.avmedia.gShockSmartSyncCompose.ui.settings.SettingsScreen
 import org.avmedia.gShockSmartSyncCompose.ui.time.TimeScreen
+import org.avmedia.gShockSmartSyncCompose.utils.Utils.Companion.Snackbar
 
 @Composable
 fun BottomNavigationBar() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
@@ -76,13 +89,30 @@ fun BottomNavigationBar() {
                 )
             }
             composable(Screens.Events.route) {
-                EventsScreen(
-                    navController
+                PermissionRequiredScreen(
+                    requiredPermissions = listOf(READ_CALENDAR),
+                    onPermissionGranted = { EventsScreen(navController) },
+                    onPermissionDenied = {
+                        Snackbar("Calendar permission denied. Returning to Time screen.", 3000) {
+                            navController.navigate("time")
+                        }
+                    }
                 )
             }
             composable(Screens.Actions.route) {
-                ActionsScreen(
-                    navController
+
+                PermissionRequiredScreen(
+                    requiredPermissions = listOf(
+                        WRITE_EXTERNAL_STORAGE,
+                        CAMERA,
+                        CALL_PHONE
+                    ),
+                    onPermissionGranted = { ActionsScreen(navController) },
+                    onPermissionDenied = {
+                        Snackbar("Required permissions denied. Returning to Time screen.", 3000) {
+                            navController.navigate("time")
+                        }
+                    }
                 )
             }
             composable(Screens.Settings.route) {
@@ -90,6 +120,37 @@ fun BottomNavigationBar() {
                     navController
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun PermissionRequiredScreen(
+    requiredPermissions: List<String>,
+    onPermissionGranted: @Composable () -> Unit,
+    onPermissionDenied: @Composable () -> Unit
+) {
+    val context = LocalContext.current
+    var permissionGranted by remember { mutableStateOf(false) }
+    var permissionChecked by remember { mutableStateOf(false) }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+        onResult = { permissions ->
+            permissionGranted = permissions.values.all { it }
+            permissionChecked = true
+        }
+    )
+
+    LaunchedEffect(Unit) {
+        launcher.launch(requiredPermissions.toTypedArray())
+    }
+
+    if (permissionChecked) {
+        if (permissionGranted) {
+            onPermissionGranted() // Safe to call @Composable here
+        } else {
+            onPermissionDenied()  // Safe to call @Composable here
         }
     }
 }

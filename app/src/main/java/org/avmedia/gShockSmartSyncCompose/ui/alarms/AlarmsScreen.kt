@@ -32,6 +32,7 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.ItemView
 import org.avmedia.gShockSmartSyncCompose.ui.common.ScreenTitle
 import org.avmedia.gshockapi.Alarm
 import java.util.Date
+import java.util.Locale
 
 @Composable
 fun AlarmList(alarmViewModel: AlarmViewModel = viewModel()) {
@@ -50,14 +51,14 @@ fun AlarmList(alarmViewModel: AlarmViewModel = viewModel()) {
             }
         }
 
-        val sdf = SimpleDateFormat("H:mm")
+        val sdf = SimpleDateFormat("H:mm", Locale.getDefault())
         val dateObj: Date = sdf.parse(alarm.hour.toString() + ":" + alarm.minute.toString())
 
         val timeFormat = if (java.text.SimpleDateFormat()
                 .toPattern().split(" ")[1][0] == 'h'
         ) "K:mm aa" else "H:mm"
 
-        val time = SimpleDateFormat(timeFormat).format(dateObj)
+        val time = SimpleDateFormat(timeFormat, Locale.getDefault()).format(dateObj)
         return if (timeFormat.contains("aa")) from0to12(time) else time
     }
 

@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
+import org.avmedia.gShockSmartSyncCompose.ui.actions.ActionsViewModel.Action
 import org.avmedia.gshockapi.Alarm
 import org.avmedia.gshockapi.ProgressEvents
 

@@ -19,7 +19,8 @@ object EventsModel {
 
     val events = ArrayList<Event>()
 
-    fun refresh(context: Context) {
+    fun
+            refresh(context: Context) {
         events.clear()
         events.addAll(CalendarEvents.getEventsFromCalendar(context))
     }

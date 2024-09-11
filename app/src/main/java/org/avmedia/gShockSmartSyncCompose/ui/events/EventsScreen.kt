@@ -118,7 +118,6 @@ fun RequestPermissions() {
     }
 }
 
-
 @Composable
 fun EventList() {
     val eventViewModel: EventViewModel = viewModel()
@@ -131,10 +130,13 @@ fun EventList() {
                     eventViewModel.loadEvents(context)
                 }
             },
-        )
+            EventAction("CalendarPermissionsNotGranted") {
+                // TODO: Handle the case where permissions are not grantedGoHome()
+            })
 
         ProgressEvents.runEventActions(AppHashCode(), eventActions)
     }
+
     waitForPermissions(LocalContext.current)
 
     @Composable
