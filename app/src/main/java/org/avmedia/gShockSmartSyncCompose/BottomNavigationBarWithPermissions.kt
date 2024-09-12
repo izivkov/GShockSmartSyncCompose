@@ -12,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,7 +36,7 @@ import org.avmedia.gShockSmartSyncCompose.ui.time.TimeScreen
 import org.avmedia.gShockSmartSyncCompose.utils.Utils.Companion.Snackbar
 
 @Composable
-fun BottomNavigationBar() {
+fun BottomNavigationBarWithPermissions() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -93,8 +94,8 @@ fun BottomNavigationBar() {
                     requiredPermissions = listOf(READ_CALENDAR),
                     onPermissionGranted = { EventsScreen(navController) },
                     onPermissionDenied = {
-                        Snackbar("Calendar permission denied. Returning to Time screen.", 3000) {
-                            navController.navigate("time")
+                        Snackbar("Calendar permission denied.  Cannot access Events.", SnackbarDuration.Short) {
+                            navController.navigate(Screens.Time.route)
                         }
                     }
                 )
@@ -109,8 +110,8 @@ fun BottomNavigationBar() {
                     ),
                     onPermissionGranted = { ActionsScreen(navController) },
                     onPermissionDenied = {
-                        Snackbar("Required permissions denied. Returning to Time screen.", 3000) {
-                            navController.navigate("time")
+                        Snackbar("Required permissions denied. Cannot access Actions.", SnackbarDuration.Short) {
+                            navController.navigate(Screens.Time.route)
                         }
                     }
                 )
