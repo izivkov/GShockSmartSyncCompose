@@ -1,5 +1,8 @@
 package org.avmedia.gShockSmartSyncCompose.ui.settings
 
+import android.annotation.SuppressLint
+import android.app.NotificationManager
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
@@ -13,6 +16,7 @@ import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationCont
 import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
 import org.avmedia.gshockapi.WatchInfo
 import org.json.JSONObject
+import java.text.SimpleDateFormat
 import kotlin.coroutines.CoroutineContext
 
 object SettingsViewModel : ViewModel() {
@@ -70,9 +74,7 @@ object SettingsViewModel : ViewModel() {
         }
     }
 
-    class OperationSound : Setting("Button Sound") {
-        var sound: Boolean = true
-    }
+    data class OperationSound(var sound: Boolean = true) : Setting("Button Sound")
 
     data class Light(
         var autoLight: Boolean = false,
@@ -251,7 +253,6 @@ object SettingsViewModel : ViewModel() {
         return ArrayList(updatedObjects)
     }
 
-
     fun getSettings(): ArrayList<Setting> {
         return filter(_settings.value)
     }
@@ -265,5 +266,75 @@ object SettingsViewModel : ViewModel() {
                 else -> true
             }
         } as ArrayList<Setting>
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private suspend fun getSmartDefaults(
+    ): ArrayList<Setting> {
+        val smartSettings = arrayListOf<Setting>()
+        val currentLocale = java.util.Locale.getDefault()
+
+        // Locale
+        val language = when (currentLocale.language) {
+            "en" -> Locale.DAY_OF_WEEK_LANGUAGE.ENGLISH
+            "es" -> Locale.DAY_OF_WEEK_LANGUAGE.SPANISH
+            "fr" -> Locale.DAY_OF_WEEK_LANGUAGE.FRENCH
+            "de" -> Locale.DAY_OF_WEEK_LANGUAGE.GERMAN
+            "it" -> Locale.DAY_OF_WEEK_LANGUAGE.ITALIAN
+            "ru" -> Locale.DAY_OF_WEEK_LANGUAGE.RUSSIAN
+            else -> Locale.DAY_OF_WEEK_LANGUAGE.ENGLISH
+        }
+
+        val dateTimePattern = SimpleDateFormat().toPattern()
+        val datePattern = dateTimePattern.split(" ")[0]
+        val timePattern = dateTimePattern.split(" ")[1]
+
+        val dateFormat = if (datePattern.lowercase().startsWith("d")) {
+            Locale.DATE_FORMAT.DAY_MONTH
+        } else {
+            Locale.DATE_FORMAT.MONTH_DAY
+        }
+        val timeFormat = if (timePattern[0] == 'h') {
+            Locale.TIME_FORMAT.TWELVE_HOURS
+        } else {
+            Locale.TIME_FORMAT.TWENTY_FOUR_HOURS
+        }
+        val locale =
+            Locale(timeFormat = timeFormat, dateFormat = dateFormat, language = language.value)
+        smartSettings.add(locale)
+
+        // Button sounds
+        val notificationManager =
+            applicationContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val buttonTone =
+            notificationManager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_ALL
+        val operationSound = OperationSound(buttonTone)
+        smartSettings.add(operationSound)
+
+        // Light settings
+        val autoLight = false
+        val light = Light(autoLight, Light.LIGHT_DURATION.TWO_SECONDS, false)
+        smartSettings.add(light)
+
+        // Power Save Mode
+        val batteryLevel = api().getBatteryLevel()
+        val powerSavingMode = batteryLevel <= 15
+        val powerSavings = PowerSavingMode(powerSavingMode)
+        smartSettings.add(powerSavings)
+
+        // Time adjustment
+        val timeAdjustment = TimeAdjustment(true, 30)
+        smartSettings.add(timeAdjustment)
+
+        // DnD
+        val dnd =
+            DnD(notificationManager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_ALL)
+        smartSettings.add(dnd)
+
+        return smartSettings
+    }
+
+    suspend fun setSmartDefaults() {
+        updateSettingsAndMap(getSmartDefaults())
     }
 }

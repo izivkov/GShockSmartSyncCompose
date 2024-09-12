@@ -103,7 +103,7 @@ class GShockAPIMock(private val context: Context) {
     }
 
     suspend fun getBatteryLevel(): Int {
-        return 73
+        return 81
     }
 
     suspend fun getWatchTemperature(): Int {

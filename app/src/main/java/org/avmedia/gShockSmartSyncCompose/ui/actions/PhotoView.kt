@@ -15,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -84,7 +83,8 @@ fun PhotoView(
                         RadioButton(
                             selected = cameraOrientation == ActionsViewModel.CAMERA_ORIENTATION.FRONT,
                             onClick = {
-                                photoAction.cameraOrientation = ActionsViewModel.CAMERA_ORIENTATION.FRONT
+                                photoAction.cameraOrientation =
+                                    ActionsViewModel.CAMERA_ORIENTATION.FRONT
                                 cameraOrientation = ActionsViewModel.CAMERA_ORIENTATION.FRONT
                                 onUpdate(photoAction.copy(cameraOrientation = cameraOrientation))
                             },
@@ -98,7 +98,8 @@ fun PhotoView(
                         RadioButton(
                             selected = cameraOrientation == ActionsViewModel.CAMERA_ORIENTATION.BACK,
                             onClick = {
-                                photoAction.cameraOrientation = ActionsViewModel.CAMERA_ORIENTATION.BACK
+                                photoAction.cameraOrientation =
+                                    ActionsViewModel.CAMERA_ORIENTATION.BACK
                                 cameraOrientation = ActionsViewModel.CAMERA_ORIENTATION.BACK
                                 onUpdate(photoAction.copy(cameraOrientation = cameraOrientation))
                             },

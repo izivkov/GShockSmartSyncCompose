@@ -20,7 +20,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
 import org.avmedia.gShockSmartSyncCompose.ui.common.ButtonData
@@ -84,7 +89,6 @@ fun SettingsList() {
         OperationalTone(),
         Light(),
         PowerSavings(),
-
         TimeAdjustment()
     )
 
@@ -96,7 +100,10 @@ fun SettingsList() {
 }
 
 @Composable
-fun BottomRow(modifier: Modifier) {
+fun BottomRow(
+    modifier: Modifier,
+    settingsViewModel: SettingsViewModel = viewModel()
+) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Bottom,
@@ -113,7 +120,13 @@ fun BottomRow(modifier: Modifier) {
             val buttons = arrayListOf(
                 ButtonData(
                     text = stringResource(id = R.string.auto_configure_settings),
-                    onClick = { println("Auto-fill settings values") }),
+                    onClick = {
+                        val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+                        scope.launch {
+                            settingsViewModel.setSmartDefaults()
+                        }
+                    }),
+
                 ButtonData(
                     text = stringResource(id = R.string.send_events_to_watch),
                     onClick = { println("Send alarms to phone clicked") })

@@ -94,7 +94,10 @@ fun BottomNavigationBarWithPermissions() {
                     requiredPermissions = listOf(READ_CALENDAR),
                     onPermissionGranted = { EventsScreen(navController) },
                     onPermissionDenied = {
-                        Snackbar("Calendar permission denied.  Cannot access Events.", SnackbarDuration.Short) {
+                        Snackbar(
+                            "Calendar permission denied.  Cannot access Events.",
+                            SnackbarDuration.Short
+                        ) {
                             navController.navigate(Screens.Time.route)
                         }
                     }
@@ -110,7 +113,10 @@ fun BottomNavigationBarWithPermissions() {
                     ),
                     onPermissionGranted = { ActionsScreen(navController) },
                     onPermissionDenied = {
-                        Snackbar("Required permissions denied. Cannot access Actions.", SnackbarDuration.Short) {
+                        Snackbar(
+                            "Required permissions denied. Cannot access Actions.",
+                            SnackbarDuration.Short
+                        ) {
                             navController.navigate(Screens.Time.route)
                         }
                     }
