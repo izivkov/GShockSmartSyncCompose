@@ -1,8 +1,6 @@
 package org.avmedia.gShockSmartSyncCompose.ui.actions
 
-import AppSnackbar
 import android.content.Context
-
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -11,7 +9,7 @@ import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.RingtoneManager
-import org.avmedia.gShockSmartSyncCompose.utils.Utils
+import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
 import timber.log.Timber
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
@@ -25,7 +23,7 @@ class PhoneFinder {
         var resetVolume: () -> Unit? = {}
 
         fun ring(context: Context) {
-            Timber.e ("When found, lift phone to stop ringing")
+            AppSnackbar("When found, lift phone to stop ringing")
 
             // get alarm uri
             var alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
@@ -33,7 +31,7 @@ class PhoneFinder {
                 alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
             }
             if (alarmUri == null) {
-                Timber.e("ringAlarm", "Unable to get default sound URI")
+                AppSnackbar("Unable to get default sound URI")
                 return
             }
 

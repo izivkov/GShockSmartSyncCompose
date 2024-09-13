@@ -3,7 +3,7 @@ package org.avmedia.gShockSmartSyncCompose.ui.actions
 import android.content.Context
 import android.hardware.camera2.CameraManager
 import android.hardware.camera2.CameraManager.TorchCallback
-import timber.log.Timber
+import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
 
 object FlashlightHelper {
     private lateinit var cameraId: String
@@ -22,7 +22,7 @@ object FlashlightHelper {
     private fun turnOnOff(context: Context, state: Boolean) {
         cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
         if (cameraManager.cameraIdList.isEmpty()) {
-            Timber.d("Flashlight", "Flashlight not available")
+            AppSnackbar("Flashlight not available")
             return
         }
 

@@ -1,6 +1,5 @@
 package org.avmedia.gShockSmartSyncCompose.ui.actions
 
-import AppSnackbar
 import android.app.NotificationManager
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -21,6 +20,7 @@ import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationCont
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.services.NotificationProvider
 import org.avmedia.gShockSmartSyncCompose.ui.actions.ActionsViewModel.CoroutineScopes.mainScope
+import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
 import org.avmedia.gShockSmartSyncCompose.ui.events.EventsModel
 import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
 import org.avmedia.gshockapi.WatchInfo
@@ -286,7 +286,7 @@ object ActionsViewModel : ViewModel() {
                 audioManager.dispatchMediaKeyEvent(upEvent)
 
             } catch (e: ActivityNotFoundException) {
-                Timber.e("Cannot go to Next Track!")
+                AppSnackbar("Cannot go to Next Track!")
             }
         }
     }
@@ -403,12 +403,12 @@ object ActionsViewModel : ViewModel() {
                 cameraHelper.takePicture(
                     onImageCaptured = { result ->
                         captureResult = result
-                        Timber.d("Image captured: $captureResult")
+                        AppSnackbar("Image captured: $captureResult")
                         // Handle result, maybe pass it to the UI or save it
                     },
                     onError = { error ->
                         captureResult = "Error: $error"
-                        Timber.e("Camera capture error: $captureResult")
+                        AppSnackbar("Camera capture error: $captureResult")
                     }
                 )
             }
@@ -437,7 +437,7 @@ object ActionsViewModel : ViewModel() {
     ) : Action(title, enabled) {
 
         init {
-            Timber.d("EmailLocationAction: emailAddress: $emailAddress")
+            AppSnackbar("EmailLocationAction: emailAddress: $emailAddress")
             Timber.d("EmailLocationAction: extraText: $extraText")
         }
 
@@ -473,9 +473,9 @@ However, this way gives us more control on how to start the actions.
         try {
             action.run(context)
         } catch (e: SecurityException) {
-            Timber.e("You have not given permission to to run action ${action.title}.")
+            AppSnackbar("You have not given permission to to run action ${action.title}.")
         } catch (e: Exception) {
-            Timber.e("Could not run action ${action.title}. Reason: $e")
+            AppSnackbar("Could not run action ${action.title}. Reason: $e")
         }
     }
 

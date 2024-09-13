@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
+import org.avmedia.gShockSmartSyncCompose.utils.Utils
 import org.avmedia.gshockapi.EventAction
 import org.avmedia.gshockapi.ProgressEvents
 
@@ -57,7 +58,7 @@ fun ActionRunner(
         )
 
         // Substitute the original ProgressEvents.runEventActions logic here
-        ProgressEvents.runEventActions("ActionRunner", eventActions)
+        ProgressEvents.runEventActions(Utils.AppHashCode(), eventActions)
     }
 
     // Show or hide based on the isVisible state

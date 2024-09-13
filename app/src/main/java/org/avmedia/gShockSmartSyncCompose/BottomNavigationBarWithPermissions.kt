@@ -1,6 +1,5 @@
 package org.avmedia.gShockSmartSyncCompose
 
-import AppSnackbar
 import android.Manifest.permission.CALL_PHONE
 import android.Manifest.permission.CAMERA
 import android.Manifest.permission.READ_CALENDAR
@@ -13,7 +12,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,6 +29,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import org.avmedia.gShockSmartSyncCompose.ui.actions.ActionsScreen
 import org.avmedia.gShockSmartSyncCompose.ui.alarms.AlarmsScreen
+import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
 import org.avmedia.gShockSmartSyncCompose.ui.events.EventsScreen
 import org.avmedia.gShockSmartSyncCompose.ui.settings.SettingsScreen
 import org.avmedia.gShockSmartSyncCompose.ui.time.TimeScreen
@@ -94,9 +93,11 @@ fun BottomNavigationBarWithPermissions() {
                     requiredPermissions = listOf(READ_CALENDAR),
                     onPermissionGranted = { EventsScreen(navController) },
                     onPermissionDenied = {
-                        AppSnackbar(
-                            "Calendar permission denied.  Cannot access Events.",
-                        )
+                        LaunchedEffect(Unit) { // make sure it is only called once
+                            AppSnackbar(
+                                "Calendar permission denied.  Cannot access Events.",
+                            )
+                        }
                         navController.navigate(Screens.Time.route)
                     }
                 )
@@ -111,9 +112,11 @@ fun BottomNavigationBarWithPermissions() {
                     ),
                     onPermissionGranted = { ActionsScreen(navController) },
                     onPermissionDenied = {
-                        AppSnackbar(
-                            "Required permissions denied. Cannot access Actions.",
-                        )
+                        LaunchedEffect(Unit) {
+                            AppSnackbar(
+                                "Required permissions denied. Cannot access Actions.",
+                            )
+                        }
                         navController.navigate(Screens.Time.route)
                     }
                 )

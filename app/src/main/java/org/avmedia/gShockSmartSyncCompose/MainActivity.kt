@@ -1,6 +1,5 @@
 package org.avmedia.gShockSmartSyncCompose
 
-import AppSnackbar
 import android.Manifest
 import android.app.Activity
 import android.content.Context
@@ -13,13 +12,14 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
+import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
+import org.avmedia.gShockSmartSyncCompose.ui.common.PopupMessageReceiver
 import org.avmedia.gshockapi.GShockAPIMock
 
 class MainActivity : ComponentActivity() {
@@ -56,8 +56,7 @@ class MainActivity : ComponentActivity() {
         RunWithChecks()
         BottomNavigationBarWithPermissions()
 
-//        AppSnackbar("Snackbar from composable")
-//        SnackbarHostScreen()
+        PopupMessageReceiver()
     }
 
     @Composable

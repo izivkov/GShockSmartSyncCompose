@@ -6,7 +6,6 @@
 
 package org.avmedia.gShockSmartSyncCompose.ui.actions
 
-import AppSnackbar
 import android.content.Context
 import com.batoulapps.adhan2.CalculationMethod
 import com.batoulapps.adhan2.Coordinates
@@ -14,8 +13,8 @@ import com.batoulapps.adhan2.PrayerAdjustments
 import com.batoulapps.adhan2.PrayerTimes
 import com.batoulapps.adhan2.data.DateComponents
 import org.avmedia.gShockSmartSyncCompose.services.LocationProvider
+import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
 import org.avmedia.gshockapi.Alarm
-import timber.log.Timber
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -28,7 +27,7 @@ object PrayerAlarmsHelper {
 
         val location = LocationProvider.getLocation(context)
         if (location == null) {
-            Timber.e(
+            AppSnackbar(
                 "Could not obtain your location. Make sure FINE_LOCATION permission os granted."
             )
             return null
