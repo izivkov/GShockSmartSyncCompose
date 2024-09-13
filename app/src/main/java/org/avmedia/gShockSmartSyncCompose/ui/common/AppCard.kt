@@ -14,15 +14,11 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun AppCard(
     modifier: Modifier = Modifier,
-    enabled: Boolean = true,
     padding: Dp = 2.dp,
-    onClick: (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
     Card(
-        onClick = { onClick?.invoke() },
         modifier = modifier.padding(padding),
-        enabled = enabled,
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(2.dp),

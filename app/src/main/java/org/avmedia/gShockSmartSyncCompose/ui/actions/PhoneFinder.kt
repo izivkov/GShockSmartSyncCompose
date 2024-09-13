@@ -1,5 +1,6 @@
 package org.avmedia.gShockSmartSyncCompose.ui.actions
 
+import AppSnackbar
 import android.content.Context
 
 import android.hardware.Sensor
@@ -24,7 +25,7 @@ class PhoneFinder {
         var resetVolume: () -> Unit? = {}
 
         fun ring(context: Context) {
-            Utils.snackBar(context, "When found, lift phone to stop ringing")
+            Timber.e ("When found, lift phone to stop ringing")
 
             // get alarm uri
             var alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)

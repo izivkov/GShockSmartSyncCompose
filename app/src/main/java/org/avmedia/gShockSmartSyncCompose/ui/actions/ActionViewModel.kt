@@ -1,5 +1,6 @@
 package org.avmedia.gShockSmartSyncCompose.ui.actions
 
+import AppSnackbar
 import android.app.NotificationManager
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -22,7 +23,6 @@ import org.avmedia.gShockSmartSyncCompose.services.NotificationProvider
 import org.avmedia.gShockSmartSyncCompose.ui.actions.ActionsViewModel.CoroutineScopes.mainScope
 import org.avmedia.gShockSmartSyncCompose.ui.events.EventsModel
 import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
-import org.avmedia.gShockSmartSyncCompose.utils.Utils
 import org.avmedia.gshockapi.WatchInfo
 import timber.log.Timber
 import java.text.DateFormat
@@ -254,7 +254,7 @@ object ActionsViewModel : ViewModel() {
             try {
                 context.startActivity(Intent(Intent.ACTION_VOICE_COMMAND).setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT))
             } catch (e: ActivityNotFoundException) {
-                Utils.snackBar(context, "Voice Assistant not available on this device!")
+                // AppSnackbar("Voice Assistant not available on this device!")
             }
         }
     }
@@ -286,7 +286,7 @@ object ActionsViewModel : ViewModel() {
                 audioManager.dispatchMediaKeyEvent(upEvent)
 
             } catch (e: ActivityNotFoundException) {
-                Utils.snackBar(context, "Cannot go to Next Track!")
+                Timber.e("Cannot go to Next Track!")
             }
         }
     }
@@ -309,7 +309,7 @@ object ActionsViewModel : ViewModel() {
             Timber.d("running ${this.javaClass.simpleName}")
             val alarms = PrayerAlarmsHelper.createPrayerAlarms(context)
             if (alarms == null) {
-                Utils.snackBar(context, "Could not set prayer alarms")
+                Timber.e("Could not set prayer alarms")
                 return
             }
             mainScope.launch {
@@ -368,7 +368,7 @@ object ActionsViewModel : ViewModel() {
 
         override fun validate(context: Context): Boolean {
             if (phoneNumber.isEmpty()) {
-                Utils.snackBar(context, "Phone number cannot be empty!")
+                Timber.e("Phone number cannot be empty!")
                 return false
             }
 
@@ -473,11 +473,9 @@ However, this way gives us more control on how to start the actions.
         try {
             action.run(context)
         } catch (e: SecurityException) {
-            Utils.snackBar(
-                context, "You have not given permission to to run action ${action.title}."
-            )
+            Timber.e("You have not given permission to to run action ${action.title}.")
         } catch (e: Exception) {
-            Utils.snackBar(context, "Could not run action ${action.title}. Reason: $e")
+            Timber.e("Could not run action ${action.title}. Reason: $e")
         }
     }
 

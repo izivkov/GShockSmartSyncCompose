@@ -1,5 +1,6 @@
 package org.avmedia.gShockSmartSyncCompose
 
+import AppSnackbar
 import android.Manifest
 import android.app.Activity
 import android.content.Context
@@ -19,7 +20,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
-import org.avmedia.gShockSmartSyncCompose.utils.Utils.Companion.Snackbar
 import org.avmedia.gshockapi.GShockAPIMock
 
 class MainActivity : ComponentActivity() {
@@ -55,6 +55,9 @@ class MainActivity : ComponentActivity() {
     fun DynamicContent() {
         RunWithChecks()
         BottomNavigationBarWithPermissions()
+
+//        AppSnackbar("Snackbar from composable")
+//        SnackbarHostScreen()
     }
 
     @Composable
@@ -86,15 +89,15 @@ class MainActivity : ComponentActivity() {
                 if (!permissions.values.all { it }) {
                     setContent {
                         // Show a snackbar and exit the app
-                        Snackbar("Permissions not granted. Exiting...", SnackbarDuration.Short) {
-                            (context as Activity).finish()
-                        }
+                        AppSnackbar("Permissions not granted. Exiting...")
+                        (context as Activity).finish()
                     }
                 }
             }
         )
 
-        LaunchedEffect(Unit) {
+        LaunchedEffect(Unit)
+        {
             launcher.launch(initialPermissions.toTypedArray())
         }
     }

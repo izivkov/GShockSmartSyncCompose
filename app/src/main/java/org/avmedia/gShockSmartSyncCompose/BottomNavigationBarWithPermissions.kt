@@ -1,5 +1,6 @@
 package org.avmedia.gShockSmartSyncCompose
 
+import AppSnackbar
 import android.Manifest.permission.CALL_PHONE
 import android.Manifest.permission.CAMERA
 import android.Manifest.permission.READ_CALENDAR
@@ -33,7 +34,6 @@ import org.avmedia.gShockSmartSyncCompose.ui.alarms.AlarmsScreen
 import org.avmedia.gShockSmartSyncCompose.ui.events.EventsScreen
 import org.avmedia.gShockSmartSyncCompose.ui.settings.SettingsScreen
 import org.avmedia.gShockSmartSyncCompose.ui.time.TimeScreen
-import org.avmedia.gShockSmartSyncCompose.utils.Utils.Companion.Snackbar
 
 @Composable
 fun BottomNavigationBarWithPermissions() {
@@ -94,12 +94,10 @@ fun BottomNavigationBarWithPermissions() {
                     requiredPermissions = listOf(READ_CALENDAR),
                     onPermissionGranted = { EventsScreen(navController) },
                     onPermissionDenied = {
-                        Snackbar(
+                        AppSnackbar(
                             "Calendar permission denied.  Cannot access Events.",
-                            SnackbarDuration.Short
-                        ) {
-                            navController.navigate(Screens.Time.route)
-                        }
+                        )
+                        navController.navigate(Screens.Time.route)
                     }
                 )
             }
@@ -113,12 +111,10 @@ fun BottomNavigationBarWithPermissions() {
                     ),
                     onPermissionGranted = { ActionsScreen(navController) },
                     onPermissionDenied = {
-                        Snackbar(
+                        AppSnackbar(
                             "Required permissions denied. Cannot access Actions.",
-                            SnackbarDuration.Short
-                        ) {
-                            navController.navigate(Screens.Time.route)
-                        }
+                        )
+                        navController.navigate(Screens.Time.route)
                     }
                 )
             }
