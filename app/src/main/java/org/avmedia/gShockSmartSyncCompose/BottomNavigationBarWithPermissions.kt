@@ -112,7 +112,7 @@ fun BottomNavigationBarWithPermissions() {
                     ),
                     onPermissionGranted = { ActionsScreen(navController) },
                     onPermissionDenied = {
-                        LaunchedEffect(Unit) {
+                        LaunchedEffect(Unit) { // make sure it is only called once
                             AppSnackbar(
                                 "Required permissions denied. Cannot access Actions.",
                             )

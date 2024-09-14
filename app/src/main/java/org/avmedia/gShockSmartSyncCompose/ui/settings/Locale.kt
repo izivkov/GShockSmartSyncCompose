@@ -39,7 +39,6 @@ fun Locale(
     settingsViewModel: SettingsViewModel = viewModel()
 ) {
     val classType = SettingsViewModel.Locale::class.java
-
     val settings by settingsViewModel.settings.collectAsState()
     val localeSetting: SettingsViewModel.Locale = settingsViewModel.getSetting(classType)
 
@@ -155,9 +154,8 @@ fun Locale(
                 LanguageDropdownMenu(
                     modifier = Modifier
                         .weight(1.5f),
-                    initialOption = selectedLanguage.value,
                     onUpdate = onUpdate,
-                    localeSetting = localeSetting
+                    localeSetting = localeSetting,
                 )
             }
         }
@@ -167,17 +165,19 @@ fun Locale(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LanguageDropdownMenu(
-    initialOption: String,
     onUpdate: (SettingsViewModel.Locale) -> Unit = SettingsViewModel::updateSetting,
     localeSetting: SettingsViewModel.Locale,
-    modifier: Modifier
+    modifier: Modifier,
+    settingsViewModel: SettingsViewModel = viewModel()
 ) {
-    val languages = SettingsViewModel.Locale.DAY_OF_WEEK_LANGUAGE.entries.map { it.value }
-    var selectedLanguage by remember { mutableStateOf(initialOption) }
+    val settings by settingsViewModel.settings.collectAsState()
+
+    val languages = SettingsViewModel.Locale.DAY_OF_WEEK_LANGUAGE.entries.map { it }
+    var selectedLanguage by remember { mutableStateOf(localeSetting.dayOfWeekLanguage) }
     var expanded by remember { mutableStateOf(false) }  // State to control menu visibility
 
-    LaunchedEffect(initialOption) {
-        selectedLanguage = initialOption
+    LaunchedEffect(settings) {
+        selectedLanguage = localeSetting.dayOfWeekLanguage
     }
 
     // ExposedDropdownMenuBox wraps around the TextField and DropdownMenu
@@ -186,9 +186,8 @@ fun LanguageDropdownMenu(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded }
     ) {
-        // OutlinedTextField to add the border/outline
         OutlinedTextField(
-            value = selectedLanguage,
+            value = selectedLanguage.value,
             onValueChange = {},
             readOnly = true,  // To prevent user from typing in the field
             label = { AppText(text = "Select a language") },
@@ -205,11 +204,11 @@ fun LanguageDropdownMenu(
         ) {
             languages.forEach { language ->
                 DropdownMenuItem(
-                    text = { AppText(language) },
+                    text = { AppText(language.value) },
                     onClick = {
                         selectedLanguage = language
                         expanded = false
-                        onUpdate(localeSetting.copy(language = language))
+                        onUpdate(localeSetting.copy(dayOfWeekLanguage = language))
                     }
                 )
             }

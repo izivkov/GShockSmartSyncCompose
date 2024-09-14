@@ -57,7 +57,6 @@ object SettingsViewModel : ViewModel() {
         var timeFormat: TIME_FORMAT = TIME_FORMAT.TWELVE_HOURS,
         var dateFormat: DATE_FORMAT = DATE_FORMAT.MONTH_DAY,
         var dayOfWeekLanguage: DAY_OF_WEEK_LANGUAGE = DAY_OF_WEEK_LANGUAGE.ENGLISH,
-        var language: String = "English",
     ) : Setting("Locale") {
         enum class TIME_FORMAT(val value: String) {
             TWELVE_HOURS("12h"), TWENTY_FOUR_HOURS("24h"),
@@ -300,7 +299,7 @@ object SettingsViewModel : ViewModel() {
             Locale.TIME_FORMAT.TWENTY_FOUR_HOURS
         }
         val locale =
-            Locale(timeFormat = timeFormat, dateFormat = dateFormat, language = language.value)
+            Locale(timeFormat = timeFormat, dateFormat = dateFormat, dayOfWeekLanguage = language)
         smartSettings.add(locale)
 
         // Button sounds

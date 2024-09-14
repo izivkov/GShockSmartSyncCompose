@@ -11,7 +11,6 @@ fun ItemView(content: @Composable () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { /* Handle click */ }
     ) {
         content()
     }

@@ -29,6 +29,12 @@ class MainActivity : ComponentActivity() {
         instance = this
     }
 
+    @Composable
+    fun init () {
+        BottomNavigationBarWithPermissions()
+        PopupMessageReceiver()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -39,6 +45,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.wrapContentHeight(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
+                    init ()
                     DynamicContent()
                 }
             }
@@ -54,9 +61,6 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun DynamicContent() {
         RunWithChecks()
-        BottomNavigationBarWithPermissions()
-
-        PopupMessageReceiver()
     }
 
     @Composable

@@ -45,7 +45,6 @@ fun PopupMessageReceiver(
         ProgressEvents.runEventActions(Utils.AppHashCode(), eventActions)
     }
 
-    // Bottom overlay to display Snackbar
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.BottomCenter // Align the popup at the bottom

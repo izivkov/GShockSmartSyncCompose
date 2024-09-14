@@ -40,7 +40,7 @@ fun AlarmItem(
     AppCard(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(0.dp)
+            .padding(0.dp),
     ) {
         Row(
             modifier = Modifier
