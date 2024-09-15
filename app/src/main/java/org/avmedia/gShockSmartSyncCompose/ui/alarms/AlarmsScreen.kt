@@ -1,6 +1,5 @@
 package org.avmedia.gShockSmartSyncCompose.ui.alarms
 
-import android.icu.text.SimpleDateFormat
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,36 +29,12 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.ButtonsRow
 import org.avmedia.gShockSmartSyncCompose.ui.common.ItemList
 import org.avmedia.gShockSmartSyncCompose.ui.common.ItemView
 import org.avmedia.gShockSmartSyncCompose.ui.common.ScreenTitle
-import org.avmedia.gshockapi.Alarm
-import java.util.Date
-import java.util.Locale
 
 @Composable
 fun AlarmList(alarmViewModel: AlarmViewModel = viewModel()) {
     val alarms by alarmViewModel.alarms.collectAsState()
 
     LaunchedEffect(alarms) {
-    }
-
-    fun getTime(alarm: Alarm): String {
-
-        fun from0to12(formattedTime: String): String {
-            return if (formattedTime.startsWith("0")) {
-                "12${formattedTime.substring(1)}"
-            } else {
-                formattedTime
-            }
-        }
-
-        val sdf = SimpleDateFormat("H:mm", Locale.getDefault())
-        val dateObj: Date = sdf.parse(alarm.hour.toString() + ":" + alarm.minute.toString())
-
-        val timeFormat = if (java.text.SimpleDateFormat()
-                .toPattern().split(" ")[1][0] == 'h'
-        ) "K:mm aa" else "H:mm"
-
-        val time = SimpleDateFormat(timeFormat, Locale.getDefault()).format(dateObj)
-        return if (timeFormat.contains("aa")) from0to12(time) else time
     }
 
     @Composable
@@ -70,10 +45,14 @@ fun AlarmList(alarmViewModel: AlarmViewModel = viewModel()) {
             println("Alarm ${index}: ${alarm.enabled}")
             ItemView {
                 AlarmItem(
-                    time = getTime(alarm),
+                    hours = alarm.hour,
+                    minutes = alarm.minute,
                     isAlarmEnabled = alarm.enabled,
                     onToggleAlarm = { isEnabled ->
                         alarmViewModel.toggleAlarm(index, isEnabled)
+                    },
+                    onTimeChanged = { hours, munutes ->
+                        alarmViewModel.onTimeChanged(index, hours, munutes)
                     }
                 )
             }

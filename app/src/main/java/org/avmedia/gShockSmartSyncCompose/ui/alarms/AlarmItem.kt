@@ -3,6 +3,7 @@ package org.avmedia.gShockSmartSyncCompose.ui.alarms
 import AppSwitch
 import AppText
 import AppTextExtraLarge
+import android.icu.text.SimpleDateFormat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -30,30 +31,36 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
+import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppTimePicker
+import org.avmedia.gshockapi.Alarm
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlarmItem(
-    time: String = stringResource(id = R.string._12_00),
+    hours: Int = 12,
+    minutes: Int = 0,
     isAlarmEnabled: Boolean = true,
-    onToggleAlarm: (Boolean) -> Unit
+    onToggleAlarm: (Boolean) -> Unit,
+    onTimeChanged: (Int, Int) -> Unit
 ) {
     var isEnabled by remember { mutableStateOf(isAlarmEnabled) }
     var showTimePickerDialog by remember { mutableStateOf(false) }
     var selectedTime by remember { mutableStateOf<TimePickerState?>(null) }
-
-    LaunchedEffect(isAlarmEnabled) {
-        isEnabled = isAlarmEnabled
-    }
+    var alarmHours by remember { mutableStateOf(hours) }
+    var alarmMinutes by remember { mutableStateOf(minutes) }
 
     val handleConfirm: (TimePickerState) -> Unit = { timePickerState ->
         selectedTime = timePickerState
+        alarmHours = selectedTime?.hour ?: hours
+        alarmMinutes = selectedTime?.minute ?: minutes
+        onTimeChanged(alarmHours, alarmMinutes)
         showTimePickerDialog = false
-        // You can also handle the selected time here
     }
 
-    // Function to handle dismissal
     val handleDismiss: () -> Unit = {
         showTimePickerDialog = false
     }
@@ -77,7 +84,7 @@ fun AlarmItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 AppTextExtraLarge(
-                    text = time,
+                    text = formatTime(alarmHours, alarmMinutes),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
@@ -86,7 +93,7 @@ fun AlarmItem(
                             showTimePickerDialog = true
                         },
                 )
-                Spacer(modifier = Modifier.width(8.dp)) // Add spacing between texts
+                Spacer(modifier = Modifier.width(8.dp))
                 AppText(
                     text = stringResource(id = R.string.daily),
                     style = MaterialTheme.typography.bodyMedium,
@@ -113,15 +120,38 @@ fun AlarmItem(
             ) {
                 AppTimePicker(
                     onConfirm = handleConfirm,
-                    onDismiss = handleDismiss
+                    onDismiss = handleDismiss,
+                    initialHour = alarmHours,
+                    initialMinute = alarmMinutes,
                 )
             }
         }
     }
 }
 
+fun formatTime(hours: Int, minutes: Int): String {
+
+    fun from0to12(formattedTime: String): String {
+        return if (formattedTime.startsWith("0")) {
+            "12${formattedTime.substring(1)}"
+        } else {
+            formattedTime
+        }
+    }
+
+    val sdf = SimpleDateFormat("H:mm", Locale.getDefault())
+    val dateObj: Date = sdf.parse(hours.toString() + ":" + minutes.toString())
+
+    val timeFormat = if (java.text.SimpleDateFormat()
+            .toPattern().split(" ")[1][0] == 'h'
+    ) "K:mm aa" else "H:mm"
+
+    val time = SimpleDateFormat(timeFormat, Locale.getDefault()).format(dateObj)
+    return if (timeFormat.contains("aa")) from0to12(time) else time
+}
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewAlarmItem() {
-    AlarmItem(onToggleAlarm = {})
+    AlarmItem(onToggleAlarm = {}, onTimeChanged = { _, _ -> })
 }

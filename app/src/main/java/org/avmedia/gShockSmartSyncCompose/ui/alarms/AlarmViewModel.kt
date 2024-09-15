@@ -36,4 +36,11 @@ class AlarmViewModel : ViewModel() {
         updatedAlarms[index].enabled = isEnabled
         _alarms.value = updatedAlarms
     }
+
+    fun onTimeChanged(index: Int, hours: Int, minutes: Int) {
+        val updatedAlarms = _alarms.value.toMutableList()
+        updatedAlarms[index].hour = hours
+        updatedAlarms[index].minute = minutes
+        _alarms.value = updatedAlarms
+    }
 }

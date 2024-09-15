@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import java.text.SimpleDateFormat
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,13 +28,17 @@ import java.util.Calendar
 fun AppTimePicker(
     onConfirm: (TimePickerState) -> Unit,
     onDismiss: () -> Unit,
+    initialHour: Int,
+    initialMinute: Int,
 ) {
-    val currentTime = Calendar.getInstance()
+    val timeFormat = if (SimpleDateFormat().toPattern()
+            .split(" ")[1][0] == 'h'
+    ) TimeFormat.TwelveHour else TimeFormat.TwentyFourHour
 
     val timePickerState = rememberTimePickerState(
-        initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
-        initialMinute = currentTime.get(Calendar.MINUTE),
-        is24Hour = false,
+        initialHour,
+        initialMinute,
+        is24Hour = timeFormat == TimeFormat.TwentyFourHour,
     )
 
     Column(
@@ -73,5 +78,7 @@ fun PreviewInputExample() {
         onConfirm = { time ->
             selectedTime = time
         },
+        initialHour = 15,
+        initialMinute = 23
     )
 }
