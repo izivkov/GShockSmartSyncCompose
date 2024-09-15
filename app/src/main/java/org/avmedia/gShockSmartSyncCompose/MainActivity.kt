@@ -23,6 +23,7 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.PopupMessageReceiver
 import org.avmedia.gshockapi.GShockAPIMock
 
 class MainActivity : ComponentActivity() {
+    // Use FragmentActivity to be able to handle popups like MaterialTimePickerDialog in AlarmsItem
     private val api = GShockAPIMock(this)
 
     init {
@@ -30,7 +31,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun init () {
+    fun init() {
         BottomNavigationBarWithPermissions()
         PopupMessageReceiver()
     }
@@ -45,7 +46,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.wrapContentHeight(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    init ()
+                    init()
                     DynamicContent()
                 }
             }
