@@ -1,5 +1,6 @@
 package org.avmedia.gShockSmartSyncCompose.ui.common
 
+import TimeFormat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import java.text.SimpleDateFormat
-import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,7 +61,8 @@ fun AppTimePicker(
             AppButton(
                 onClick = { onConfirm(timePickerState) },
                 modifier = Modifier.weight(1f), // Equal width buttons
-                text = "OK")
+                text = "OK"
+            )
         }
     }
 }

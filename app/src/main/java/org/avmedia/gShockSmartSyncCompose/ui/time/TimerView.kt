@@ -2,21 +2,30 @@ package org.avmedia.gShockSmartSyncCompose.ui.time
 
 import AppTextExtraLarge
 import AppTextLarge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppButton
@@ -29,6 +38,7 @@ fun TimerView(
     timeModel: TimeModel = viewModel()
 ) {
     val timer by timeModel.timer.collectAsState()
+    var showTimerDialog by remember { mutableStateOf(false) }
 
     fun makeLongString(inSeconds: Int): String {
         val hours = inSeconds / 3600
@@ -39,6 +49,16 @@ fun TimerView(
         return "${"%02d".format(hours)}:${"%02d".format(minutes)}:${"%02d".format(seconds)}"
     }
 
+    val handleDismiss: () -> Unit = {
+        showTimerDialog = false
+    }
+
+    val handleConfirm: (hours: Int, minutes: Int, seconds: Int) -> Unit = {  hours, minutes, seconds ->
+        println("Submitted time: $hours:$minutes:$seconds")
+        timeModel.setTimer(hours, minutes, seconds)
+        showTimerDialog = false
+    }
+
     LaunchedEffect(timer) {
     }
 
@@ -46,7 +66,6 @@ fun TimerView(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
-        //.clickable { /* Handle click if needed */ }
     ) {
         Row(
             modifier = Modifier
@@ -67,7 +86,10 @@ fun TimerView(
                 TimerTimeView(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 8.dp),
+                        .padding(top = 8.dp)
+                        .clickable {
+                            showTimerDialog = true
+                        },
                     timeText = makeLongString(timer)
                 )
             }
@@ -87,12 +109,35 @@ fun TimerView(
             }
         }
     }
+    if (showTimerDialog) {
+        Dialog(onDismissRequest = handleDismiss) {
+            Box(
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.background) // Theme-based background color
+                    .padding(16.dp) // Adjust padding as needed
+            ) {
+                val (hours, minutes, seconds) = convertSecondsToTime(timer)
+
+                TimerPicker(
+                    hours = hours,
+                    minutes = minutes,
+                    seconds = seconds,
+                    onDismiss = { handleDismiss() },
+                    onSubmit = { hours, minutes, seconds ->
+                        // Handle the submitted time in the preview
+                        handleConfirm (hours, minutes, seconds)
+                    }
+                )
+            }
+        }
+    }
 }
 
 @Composable
 fun TimerTimeView(modifier: Modifier = Modifier, timeText: String) {
     AppTextExtraLarge(
         text = timeText,
+        modifier = modifier
     )
 }
 
@@ -103,6 +148,13 @@ fun SendTimerButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
         onClick = onClick,
         modifier = modifier,
     )
+}
+
+fun convertSecondsToTime(totalSeconds: Int): Triple<Int, Int, Int> {
+    val hours = totalSeconds / 3600
+    val minutes = (totalSeconds % 3600) / 60
+    val seconds = totalSeconds % 60
+    return Triple(hours, minutes, seconds)
 }
 
 @Preview(showBackground = true)

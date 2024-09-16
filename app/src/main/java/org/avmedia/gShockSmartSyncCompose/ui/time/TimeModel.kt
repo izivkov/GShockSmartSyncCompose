@@ -10,6 +10,9 @@ import org.avmedia.gshockapi.ProgressEvents
 class TimeModel : ViewModel() {
     private val _timer = MutableStateFlow(0)
     val timer = _timer
+    fun setTimer(hours: Int, minutes: Int, seconds: Int) {
+        _timer.value = hours * 3600 + minutes * 60 + seconds
+    }
 
     private val _homeTime = MutableStateFlow("")
     val homeTime = _homeTime
