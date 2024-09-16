@@ -13,18 +13,20 @@ import androidx.compose.ui.unit.sp
 fun AppButton(
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) {
     TextButton(
         onClick = onClick,
-        modifier = modifier
+        modifier = modifier,
+        enabled = enabled
     ) {
         AppText(
             text.uppercase(),
             fontWeight = FontWeight.SemiBold,
             fontSize = 20.sp,
             fontFamily = FontFamily.SansSerif,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 }

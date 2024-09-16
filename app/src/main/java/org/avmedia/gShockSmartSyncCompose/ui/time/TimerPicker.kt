@@ -2,15 +2,19 @@ package org.avmedia.gShockSmartSyncCompose.ui.time
 
 import AppText
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppButton
+
 
 @Composable
 fun TimerPicker(
@@ -20,15 +24,22 @@ fun TimerPicker(
     onDismiss: () -> Unit,
     onSubmit: (Int, Int, Int) -> Unit
 ) {
-    var hourInput by remember { mutableStateOf(hours.toString().padStart(2, '0')) }
-    var minuteInput by remember { mutableStateOf(minutes.toString().padStart(2, '0')) }
-    var secondInput by remember { mutableStateOf(seconds.toString().padStart(2, '0')) }
-
-    val isInputValid = remember(hourInput, minuteInput, secondInput) {
-        val hourValid = hourInput.toIntOrNull() in 0..23
-        val minuteValid = minuteInput.toIntOrNull() in 0..59
-        val secondValid = secondInput.toIntOrNull() in 0..59
-        hourValid && minuteValid && secondValid
+    var hourInput by remember { mutableStateOf(TextFieldValue(hours.toString()
+        .padStart(2, '0')
+    )) }
+    var minuteInput by remember {
+        mutableStateOf(
+            TextFieldValue(
+                minutes.toString().padStart(2, '0')
+            )
+        )
+    }
+    var secondInput by remember {
+        mutableStateOf(
+            TextFieldValue(
+                seconds.toString().padStart(2, '0')
+            )
+        )
     }
 
     AlertDialog(
@@ -40,50 +51,85 @@ fun TimerPicker(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
+                    // Hours input
                     OutlinedTextField(
                         value = hourInput,
                         onValueChange = { input ->
-                            if (input.length <= 2 && input.all { it.isDigit() }) {
-                                hourInput = input
+                            if (input.text.length <= 2 && input.text.all { it.isDigit() } /*&& input.text.toIntOrNull() in 0..23*/) {
+                                hourInput = input.copy(
+                                    text = input.text,
+                                    selection = TextRange(input.text.length)
+                                )
                             }
                         },
                         label = { Text(text = "Hours") },
                         placeholder = { Text(text = "HH") },
                         singleLine = true,
-                        isError = hourInput.toIntOrNull() !in 0..23,
-                        modifier = Modifier.width(80.dp)
+                        isError = hourInput.text.toIntOrNull() !in 0..23,
+                        modifier = Modifier
+                            .weight(1f),
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(fontSize = 40.sp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
-                    Text(text = " : ", style = MaterialTheme.typography.bodyLarge)
+
+                    // Larger and centered `:` separator
+                    Text(
+                        text = ":",
+                        style = MaterialTheme.typography.bodyLarge.copy(fontSize = 40.sp),
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .padding(horizontal = 2.dp)
+                    )
 
                     // Minutes input
                     OutlinedTextField(
                         value = minuteInput,
                         onValueChange = { input ->
-                            if (input.length <= 2 && input.all { it.isDigit() }) {
-                                minuteInput = input
+                            if (input.text.length <= 2 && input.text.all { it.isDigit() } /*&& input.text.toIntOrNull() in 0..59*/) {
+                                minuteInput = input.copy(
+                                    text = input.text,
+                                    selection = TextRange(input.text.length)
+                                )
                             }
                         },
                         label = { Text(text = "Mins") },
                         placeholder = { Text(text = "MM") },
                         singleLine = true,
-                        isError = minuteInput.toIntOrNull() !in 0..59,
-                        modifier = Modifier.width(80.dp)
+                        isError = minuteInput.text.toIntOrNull() !in 0..59,
+                        modifier = Modifier
+                            .weight(1f),
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(fontSize = 40.sp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
-                    AppText(text = " : ", style = MaterialTheme.typography.bodyLarge)
+
+                    // Larger and centered `:` separator
+                    Text(
+                        text = ":",
+                        style = MaterialTheme.typography.bodyLarge.copy(fontSize = 40.sp),
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .padding(horizontal = 2.dp)
+                    )
 
                     // Seconds input
                     OutlinedTextField(
                         value = secondInput,
                         onValueChange = { input ->
-                            if (input.length <= 2 && input.all { it.isDigit() }) {
-                                secondInput = input
+                            if (input.text.length <= 2 && input.text.all { it.isDigit() } /*&& input.text.toIntOrNull() in 0..59*/) {
+                                secondInput = input.copy(
+                                    text = input.text,
+                                    selection = TextRange(input.text.length)
+                                )
                             }
                         },
                         label = { Text(text = "Secs") },
                         placeholder = { Text(text = "SS") },
                         singleLine = true,
-                        isError = secondInput.toIntOrNull() !in 0..59,
-                        modifier = Modifier.width(80.dp)
+                        isError = secondInput.text.toIntOrNull() !in 0..59,
+                        modifier = Modifier
+                            .weight(1f),
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(fontSize = 40.sp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
                 }
             }
@@ -96,14 +142,14 @@ fun TimerPicker(
         },
         confirmButton = {
             AppButton(
+                text = "OK",
                 onClick = {
-                    val h = hourInput.toIntOrNull() ?: 0
-                    val m = minuteInput.toIntOrNull() ?: 0
-                    val s = secondInput.toIntOrNull() ?: 0
+                    val h = hourInput.text.toIntOrNull() ?: 0
+                    val m = minuteInput.text.toIntOrNull() ?: 0
+                    val s = secondInput.text.toIntOrNull() ?: 0
                     onSubmit(h, m, s)
                 },
-                // enabled = isInputValid,
-                text = "OK"
+                enabled = secondInput.text.toIntOrNull() in 0..59 && minuteInput.text.toIntOrNull() in 0..59 && hourInput.text.toIntOrNull() in 0..23
             )
         },
     )
