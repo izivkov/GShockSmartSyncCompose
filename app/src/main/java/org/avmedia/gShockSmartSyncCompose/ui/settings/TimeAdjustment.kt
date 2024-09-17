@@ -24,8 +24,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -107,17 +109,30 @@ fun TimeAdjustment(
 
                 Spacer(modifier = Modifier.weight(1f))
 
+                var minutesInput by remember {
+                    mutableStateOf(
+                        TextFieldValue(
+                            adjustmentMinutes.toString()
+                                .padStart(2, '0')
+                        )
+                    )
+                }
+
                 OutlinedTextField(
-                    value = adjustmentMinutes,
+                    value = minutesInput,
                     onValueChange = { newValue ->
                         // Validate that the input is numeric before updating the state
-                        if (newValue.all { it.isDigit() }) {
-                            adjustmentMinutes = newValue // Update the text field
+                        if (newValue.text == "" || (newValue.text.length <= 2 && newValue.text.all { it.isDigit() } && newValue.text.toIntOrNull() in 0..59)) {
+                            minutesInput = newValue.copy(
+                                text = newValue.text,
+                                selection = TextRange(newValue.text.length)
+                            )
+                            // Update the text field
                             timeAdjustmentSetting.adjustmentTimeMinutes =
-                                newValue.toIntOrNull() ?: 0 // Update the model safely
+                                minutesInput.text.toIntOrNull() ?: 0 // Update the model safely
                             onUpdate(
                                 timeAdjustmentSetting.copy(
-                                    adjustmentTimeMinutes = newValue.toIntOrNull() ?: 0
+                                    adjustmentTimeMinutes = minutesInput.text.toIntOrNull() ?: 0
                                 )
                             )
                         }

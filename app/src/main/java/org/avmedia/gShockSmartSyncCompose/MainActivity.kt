@@ -2,7 +2,11 @@ package org.avmedia.gShockSmartSyncCompose
 
 import android.Manifest
 import android.app.Activity
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
@@ -17,10 +21,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.ActivityCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
 import org.avmedia.gShockSmartSyncCompose.ui.common.PopupMessageReceiver
 import org.avmedia.gshockapi.GShockAPIMock
+import java.util.Timer
+import kotlin.concurrent.schedule
 
 class MainActivity : ComponentActivity() {
     // Use FragmentActivity to be able to handle popups like MaterialTimePickerDialog in AlarmsItem
@@ -55,8 +68,6 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun run() {
-
-        // Check permissions on startup
     }
 
     @Composable
@@ -67,6 +78,11 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun RunWithChecks() {
         CheckPermissions()
+
+        // Check if Bluetooth is enabled
+        if (!api().isBluetoothEnabled(this)) {
+            turnOnBLE()
+        }
 
         // Do more checks here
         run()
@@ -103,6 +119,50 @@ class MainActivity : ComponentActivity() {
         LaunchedEffect(Unit)
         {
             launcher.launch(initialPermissions.toTypedArray())
+        }
+    }
+
+    private var requestBluetooth =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                AppSnackbar("Bluetooth enabled.")
+            } else {
+                val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+                scope.launch {
+                    AppSnackbar("Please enable Bluetooth in your settings and try again")
+                    finish()
+                }
+            }
+        }
+
+    // @SuppressLint("MissingPermission")
+    private fun turnOnBLE() {
+        val bluetoothManager: BluetoothManager = getSystemService(BluetoothManager::class.java)
+        val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
+        if (bluetoothAdapter == null) {
+            AppSnackbar("Sorry, your device does not support Bluetooth. Exiting...")
+            Timer("SettingUp", false).schedule(6000) { finish() }
+        }
+
+        //val REQUEST_ENABLE_BT = 99
+        if (bluetoothAdapter?.isEnabled == false) {
+            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (ActivityCompat.checkSelfPermission(
+                        this, Manifest.permission.BLUETOOTH_CONNECT
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    return
+                }
+            }
+            // startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+            try {
+                requestBluetooth.launch(enableBtIntent)
+            } catch (e: SecurityException) {
+                AppSnackbar(
+                    "You have no permissions to turn on Bluetooth. Please turn it on manually."
+                )
+            }
         }
     }
 

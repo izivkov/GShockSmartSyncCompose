@@ -248,7 +248,7 @@ class GShockAPIMock(private val context: Context) {
     }
 
     fun isBluetoothEnabled(context: Context): Boolean {
-        return true
+        return false
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
