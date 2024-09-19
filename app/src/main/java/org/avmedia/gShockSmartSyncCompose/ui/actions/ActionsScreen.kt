@@ -23,6 +23,8 @@ import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
 import org.avmedia.gShockSmartSyncCompose.ui.common.ItemList
 import org.avmedia.gShockSmartSyncCompose.ui.common.ScreenTitle
+import org.avmedia.gshockapi.WatchInfo
+import kotlin.reflect.KFunction
 
 @Composable
 fun ActionsScreen(navController: NavController) {
@@ -66,19 +68,20 @@ fun ActionList() {
 
     @Composable
     fun createActions(): List<Any> {
-        val actions = listOf(
+        return listOfNotNull(
+            // PhoneFinderView().takeIf { WatchInfo.findButtonUserDefined },
+            if (WatchInfo.findButtonUserDefined) PhoneFinderView() else null,
             SetTimeView(),
-            RemindersView(),
+            // RemindersView().takeIf { WatchInfo.hasReminders },
+            if (WatchInfo.hasReminders) RemindersView() else null,
             PhotoView(),
             FlashlightView(),
             VoiceAssistView(),
             SkipToNextTrackView(),
             PrayerAlarmsView(),
             SeparatorView(),
-            PhoneView()
+            PhoneView(),
         )
-
-        return actions
     }
 
     Column(
@@ -87,6 +90,7 @@ fun ActionList() {
         ItemList(createActions())
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

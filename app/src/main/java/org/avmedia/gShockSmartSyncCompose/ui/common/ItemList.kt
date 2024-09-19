@@ -12,7 +12,6 @@ fun <T> ItemList(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-        // .verticalScroll(rememberScrollState()) // Add scroll behavior
     ) {
         items.forEach { item ->
             ItemView {}

@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.RadioButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -82,14 +84,27 @@ fun Light(
                 )
             }
 
-            // Night Only Auto Light Layout
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 0.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
+            if (WatchInfo.hasAutoLight && WatchInfo.alwaysConnected) {
+                // Night Only Auto Light Layout
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 0.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    AppText(
+                        text = stringResource(id = R.string.auto_light_at_night_only),
+                        modifier = Modifier.wrapContentWidth(),
+                    )
+                    Checkbox(
+                        checked = night,
+                        onCheckedChange = { newValue ->
+                            night = newValue // Update the state when the switch is toggled
+                            lightSetting.nightOnly = newValue
+                            onUpdate(lightSetting.copy(nightOnly = night))
+                        }
+                    )
+                }
             }
 
             // Illumination Period Layout

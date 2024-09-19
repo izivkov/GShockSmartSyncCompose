@@ -4,7 +4,10 @@ import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.avmedia.gshockapi.ble.Connection
 import org.avmedia.gshockapi.casio.*
 import org.avmedia.gshockapi.io.*
@@ -21,6 +24,14 @@ This class is used during development to mock the GShock API.
  */
 @RequiresApi(Build.VERSION_CODES.O)
 class GShockAPIMock(private val context: Context) {
+
+    private val scope = CoroutineScope(Dispatchers.Default)
+
+    init {
+        scope.launch {
+            WatchInfo.setNameAndModel(getWatchName())
+        }
+    }
 
     suspend fun waitForConnection(deviceId: String? = "", deviceName: String? = "") {
     }
@@ -59,6 +70,7 @@ class GShockAPIMock(private val context: Context) {
 
     suspend fun getWatchName(): String {
         return "GW-B5600"
+        // return "CASIO ECB-30"
     }
 
     suspend fun getError(): String {

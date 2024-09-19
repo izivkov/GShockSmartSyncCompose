@@ -33,6 +33,7 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.ButtonsRow
 import org.avmedia.gShockSmartSyncCompose.ui.common.InfoButton
 import org.avmedia.gShockSmartSyncCompose.ui.common.ItemList
 import org.avmedia.gShockSmartSyncCompose.ui.common.ScreenTitle
+import org.avmedia.gshockapi.WatchInfo
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
@@ -87,10 +88,12 @@ fun SettingsList() {
     val settingsViews = arrayListOf(
         Locale(),
         OperationalTone(),
-        Light(),
-        PowerSavings(),
-        TimeAdjustment()
-    )
+        Light()
+    ).apply {
+        if (!WatchInfo.alwaysConnected) add(TimeAdjustment())
+        if (WatchInfo.hasPowerSavingMode) add(PowerSavings())
+        if (WatchInfo.hasDnD) add(DnD())
+    }
 
     Column(
         modifier = Modifier
