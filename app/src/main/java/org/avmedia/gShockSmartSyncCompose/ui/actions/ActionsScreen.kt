@@ -69,10 +69,10 @@ fun ActionList() {
     @Composable
     fun createActions(): List<Any> {
         return listOfNotNull(
-            // PhoneFinderView().takeIf { WatchInfo.findButtonUserDefined },
+            // PhoneFinderView().takeIf { WatchInfo.findButtonUserDefined }, // this should work but it doesn't. Why?
             if (WatchInfo.findButtonUserDefined) PhoneFinderView() else null,
+
             SetTimeView(),
-            // RemindersView().takeIf { WatchInfo.hasReminders },
             if (WatchInfo.hasReminders) RemindersView() else null,
             PhotoView(),
             FlashlightView(),

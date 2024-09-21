@@ -1,0 +1,20 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/izivkov/projects/GShockSmartSyncCompose/api/src/main/AndroidManifest.xml:2:1-5:12
+INJECTED from /home/izivkov/projects/GShockSmartSyncCompose/api/src/main/AndroidManifest.xml:2:1-5:12
+	package
+		INJECTED from /home/izivkov/projects/GShockSmartSyncCompose/api/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /home/izivkov/projects/GShockSmartSyncCompose/api/src/main/AndroidManifest.xml:2:11-69
+uses-permission#android.permission.BLUETOOTH_CONNECT
+ADDED from /home/izivkov/projects/GShockSmartSyncCompose/api/src/main/AndroidManifest.xml:4:5-76
+	android:name
+		ADDED from /home/izivkov/projects/GShockSmartSyncCompose/api/src/main/AndroidManifest.xml:4:22-73
+uses-sdk
+INJECTED from /home/izivkov/projects/GShockSmartSyncCompose/api/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /home/izivkov/projects/GShockSmartSyncCompose/api/src/main/AndroidManifest.xml
+INJECTED from /home/izivkov/projects/GShockSmartSyncCompose/api/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /home/izivkov/projects/GShockSmartSyncCompose/api/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /home/izivkov/projects/GShockSmartSyncCompose/api/src/main/AndroidManifest.xml

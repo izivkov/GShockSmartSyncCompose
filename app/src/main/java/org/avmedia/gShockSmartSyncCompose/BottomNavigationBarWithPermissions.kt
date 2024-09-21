@@ -1,9 +1,12 @@
 package org.avmedia.gShockSmartSyncCompose
 
+import android.Manifest
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.Manifest.permission.CALL_PHONE
 import android.Manifest.permission.CAMERA
 import android.Manifest.permission.READ_CALENDAR
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
@@ -104,12 +107,13 @@ fun BottomNavigationBarWithPermissions() {
             }
             composable(Screens.Actions.route) {
 
+                val permissions = mutableListOf(CAMERA, CALL_PHONE).also {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) it += WRITE_EXTERNAL_STORAGE
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) it += ACCESS_FINE_LOCATION
+                }
+
                 PermissionRequiredScreen(
-                    requiredPermissions = listOf(
-                        WRITE_EXTERNAL_STORAGE,
-                        CAMERA,
-                        CALL_PHONE
-                    ),
+                    requiredPermissions = permissions,
                     onPermissionGranted = { ActionsScreen(navController) },
                     onPermissionDenied = {
                         LaunchedEffect(Unit) { // make sure it is only called once

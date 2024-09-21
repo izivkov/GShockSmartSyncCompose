@@ -90,8 +90,8 @@ fun SettingsList() {
         OperationalTone(),
         Light()
     ).apply {
-        if (!WatchInfo.alwaysConnected) add(TimeAdjustment())
         if (WatchInfo.hasPowerSavingMode) add(PowerSavings())
+        if (!WatchInfo.alwaysConnected) add(TimeAdjustment())
         if (WatchInfo.hasDnD) add(DnD())
     }
 
