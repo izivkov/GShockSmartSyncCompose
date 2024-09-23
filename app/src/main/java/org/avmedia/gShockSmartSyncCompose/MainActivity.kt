@@ -26,10 +26,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import org.avmedia.gShockSmartSyncCompose.services.InactivityWatcher
+import org.avmedia.gShockSmartSyncCompose.services.NightWatcher
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
 import org.avmedia.gShockSmartSyncCompose.ui.common.PopupMessageReceiver
+import org.avmedia.gShockSmartSyncCompose.ui.others.PreConnectionScreen
+import org.avmedia.gShockSmartSyncCompose.ui.others.RunActionsScreen
+import org.avmedia.gShockSmartSyncCompose.utils.Utils
+import org.avmedia.gshockapi.EventAction
 import org.avmedia.gshockapi.GShockAPIMock
+import org.avmedia.gshockapi.ProgressEvents
 import java.util.Timer
 import kotlin.concurrent.schedule
 
@@ -42,9 +49,10 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun init() {
-        BottomNavigationBarWithPermissions()
+    private fun Init() {
+        InactivityWatcher.start(this)
         PopupMessageReceiver()
+        NightWatcher.setupSunriseSunsetTasks(this@MainActivity as Context)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,8 +65,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.wrapContentHeight(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    init()
-                    DynamicContent()
+                    Init()
+                    RunWithChecks()
                 }
             }
         }
@@ -66,11 +74,15 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun run() {
-    }
+        createAppEventsSubscription()
+        PreConnectionScreen()
 
-    @Composable
-    fun DynamicContent() {
-        RunWithChecks()
+        LaunchedEffect(Unit) {
+            val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+            scope.launch {
+                api().waitForConnection(api().getWatchName())
+            }
+        }
     }
 
     @Composable
@@ -85,6 +97,64 @@ class MainActivity : ComponentActivity() {
 
         // Do more checks here
         run()
+    }
+
+    private fun createAppEventsSubscription() {
+        val eventActions = arrayOf(
+            EventAction("ConnectionSetupComplete") {
+                setContent {
+                    GShockSmartSyncTheme {
+                        if (api().isActionButtonPressed()) {
+                            RunActionsScreen()
+                        } else {
+                            BottomNavigationBarWithPermissions()
+                        }
+                    }
+                }
+            },
+            EventAction("ConnectionFailed") {
+                setContent {
+                    GShockSmartSyncTheme {
+                        PreConnectionScreen()
+                    }
+                }
+            },
+            EventAction("ApiError")
+            {
+                val message = ProgressEvents.getPayload("ApiError") as String?
+                    ?: "ApiError! Something went wrong - Make sure the official G-Shock app in not running, to prevent interference."
+
+                AppSnackbar(message)
+                api().disconnect(this)
+                setContent {
+                    GShockSmartSyncTheme {
+                        PreConnectionScreen()
+                    }
+                }
+            },
+            EventAction("WaitForConnection")
+            {},
+            EventAction("Disconnect")
+            {
+                InactivityWatcher.cancel()
+//                val device = ProgressEvents.getPayload("Disconnect") as BluetoothDevice
+//                api().teardownConnection(device)
+                setContent {
+                    GShockSmartSyncTheme {
+                        Surface(
+                            modifier = Modifier.wrapContentHeight(),
+                            color = MaterialTheme.colorScheme.background,
+                        ) {
+                            PreConnectionScreen()
+                        }
+                    }
+                }
+            },
+            EventAction("HomeTimeUpdated")
+            {},
+        )
+
+        ProgressEvents.runEventActions(Utils.AppHashCode(), eventActions)
     }
 
     @Composable

@@ -24,7 +24,6 @@ import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
 import org.avmedia.gShockSmartSyncCompose.ui.common.ItemList
 import org.avmedia.gShockSmartSyncCompose.ui.common.ScreenTitle
 import org.avmedia.gshockapi.WatchInfo
-import kotlin.reflect.KFunction
 
 @Composable
 fun ActionsScreen(navController: NavController) {

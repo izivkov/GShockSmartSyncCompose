@@ -34,6 +34,17 @@ class GShockAPIMock(private val context: Context) {
     }
 
     suspend fun waitForConnection(deviceId: String? = "", deviceName: String? = "") {
+        ProgressEvents.onNext("WaitForConnection")
+        delay(1000)
+
+        ProgressEvents.onNext("ConnectionStarted")
+        delay(2000)
+
+        ProgressEvents.onNext("WatchInitializationCompleted")
+        ProgressEvents.onNext("ConnectionSetupComplete")
+        delay(5000)
+
+        ProgressEvents.onNext("Disconnect")
     }
 
     private suspend fun init(): Boolean {

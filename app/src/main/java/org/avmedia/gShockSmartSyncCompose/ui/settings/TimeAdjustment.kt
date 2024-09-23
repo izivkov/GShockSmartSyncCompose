@@ -138,7 +138,8 @@ fun TimeAdjustment(
                         }
                     },
                     modifier = Modifier
-                        .width(IntrinsicSize.Min)
+                        // .width(IntrinsicSize.Min)
+                        .width(70.dp)
                         .align(Alignment.CenterVertically)
                         .padding(end = 12.dp)
                         .weight(1.0f),
