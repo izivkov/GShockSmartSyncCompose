@@ -8,15 +8,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.avmedia.gshockapi.ble.Connection
-import org.avmedia.gshockapi.casio.*
-import org.avmedia.gshockapi.io.*
-import org.avmedia.gshockapi.utils.*
-import timber.log.Timber
+import org.avmedia.gshockapi.io.IO
+import org.avmedia.gshockapi.io.TimeAdjustmentInfo
 import java.time.DayOfWeek
 import java.time.Month
-import java.time.ZoneId
-import java.util.*
+import java.util.TimeZone
 
 
 /*
@@ -35,16 +31,20 @@ class GShockAPIMock(private val context: Context) {
 
     suspend fun waitForConnection(deviceId: String? = "", deviceName: String? = "") {
         ProgressEvents.onNext("WaitForConnection")
-        delay(1000)
+        //delay(1000)
 
-        ProgressEvents.onNext("ConnectionStarted")
-        delay(2000)
+        ProgressEvents.onNext("DeviceName", "ECB-20")
+        //delay(5000)
 
-        ProgressEvents.onNext("WatchInitializationCompleted")
+//        ProgressEvents.onNext("ConnectionStarted")
+//        //delay(2000)
+//
+//        ProgressEvents.onNext("WatchInitializationCompleted")
         ProgressEvents.onNext("ConnectionSetupComplete")
-        delay(5000)
+//        //delay(10000)
+//        ProgressEvents.onNext("ButtonPressedInfoReceived")
 
-        ProgressEvents.onNext("Disconnect")
+        // ProgressEvents.onNext("Disconnect")
     }
 
     private suspend fun init(): Boolean {
@@ -138,7 +138,7 @@ class GShockAPIMock(private val context: Context) {
     }
 
     fun setTimer(timerValue: Int) {
-        // NO-OP
+        println("Timer set to $timerValue")
     }
 
     suspend fun getAppInfo(): String {
@@ -146,7 +146,7 @@ class GShockAPIMock(private val context: Context) {
     }
 
     suspend fun setTime(timeZone: String = TimeZone.getDefault().id) {
-        // NO-OP
+        println("Time set to $timeZone")
     }
 
     suspend fun getAlarms(): ArrayList<Alarm> {
@@ -163,7 +163,7 @@ class GShockAPIMock(private val context: Context) {
     }
 
     fun setAlarms(alarms: ArrayList<Alarm>) {
-        // NO-OP
+        println("Alarms set: $alarms")
     }
 
     suspend fun getEventsFromWatch(): ArrayList<Event> {
@@ -171,8 +171,12 @@ class GShockAPIMock(private val context: Context) {
         val eventList: ArrayList<Event> = arrayListOf(
             Event(
                 title = "Event 1",
-                startDate = EventDate(2024, Month.MAY, 1), // Replace with actual EventDate structure
-                endDate = EventDate(2024,Month.MAY,2),
+                startDate = EventDate(
+                    2024,
+                    Month.MAY,
+                    1
+                ), // Replace with actual EventDate structure
+                endDate = EventDate(2024, Month.MAY, 2),
                 repeatPeriod = RepeatPeriod.NEVER,
                 daysOfWeek = arrayListOf(DayOfWeek.MONDAY),
                 enabled = false,
@@ -180,8 +184,12 @@ class GShockAPIMock(private val context: Context) {
             ),
             Event(
                 title = "Event 2",
-                startDate = EventDate(2024, Month.MAY, 1), // Replace with actual EventDate structure
-                endDate = EventDate(2024,Month.MAY,2),
+                startDate = EventDate(
+                    2024,
+                    Month.MAY,
+                    1
+                ), // Replace with actual EventDate structure
+                endDate = EventDate(2024, Month.MAY, 2),
                 repeatPeriod = RepeatPeriod.NEVER,
                 daysOfWeek = arrayListOf(DayOfWeek.MONDAY),
                 enabled = false,
@@ -189,8 +197,12 @@ class GShockAPIMock(private val context: Context) {
             ),
             Event(
                 title = "Event 3",
-                startDate = EventDate(2024, Month.MAY, 1), // Replace with actual EventDate structure
-                endDate = EventDate(2024,Month.MAY,2),
+                startDate = EventDate(
+                    2024,
+                    Month.MAY,
+                    1
+                ), // Replace with actual EventDate structure
+                endDate = EventDate(2024, Month.MAY, 2),
                 repeatPeriod = RepeatPeriod.NEVER,
                 daysOfWeek = arrayListOf(DayOfWeek.MONDAY),
                 enabled = false,
@@ -198,13 +210,18 @@ class GShockAPIMock(private val context: Context) {
             ),
             Event(
                 title = "Event 4",
-                startDate = EventDate(2024, Month.MAY, 1), // Replace with actual EventDate structure
-                endDate = EventDate(2024,Month.MAY,2),
+                startDate = EventDate(
+                    2024,
+                    Month.MAY,
+                    1
+                ), // Replace with actual EventDate structure
+                endDate = EventDate(2024, Month.MAY, 2),
                 repeatPeriod = RepeatPeriod.NEVER,
                 daysOfWeek = arrayListOf(DayOfWeek.MONDAY),
                 enabled = false,
                 incompatible = false
-            ))
+            )
+        )
 
         return eventList
 
@@ -215,7 +232,7 @@ class GShockAPIMock(private val context: Context) {
         return Event(
             title = "Event 10",
             startDate = EventDate(2024, Month.MAY, 1), // Replace with actual EventDate structure
-            endDate = EventDate(2024,Month.MAY,2),
+            endDate = EventDate(2024, Month.MAY, 2),
             repeatPeriod = RepeatPeriod.NEVER,
             daysOfWeek = arrayListOf(DayOfWeek.MONDAY),
             enabled = false,
@@ -224,11 +241,11 @@ class GShockAPIMock(private val context: Context) {
     }
 
     fun setEvents(events: ArrayList<Event>) {
-        // NO-OP
+        println("Events set: $events")
     }
 
     fun clearEvents() {
-        // NO-OP
+        println("Events cleared")
     }
 
     suspend fun getSettings(): Settings {
@@ -259,15 +276,15 @@ class GShockAPIMock(private val context: Context) {
     }
 
     fun setSettings(settings: Settings) {
-        // NO-OP
+        println("Settings set: $settings")
     }
 
     fun disconnect(context: Context) {
-        // NO-OP
+        println("Disconnected")
     }
 
     fun stopScan() {
-        // NO-OP
+        println("Scan stopped")
     }
 
     fun isBluetoothEnabled(context: Context): Boolean {
@@ -276,11 +293,11 @@ class GShockAPIMock(private val context: Context) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun sendMessage(message: String) {
-       // NO-OP
+        println("Message sent: $message")
     }
 
     fun resetHand() {
-        // NO-OP
+        println("Hand reset")
     }
 
     fun validateBluetoothAddress(deviceAddress: String?): Boolean {

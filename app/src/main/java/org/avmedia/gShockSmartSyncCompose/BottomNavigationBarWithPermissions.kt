@@ -87,14 +87,12 @@ fun BottomNavigationBarWithPermissions() {
                 )
             }
             composable(Screens.Alarms.route) {
-                AlarmsScreen(
-                    navController
-                )
+                AlarmsScreen()
             }
             composable(Screens.Events.route) {
                 PermissionRequiredScreen(
                     requiredPermissions = listOf(READ_CALENDAR),
-                    onPermissionGranted = { EventsScreen(navController) },
+                    onPermissionGranted = { EventsScreen() },
                     onPermissionDenied = {
                         LaunchedEffect(Unit) { // make sure it is only called once
                             AppSnackbar(
@@ -126,9 +124,7 @@ fun BottomNavigationBarWithPermissions() {
                 )
             }
             composable(Screens.Settings.route) {
-                SettingsScreen(
-                    navController
-                )
+                SettingsScreen()
             }
         }
     }

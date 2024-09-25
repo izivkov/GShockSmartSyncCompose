@@ -3,7 +3,10 @@ package org.avmedia.gShockSmartSyncCompose.ui.settings
 import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.content.Context
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +16,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationContext
+import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
 import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
+import org.avmedia.gshockapi.ProgressEvents
+import org.avmedia.gshockapi.Settings
 import org.avmedia.gshockapi.WatchInfo
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -333,7 +339,56 @@ object SettingsViewModel : ViewModel() {
         return smartSettings
     }
 
-    suspend fun setSmartDefaults() {
-        updateSettingsAndMap(getSmartDefaults())
+    fun setSmartDefaults() {
+        viewModelScope.launch {
+            try {
+                updateSettingsAndMap(getSmartDefaults())
+            } catch (e: Exception) {
+                ProgressEvents.onNext("ApiError", e.message ?: "")
+            }
+        }
+    }
+
+    fun sendToWatch() {
+        val settings = Settings()
+
+        val localeSetting: Locale = settingsMap[Locale::class.java] as Locale
+        settings.language = localeSetting.dayOfWeekLanguage.value
+        settings.timeFormat = localeSetting.timeFormat.value
+        settings.dateFormat = localeSetting.dateFormat.value
+
+        val lightSetting: Light = settingsMap[Light::class.java] as Light
+        settings.autoLight = lightSetting.autoLight
+        settings.lightDuration = lightSetting.duration.value
+
+        if (WatchInfo.hasPowerSavingMode) {
+            val powerSavingMode: PowerSavingMode = settingsMap[PowerSavingMode::class.java] as PowerSavingMode
+            settings.powerSavingMode = powerSavingMode.powerSavingMode
+        }
+
+        if (!WatchInfo.alwaysConnected) { // Auto-time-adjustment does not apply for always-connected watches
+            val timeAdjustment: TimeAdjustment = settingsMap[TimeAdjustment::class.java] as TimeAdjustment
+            settings.timeAdjustment = timeAdjustment.timeAdjustment
+            settings.adjustmentTimeMinutes = timeAdjustment.adjustmentTimeMinutes
+            LocalDataStorage.setTimeAdjustmentNotification(applicationContext(), timeAdjustment.timeAdjustmentNotifications)
+        }
+
+        if (WatchInfo.hasDnD) {
+            val dnd: DnD = settingsMap[DnD::class.java] as DnD
+            settings.DnD = dnd.dnd
+            LocalDataStorage.setMirrorPhoneDnD(applicationContext(), dnd.mirrorPhone)
+        }
+
+        val buttonTone: OperationSound = settingsMap[OperationSound::class.java] as OperationSound
+        settings.buttonTone = buttonTone.sound
+
+        viewModelScope.launch {
+            try {
+                api().setSettings(settings)
+                AppSnackbar("Settings Sent to Watch")
+            } catch (e: Exception) {
+                ProgressEvents.onNext("ApiError", e.message ?: "")
+            }
+        }
     }
 }

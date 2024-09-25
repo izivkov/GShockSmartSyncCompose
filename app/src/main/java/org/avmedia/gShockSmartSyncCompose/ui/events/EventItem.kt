@@ -1,12 +1,17 @@
 package org.avmedia.gShockSmartSyncCompose.ui.events
 
+import AppSwitch
 import AppText
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,8 +26,14 @@ fun EventItem(
     period: String,
     frequency: String,
     enabled: Boolean,
-    onEnabledChange: (Boolean) -> Unit
+    onEnabledChange: (Boolean) -> Unit,
 ) {
+    var isEnabled by remember { mutableStateOf(enabled) }
+
+    LaunchedEffect(enabled) {
+        isEnabled = enabled
+    }
+
     AppCard(
         modifier = Modifier
             .fillMaxWidth()
@@ -50,9 +61,12 @@ fun EventItem(
                             .weight(1f)
                             .padding(end = 0.dp, bottom = 0.dp)
                     )
-                    Switch(
-                        checked = enabled,
-                        onCheckedChange = onEnabledChange,
+                    AppSwitch(
+                        checked = isEnabled,
+                        onCheckedChange = { newValue ->
+                            onEnabledChange(newValue)
+                            isEnabled = newValue
+                        },
                         modifier = Modifier.align(Alignment.Top)
                     )
                 }

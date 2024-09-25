@@ -37,9 +37,7 @@ import org.avmedia.gshockapi.WatchInfo
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
-fun SettingsScreen(
-    navController: NavController,
-) {
+fun SettingsScreen() {
     GShockSmartSyncTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -123,16 +121,11 @@ fun BottomRow(
             val buttons = arrayListOf(
                 ButtonData(
                     text = stringResource(id = R.string.auto_configure_settings),
-                    onClick = {
-                        val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-                        scope.launch {
-                            settingsViewModel.setSmartDefaults()
-                        }
-                    }),
+                    onClick = { settingsViewModel.setSmartDefaults() }),
 
                 ButtonData(
-                    text = stringResource(id = R.string.send_events_to_watch),
-                    onClick = { println("Send alarms to phone clicked") })
+                    text = stringResource(id = R.string.send_to_watch),
+                    onClick = { settingsViewModel.sendToWatch() })
             )
 
             ButtonsRow(buttons = buttons)
@@ -143,5 +136,5 @@ fun BottomRow(
 @Preview(showBackground = true)
 @Composable
 fun PreviewSettingsScreen() {
-    SettingsScreen(NavController(LocalContext.current))
+    SettingsScreen()
 }

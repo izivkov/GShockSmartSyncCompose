@@ -21,12 +21,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppButton
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 
 @Composable
-fun LocalTimeView(modifier: Modifier) {
+fun LocalTimeView(
+    modifier: Modifier,
+    timeModel: TimeModel = viewModel()
+) {
     AppCard(
         modifier = modifier
     ) {
@@ -72,7 +76,10 @@ fun LocalTimeView(modifier: Modifier) {
                     modifier = Modifier
                         .padding(5.dp)
                         .background(MaterialTheme.colorScheme.primary),
-                    text = stringResource(id = R.string.send_to_watch)
+                    text = stringResource(id = R.string.send_to_watch),
+                    onClick = {
+                        timeModel.sendTimeToWatch()
+                    }
                 )
             }
         }
@@ -98,9 +105,11 @@ fun TimeZoneTextView(modifier: Modifier = Modifier, textSize: TextUnit) {
 }
 
 @Composable
-fun SendTimeButton(modifier: Modifier = Modifier, text: String) {
+fun SendTimeButton(modifier: Modifier = Modifier, text: String, onClick: () -> Unit) {
     AppButton(
-        onClick = { /* TODO: Implement button logic */ },
+        onClick = {
+            onClick()
+        },
         text = text
     )
 }

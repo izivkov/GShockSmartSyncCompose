@@ -16,6 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -25,6 +28,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationContext
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
 import org.avmedia.gShockSmartSyncCompose.ui.common.ButtonData
@@ -38,7 +42,7 @@ import org.avmedia.gshockapi.EventAction
 import org.avmedia.gshockapi.ProgressEvents
 
 @Composable
-fun EventsScreen(navController: NavController) {
+fun EventsScreen(viewModel: EventViewModel = viewModel()) {
 
     RequestPermissions()
 
@@ -82,11 +86,11 @@ fun EventsScreen(navController: NavController) {
                     }
                     .fillMaxWidth()
                 ) {
-
                     val buttons = arrayListOf(
                         ButtonData(
                             text = stringResource(id = R.string.send_events_to_watch),
-                            onClick = { println("Send alarms to phone clicked") })
+                            onClick = {viewModel.sendEventsToWatch()}
+                        )
                     )
                     ButtonsRow(buttons = buttons)
                 }
@@ -119,25 +123,13 @@ fun RequestPermissions() {
 }
 
 @Composable
-fun EventList() {
-    val eventViewModel: EventViewModel = viewModel()
+fun EventList(eventViewModel: EventViewModel = viewModel()) {
+
     val events by eventViewModel.events.collectAsState()
 
-    fun waitForPermissions(context: Context) {
-        val eventActions = arrayOf(
-            EventAction("CalendarPermissionsGranted") {
-                if (EventsModel.events.isEmpty()) {
-                    eventViewModel.loadEvents(context)
-                }
-            },
-            EventAction("CalendarPermissionsNotGranted") {
-                // TODO: Handle the case where permissions are not grantedGoHome()
-            })
-
-        ProgressEvents.runEventActions(AppHashCode(), eventActions)
+    LaunchedEffect(Unit) {
+        eventViewModel.loadEvents(applicationContext())
     }
-
-    waitForPermissions(LocalContext.current)
 
     @Composable
     fun createEvent(): List<Any> {
@@ -149,7 +141,9 @@ fun EventList() {
                     period = event.getPeriodFormatted(),
                     frequency = event.getFrequencyFormatted(),
                     enabled = event.enabled,
-                    onEnabledChange = {}
+                    onEnabledChange = { newValue ->
+                        eventViewModel.toggleEvents(index, newValue)
+                    }
                 )
             }
         }
@@ -167,5 +161,5 @@ fun EventList() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewEventsScreen() {
-    EventsScreen(NavController(LocalContext.current))
+    EventsScreen()
 }

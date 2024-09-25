@@ -27,6 +27,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppButton
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
@@ -34,7 +38,6 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 @Composable
 fun TimerView(
     modifier: Modifier = Modifier,
-    onSendClick: () -> Unit,
     timeModel: TimeModel = viewModel()
 ) {
     val timer by timeModel.timer.collectAsState()
@@ -104,7 +107,9 @@ fun TimerView(
                 SendTimerButton(
                     modifier = Modifier
                         .padding(5.dp),
-                    onClick = onSendClick
+                    onClick = {
+                        timeModel.sendTimerToWatch(timer)
+                    }
                 )
             }
         }
@@ -137,7 +142,7 @@ fun TimerView(
 fun TimerTimeView(modifier: Modifier = Modifier, timeText: String) {
     AppTextExtraLarge(
         text = timeText,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -160,7 +165,5 @@ fun convertSecondsToTime(totalSeconds: Int): Triple<Int, Int, Int> {
 @Preview(showBackground = true)
 @Composable
 fun PreviewTimerView() {
-    TimerView(Modifier, onSendClick = {
-        println("Timer Clicked")
-    })
+    TimerView(Modifier)
 }

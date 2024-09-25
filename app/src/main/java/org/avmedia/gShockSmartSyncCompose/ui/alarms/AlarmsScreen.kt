@@ -14,14 +14,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
 import org.avmedia.gShockSmartSyncCompose.ui.common.ButtonData
@@ -70,11 +68,13 @@ fun AlarmList(alarmViewModel: AlarmViewModel = viewModel()) {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun AlarmsScreen(navController: NavController) {
+fun AlarmsScreen(
+    alarmViewModel: AlarmViewModel = viewModel()
+) {
     GShockSmartSyncTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
+            color = MaterialTheme.colorScheme.background,
         ) {
             ConstraintLayout(
                 modifier = Modifier.fillMaxSize()
@@ -123,10 +123,12 @@ fun AlarmsScreen(navController: NavController) {
                     val buttons = arrayListOf(
                         ButtonData(
                             text = stringResource(id = R.string.send_alarms_to_phone),
-                            onClick = { println("Send alarms to phone clicked") }),
+                            onClick = { alarmViewModel.sendAlarmsToPhone() }),
                         ButtonData(
                             text = stringResource(id = R.string.send_alarms_to_watch),
-                            onClick = { println("Send alarms to watch clicked") })
+                            onClick = {
+                                alarmViewModel.sendAlarmsToWatch()
+                            })
                     )
 
                     ButtonsRow(buttons = buttons)
@@ -139,5 +141,5 @@ fun AlarmsScreen(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewAlarmScreen() {
-    AlarmsScreen(NavController(LocalContext.current))
+    AlarmsScreen()
 }

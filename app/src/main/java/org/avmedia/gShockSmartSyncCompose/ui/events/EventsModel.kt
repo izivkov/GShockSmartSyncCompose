@@ -6,9 +6,14 @@
 
 package org.avmedia.gShockSmartSyncCompose.ui.events
 
+import android.app.Activity
 import android.content.Context
+import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationContext
 import org.avmedia.gshockapi.Event
+import org.avmedia.gshockapi.EventAction
 import org.avmedia.gshockapi.EventDate
+import org.avmedia.gshockapi.ProgressEvents
+import timber.log.Timber
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -19,8 +24,7 @@ object EventsModel {
 
     val events = ArrayList<Event>()
 
-    fun
-            refresh(context: Context) {
+    fun refresh(context: Context) {
         events.clear()
         events.addAll(CalendarEvents.getEventsFromCalendar(context))
     }

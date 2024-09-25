@@ -74,8 +74,6 @@ fun PreConnectionScreen() {
             }
         }
 
-
-        // Second MaterialCardView equivalent
         AppCard(
             modifier = Modifier
                 .fillMaxWidth()
@@ -93,8 +91,7 @@ fun PreConnectionScreen() {
                     val (watchName, forgetButton, infoDeviceButton) = createRefs()
 
                     // WatchName equivalent
-                    AppTextLarge(
-                        text = "No Watch", // Set your watch name here
+                    WatchName(
                         modifier = Modifier
                             .constrainAs(watchName) {
                                 start.linkTo(parent.start)

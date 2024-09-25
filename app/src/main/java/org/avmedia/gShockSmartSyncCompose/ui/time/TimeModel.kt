@@ -26,6 +26,22 @@ class TimeModel : ViewModel() {
     private val _watchName = MutableStateFlow("")
     val watchName = _watchName
 
+    fun sendTimerToWatch(timeMs: Int) {
+        viewModelScope.launch {
+            api().setTimer(timeMs)
+        }
+    }
+
+    fun sendTimeToWatch() {
+        viewModelScope.launch {
+            try {
+                api().setTime()
+            } catch (e: Exception) {
+                ProgressEvents.onNext("ApiError", e.message ?: "")
+            }
+        }
+    }
+
     init {
         viewModelScope.launch {
             try {

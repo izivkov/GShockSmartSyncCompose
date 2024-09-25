@@ -24,7 +24,7 @@ fun AppButton(
         AppText(
             text.uppercase(),
             fontWeight = FontWeight.SemiBold,
-            fontSize = 20.sp,
+            fontSize = 16.sp,
             fontFamily = FontFamily.SansSerif,
             textAlign = TextAlign.Center,
         )

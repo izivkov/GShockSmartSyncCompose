@@ -52,7 +52,7 @@ fun TimeScreen(navController: NavController) {
                         top.linkTo(localTime.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
-                    }, onSendClick = { println("Timer Clicked") })
+                    })
 
                 WatchNameView(
                     modifier = Modifier

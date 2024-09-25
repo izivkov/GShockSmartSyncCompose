@@ -43,7 +43,7 @@
     <string name="signal_chime">Signal (chime)</string>
     <string name="google_calendar_events">Google Calendar Events</string>
     <string name="local_time">Local Time</string>
-    <string name="send_to_watch">Send to Watch</string>
+    <string name="send_to_watch">Send to\nWatch</string>
     <string name="_416_555_6789">416–555–6789</string>
     <string name="phonecall_item">PhoneCall Item</string>
     <string name="home_time">Home Time</string>

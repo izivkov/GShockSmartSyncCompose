@@ -14,6 +14,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Handler
 import android.provider.CalendarContract
+import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationContext
 import org.avmedia.gshockapi.Event
 import org.avmedia.gshockapi.EventDate
 import org.avmedia.gshockapi.ProgressEvents
@@ -131,7 +132,7 @@ object CalendarEvents {
         @Suppress("DEPRECATION")
         private val calendarObserver = object : ContentObserver(Handler()) {
             override fun onChange(selfChange: Boolean) {
-                ProgressEvents.onNext("CalendarUpdated")
+                ProgressEvents.onNext("CalendarUpdated", getEvents(applicationContext()))
             }
         }
 
