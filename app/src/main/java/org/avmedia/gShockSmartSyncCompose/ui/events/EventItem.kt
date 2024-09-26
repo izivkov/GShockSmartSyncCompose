@@ -14,11 +14,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
+import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
 
 @Composable
 fun EventItem(
@@ -27,8 +30,12 @@ fun EventItem(
     frequency: String,
     enabled: Boolean,
     onEnabledChange: (Boolean) -> Unit,
+    enabledCount: Int, // Pass in the count of currently enabled events
+    maxEnabled: Int = 5 // Set the maximum number of enabled events (default is 5)
 ) {
     var isEnabled by remember { mutableStateOf(enabled) }
+
+    val maxReminderMessage = stringResource(id = R.string.max_reminders_reached)
 
     LaunchedEffect(enabled) {
         isEnabled = enabled
@@ -64,8 +71,11 @@ fun EventItem(
                     AppSwitch(
                         checked = isEnabled,
                         onCheckedChange = { newValue ->
-                            onEnabledChange(newValue)
-                            isEnabled = newValue
+                            if (newValue && enabledCount >= maxEnabled) {
+                                AppSnackbar(maxReminderMessage)
+                            } else {
+                                onEnabledChange(newValue)
+                            }
                         },
                         modifier = Modifier.align(Alignment.Top)
                     )
@@ -108,6 +118,7 @@ fun PreviewAlarmScreen() {
         period = "Feb 22 - Mar 24",
         frequency = "Weekly",
         enabled = false,
-        onEnabledChange = {}
+        onEnabledChange = {},
+        enabledCount = 3
     )
 }

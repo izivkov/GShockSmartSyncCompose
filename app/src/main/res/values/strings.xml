@@ -153,5 +153,6 @@
     <string name="auto_light_at_night_only">Auto-light at night only</string>
     <string name="keep_alive">Keep Alive (uses more battery)</string>
     <string name="enter_timer_time">Enter Timer Time</string>
+    <string name="max_reminders_reached">Maximum number of reminders reached, Please disable some before selecting new ones" </string>
 </resources>
 

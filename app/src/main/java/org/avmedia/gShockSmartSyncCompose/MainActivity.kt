@@ -31,6 +31,7 @@ import org.avmedia.gShockSmartSyncCompose.services.NightWatcher
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
 import org.avmedia.gShockSmartSyncCompose.ui.common.PopupMessageReceiver
+import org.avmedia.gShockSmartSyncCompose.ui.common.PopupMessageReceiver2
 import org.avmedia.gShockSmartSyncCompose.ui.others.PreConnectionScreen
 import org.avmedia.gShockSmartSyncCompose.ui.others.RunActionsScreen
 import org.avmedia.gShockSmartSyncCompose.utils.Utils
@@ -51,7 +52,6 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun Init() {
         InactivityWatcher.start(this)
-        PopupMessageReceiver()
         NightWatcher.setupSunriseSunsetTasks(this@MainActivity as Context)
     }
 
@@ -100,6 +100,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun createAppEventsSubscription() {
+
         val eventActions = arrayOf(
             EventAction("ConnectionSetupComplete") {
                 setContent {
@@ -109,6 +110,7 @@ class MainActivity : ComponentActivity() {
                         } else {
                             BottomNavigationBarWithPermissions()
                         }
+                        PopupMessageReceiver()
                     }
                 }
             },
@@ -116,6 +118,7 @@ class MainActivity : ComponentActivity() {
                 setContent {
                     GShockSmartSyncTheme {
                         PreConnectionScreen()
+                        PopupMessageReceiver()
                     }
                 }
             },

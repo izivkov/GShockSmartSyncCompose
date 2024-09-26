@@ -150,4 +150,5 @@
     <string name="auto_light_at_night_only">“仅在夜间自动亮灯”</string>
     <string name="keep_alive">“保持唤醒（耗电更多）”</string>
     <string name="enter_timer_time">"输入时间 " </string>
-</resources>
+    <string name="max_reminders_reached">提醒数量已达上限，请先禁用一些再选择新的 " </string>
+    </resources>
