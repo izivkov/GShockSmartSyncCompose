@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
 import org.avmedia.gshockapi.ProgressEvents
 
-class TimeModel : ViewModel() {
+class TimeViewModel : ViewModel() {
     private val _timer = MutableStateFlow(0)
     val timer = _timer
     fun setTimer(hours: Int, minutes: Int, seconds: Int) {

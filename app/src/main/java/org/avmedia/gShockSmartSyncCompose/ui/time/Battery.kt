@@ -38,7 +38,7 @@ import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gshockapi.WatchInfo
 
 @Composable
-fun Battery(timeModel: TimeModel = viewModel()) {
+fun Battery(timeModel: TimeViewModel = viewModel()) {
 
     val batteryLevel by timeModel.batteryLevel.collectAsState()
     var result by remember { mutableIntStateOf(0) }

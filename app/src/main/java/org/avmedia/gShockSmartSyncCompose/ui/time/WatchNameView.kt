@@ -19,7 +19,7 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 @Composable
 fun WatchNameView(
     modifier: Modifier = Modifier,
-    timeModel: TimeModel = viewModel()
+    timeModel: TimeViewModel = viewModel()
 ) {
     val watchName by timeModel.watchName.collectAsState()
 

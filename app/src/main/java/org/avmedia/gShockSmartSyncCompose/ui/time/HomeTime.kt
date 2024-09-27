@@ -19,7 +19,7 @@ import org.avmedia.gshockapi.WatchInfo
 fun HomeTime(
     modifier: Modifier = Modifier,
     defaultText: String = "N/A",
-    timeModel: TimeModel = viewModel()
+    timeModel: TimeViewModel = viewModel()
 ) {
     val homeTime by timeModel.homeTime.collectAsState()
     var text by remember { mutableStateOf(defaultText) }

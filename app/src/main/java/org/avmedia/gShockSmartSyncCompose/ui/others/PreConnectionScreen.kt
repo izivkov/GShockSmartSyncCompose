@@ -1,6 +1,5 @@
 package org.avmedia.gShockSmartSyncCompose.ui.others
 
-import AppTextLarge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,6 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -23,16 +25,18 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.AppConnectionSpinner
 import org.avmedia.gShockSmartSyncCompose.ui.common.InfoButton
 
 @Composable
-fun PreConnectionScreen() {
+fun PreConnectionScreen(
+    watchNameViewModel: WatchNameViewModel = WatchNameViewModel()
+) {
+    val watchName by watchNameViewModel.watchName.collectAsState()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        // First MaterialCardView equivalent
         AppCard(
             modifier = Modifier
                 .fillMaxWidth()
-            // .weight(1f), // To stretch vertically
         ) {
             ConstraintLayout(
                 modifier = Modifier.fillMaxSize()
@@ -88,22 +92,22 @@ fun PreConnectionScreen() {
                 ConstraintLayout(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    val (watchName, forgetButton, infoDeviceButton) = createRefs()
+                    val (watchNamePanel, forgetButton, infoDeviceButton) = createRefs()
 
-                    // WatchName equivalent
                     WatchName(
                         modifier = Modifier
-                            .constrainAs(watchName) {
+                            .constrainAs(watchNamePanel) {
                                 start.linkTo(parent.start)
                                 top.linkTo(parent.top)
                                 bottom.linkTo(parent.bottom)
                             }
-                            .padding(start = 0.dp)
+                            .padding(start = 0.dp),
+                        watchName = watchName
                     )
 
                     // ForgetButton equivalent
                     AppButton(
-                        onClick = { /* Handle forget */ },
+                        onClick = { watchNameViewModel.forget() },
                         text = stringResource(id = R.string.forget),
                         modifier = Modifier
                             .padding(0.dp)

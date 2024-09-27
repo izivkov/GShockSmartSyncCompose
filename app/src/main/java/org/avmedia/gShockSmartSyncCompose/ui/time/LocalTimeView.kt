@@ -29,7 +29,7 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 @Composable
 fun LocalTimeView(
     modifier: Modifier,
-    timeModel: TimeModel = viewModel()
+    timeModel: TimeViewModel = viewModel()
 ) {
     AppCard(
         modifier = modifier

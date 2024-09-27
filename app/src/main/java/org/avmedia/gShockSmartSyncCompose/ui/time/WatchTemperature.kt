@@ -16,7 +16,7 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.avmedia.gShockSmartSyncCompose.ui.time.TimeModel
+import org.avmedia.gShockSmartSyncCompose.ui.time.TimeViewModel
 import java.util.Locale
 
 @Composable
@@ -25,7 +25,7 @@ fun WatchTemperature(
     hasTemperature: Boolean,
     isConnected: Boolean,
     isNormalButtonPressed: Boolean,
-    timeModel: TimeModel = viewModel()
+    timeModel: TimeViewModel = viewModel()
 ) {
     var temperatureText by remember { mutableStateOf("N/A") }
     val temperature by timeModel.temperature.collectAsState()
