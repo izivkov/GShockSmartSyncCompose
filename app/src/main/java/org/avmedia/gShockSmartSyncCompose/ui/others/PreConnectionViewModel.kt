@@ -13,7 +13,7 @@ import org.avmedia.gshockapi.EventAction
 import org.avmedia.gshockapi.ProgressEvents
 import org.avmedia.gshockapi.ble.Connection
 
-class WatchNameViewModel : ViewModel() {
+class PreConnectionViewModel : ViewModel() {
     private val noWatchString = applicationContext().getString(R.string.no_watch)
     private val initialValue = LocalDataStorage.get(applicationContext(), "LastDeviceName", noWatchString) as String
 

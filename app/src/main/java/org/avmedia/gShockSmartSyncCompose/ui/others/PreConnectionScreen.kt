@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -19,16 +18,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import org.avmedia.gShockSmartSyncCompose.R
-import org.avmedia.gShockSmartSyncCompose.ui.common.AppButton
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppConnectionSpinner
 import org.avmedia.gShockSmartSyncCompose.ui.common.InfoButton
 
 @Composable
 fun PreConnectionScreen(
-    watchNameViewModel: WatchNameViewModel = WatchNameViewModel()
+    ptrConnectionViewModel: PreConnectionViewModel = PreConnectionViewModel()
 ) {
-    val watchName by watchNameViewModel.watchName.collectAsState()
+    val watchName by ptrConnectionViewModel.watchName.collectAsState()
 
     Box(
         modifier = Modifier
@@ -106,9 +104,7 @@ fun PreConnectionScreen(
                     )
 
                     // ForgetButton equivalent
-                    AppButton(
-                        onClick = { watchNameViewModel.forget() },
-                        text = stringResource(id = R.string.forget),
+                    ForgetButton(
                         modifier = Modifier
                             .padding(0.dp)
                             .constrainAs(forgetButton) {
@@ -117,6 +113,7 @@ fun PreConnectionScreen(
                                 bottom.linkTo(parent.bottom)
                             }
                     )
+
                     Box(modifier = Modifier
                         .padding(end = 4.dp, start = 0.dp)
                         .constrainAs(infoDeviceButton) {
