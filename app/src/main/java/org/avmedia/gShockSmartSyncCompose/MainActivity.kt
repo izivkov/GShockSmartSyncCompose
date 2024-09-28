@@ -15,10 +15,17 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
@@ -51,7 +58,6 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun Init() {
         InactivityWatcher.start(this)
-        NightWatcher.setupSunriseSunsetTasks(this@MainActivity as Context)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,15 +93,17 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun RunWithChecks() {
 
-        CheckPermissions()
+        CheckPermissions {
+            NightWatcher.setupSunriseSunsetTasks(this@MainActivity as Context)
 
-        // Check if Bluetooth is enabled
-        if (!api().isBluetoothEnabled(this)) {
-            turnOnBLE()
+            // Check if Bluetooth is enabled
+            if (!api().isBluetoothEnabled(this)) {
+                turnOnBLE()
+            }
+
+            // Do more checks here
+            run()
         }
-
-        // Do more checks here
-        run()
     }
 
     private fun createAppEventsSubscription() {
@@ -160,36 +168,78 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun CheckPermissions() {
+    fun CheckPermissions(onPermissionsGranted: @Composable () -> Unit) {
         val context = LocalContext.current
+        val activity = context as Activity
 
-        val initialPermissions = emptyList<String>().toMutableList()
-
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
-            initialPermissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
+        val initialPermissions = mutableListOf<String>().apply {
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
+                add(Manifest.permission.ACCESS_FINE_LOCATION)
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                add(Manifest.permission.BLUETOOTH_SCAN)
+                add(Manifest.permission.BLUETOOTH_CONNECT)
+            }
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            initialPermissions.add(Manifest.permission.BLUETOOTH_SCAN)
-            initialPermissions.add(Manifest.permission.BLUETOOTH_CONNECT)
-        }
 
-        // Launchers for requesting permissions
+        // State to track if permissions are granted
+        var permissionsGranted by remember { mutableStateOf(false) }
+        var showRationaleDialog by remember { mutableStateOf(false) }
+        var permanentlyDenied by remember { mutableStateOf(false) }
+
+        // Launcher for requesting permissions
         val launcher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.RequestMultiplePermissions(),
             onResult = { permissions ->
-                if (!permissions.values.all { it }) {
-                    setContent {
-                        // Show a snackbar and exit the app
-                        AppSnackbar("Permissions not granted. Exiting...")
-                        (context as Activity).finish()
-                    }
+                permissionsGranted = permissions.values.all { it }
+                showRationaleDialog = permissions.values.any {
+                    !it && activity.shouldShowRequestPermissionRationale(initialPermissions[0])
+                }
+                permanentlyDenied = !permissionsGranted && !showRationaleDialog
+
+                if (!permissionsGranted && !showRationaleDialog) {
+                    // If permissions are permanently denied (Don't ask again selected), set the flag
+                    permanentlyDenied = true
                 }
             }
         )
 
-        LaunchedEffect(Unit)
-        {
+        // Trigger the permission request on first composition
+        LaunchedEffect(Unit) {
             launcher.launch(initialPermissions.toTypedArray())
+        }
+
+        // If permissions are granted, call the provided callback
+        if (permissionsGranted) {
+            onPermissionsGranted()
+        }
+
+        // Show rationale dialog if needed
+        if (showRationaleDialog) {
+            AlertDialog(
+                onDismissRequest = { /* Do nothing */ },
+                title = { Text(text = "Permissions Required") },
+                text = { Text("This app needs location and Bluetooth permissions to function properly.") },
+                confirmButton = {
+                    TextButton(onClick = {
+                        launcher.launch(initialPermissions.toTypedArray())
+                    }) {
+                        Text("Retry")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = {
+                        activity.finish()  // Exit if user doesn't want to grant permissions
+                    }) {
+                        Text("Exit")
+                    }
+                }
+            )
+        }
+
+        if (permanentlyDenied) {
+            AppSnackbar("Permissions are permanently denied. Please enable them in the app settings.")
+            activity.finish()  // Exit if user doesn't want to open settings
         }
     }
 
@@ -236,6 +286,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 
     companion object {
 
