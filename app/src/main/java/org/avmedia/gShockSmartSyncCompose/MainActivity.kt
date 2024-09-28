@@ -1,7 +1,6 @@
 package org.avmedia.gShockSmartSyncCompose
 
 import android.Manifest
-import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
@@ -11,23 +10,15 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,12 +31,11 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
 import org.avmedia.gShockSmartSyncCompose.ui.common.PopupMessageReceiver
 import org.avmedia.gShockSmartSyncCompose.ui.others.PreConnectionScreen
 import org.avmedia.gShockSmartSyncCompose.ui.others.RunActionsScreen
+import org.avmedia.gShockSmartSyncCompose.utils.CheckPermissions
 import org.avmedia.gShockSmartSyncCompose.utils.Utils
 import org.avmedia.gshockapi.EventAction
 import org.avmedia.gshockapi.GShockAPIMock
 import org.avmedia.gshockapi.ProgressEvents
-import java.util.Timer
-import kotlin.concurrent.schedule
 
 class MainActivity : ComponentActivity() {
     // Use FragmentActivity to be able to handle popups like MaterialTimePickerDialog in AlarmsItem
@@ -58,6 +48,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun Init() {
         InactivityWatcher.start(this)
+        // PopupMessageReceiver()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -167,83 +158,7 @@ class MainActivity : ComponentActivity() {
         ProgressEvents.runEventActions(Utils.AppHashCode(), eventActions)
     }
 
-    @Composable
-    fun CheckPermissions(onPermissionsGranted: @Composable () -> Unit) {
-        val context = LocalContext.current
-        val activity = context as Activity
-
-        val initialPermissions = mutableListOf<String>().apply {
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
-                add(Manifest.permission.ACCESS_FINE_LOCATION)
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                add(Manifest.permission.BLUETOOTH_SCAN)
-                add(Manifest.permission.BLUETOOTH_CONNECT)
-            }
-        }
-
-        // State to track if permissions are granted
-        var permissionsGranted by remember { mutableStateOf(false) }
-        var showRationaleDialog by remember { mutableStateOf(false) }
-        var permanentlyDenied by remember { mutableStateOf(false) }
-
-        // Launcher for requesting permissions
-        val launcher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.RequestMultiplePermissions(),
-            onResult = { permissions ->
-                permissionsGranted = permissions.values.all { it }
-                showRationaleDialog = permissions.values.any {
-                    !it && activity.shouldShowRequestPermissionRationale(initialPermissions[0])
-                }
-                permanentlyDenied = !permissionsGranted && !showRationaleDialog
-
-                if (!permissionsGranted && !showRationaleDialog) {
-                    // If permissions are permanently denied (Don't ask again selected), set the flag
-                    permanentlyDenied = true
-                }
-            }
-        )
-
-        // Trigger the permission request on first composition
-        LaunchedEffect(Unit) {
-            launcher.launch(initialPermissions.toTypedArray())
-        }
-
-        // If permissions are granted, call the provided callback
-        if (permissionsGranted) {
-            onPermissionsGranted()
-        }
-
-        // Show rationale dialog if needed
-        if (showRationaleDialog) {
-            AlertDialog(
-                onDismissRequest = { /* Do nothing */ },
-                title = { Text(text = "Permissions Required") },
-                text = { Text("This app needs location and Bluetooth permissions to function properly.") },
-                confirmButton = {
-                    TextButton(onClick = {
-                        launcher.launch(initialPermissions.toTypedArray())
-                    }) {
-                        Text("Retry")
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = {
-                        activity.finish()  // Exit if user doesn't want to grant permissions
-                    }) {
-                        Text("Exit")
-                    }
-                }
-            )
-        }
-
-        if (permanentlyDenied) {
-            AppSnackbar("Permissions are permanently denied. Please enable them in the app settings.")
-            activity.finish()  // Exit if user doesn't want to open settings
-        }
-    }
-
-    private var requestBluetooth =
+    private var requestBluetooth: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 AppSnackbar("Bluetooth enabled.")
@@ -262,7 +177,7 @@ class MainActivity : ComponentActivity() {
         val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
         if (bluetoothAdapter == null) {
             AppSnackbar("Sorry, your device does not support Bluetooth. Exiting...")
-            Timer("SettingUp", false).schedule(6000) { finish() }
+            finish()
         }
 
         //val REQUEST_ENABLE_BT = 99
