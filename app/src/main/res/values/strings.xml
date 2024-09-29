@@ -154,5 +154,7 @@
     <string name="keep_alive">Keep Alive (uses more battery)</string>
     <string name="enter_timer_time">Enter Timer Time</string>
     <string name="max_reminders_reached">Maximum number of reminders reached, Please disable some before selecting new ones" </string>
+    <string name="time_offset_ms">Time Offset (ms)</string>
+    <string name="time_offset_info">When setting time, add or subrtact these ms to set exact time.</string>
 </resources>
 

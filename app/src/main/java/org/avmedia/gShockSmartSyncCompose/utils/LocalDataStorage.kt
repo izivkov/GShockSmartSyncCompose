@@ -73,6 +73,14 @@ object LocalDataStorage {
         putBoolean(context, "timeAdjustmentNotification", value)
     }
 
+    fun getTimeAdjustmentTimeOffsetMs(context: Context): String? {
+        return get(context, "timeOffsetMs")
+    }
+
+    fun setTimeAdjustmentTimeOffsetMs(context: Context, value: String) {
+        put(context, "timeOffsetMs", value)
+    }
+
     fun getMirrorPhoneDnd(context: Context): Boolean {
         return getBoolean(context, "mirrorPhoneDnD")
     }

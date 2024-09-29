@@ -98,7 +98,8 @@ object SettingsViewModel : ViewModel() {
         var timeAdjustment: Boolean = true,
         var adjustmentTimeMinutes: Int = 0,
         var timeAdjustmentNotifications: Boolean =
-            LocalDataStorage.getTimeAdjustmentNotification(applicationContext())
+            LocalDataStorage.getTimeAdjustmentNotification(applicationContext()),
+        var timeOffsetMs: Int = 0,
     ) : Setting("Time Adjustment") {
         override fun save() {
             LocalDataStorage.setTimeAdjustmentNotification(

@@ -133,7 +133,7 @@ object CalendarEvents {
                 title = if (title.isNullOrBlank()) "(No title)" else title
 
                 val dateStart: String? =
-                    cur.getString(cur.getColumnIndex(CalendarContract.Instances.BEGIN))
+                    cur.getString(cur.getColumnIndex(CalendarContract.Events.DTSTART))
                 val rrule: String? =
                     cur.getString(cur.getColumnIndex(CalendarContract.Events.RRULE))
                 val allDay: String? =

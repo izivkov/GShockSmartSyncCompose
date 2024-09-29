@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -52,11 +53,13 @@ fun TimeAdjustment(
 
     var notifyMe by remember { mutableStateOf(timeAdjustmentSetting.timeAdjustmentNotifications) }
     var adjustmentMinutes by remember { mutableStateOf(timeAdjustmentSetting.adjustmentTimeMinutes.toString()) }
+    var timeOffsetMs by remember { mutableStateOf(timeAdjustmentSetting.timeOffsetMs.toString()) }
 
     LaunchedEffect(settings, timeAdjustment, notifyMe, adjustmentMinutes) {
         timeAdjustment = timeAdjustmentSetting.timeAdjustment
         notifyMe = timeAdjustmentSetting.timeAdjustmentNotifications
         adjustmentMinutes = timeAdjustmentSetting.adjustmentTimeMinutes.toString()
+        timeOffsetMs = timeAdjustmentSetting.timeOffsetMs.toString()
     }
 
     AppCard(
@@ -138,8 +141,7 @@ fun TimeAdjustment(
                         }
                     },
                     modifier = Modifier
-                        // .width(IntrinsicSize.Min)
-                        .width(70.dp)
+                        .width(IntrinsicSize.Min)
                         .align(Alignment.CenterVertically)
                         .padding(end = 12.dp)
                         .weight(1.0f),
@@ -154,7 +156,6 @@ fun TimeAdjustment(
                     )
                 )
             }
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

@@ -2,6 +2,7 @@ package org.avmedia.gShockSmartSyncCompose
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
@@ -24,6 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import org.avmedia.gShockSmartSyncCompose.services.DeviceManager
 import org.avmedia.gShockSmartSyncCompose.services.InactivityWatcher
 import org.avmedia.gShockSmartSyncCompose.services.NightWatcher
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
@@ -32,23 +34,29 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.PopupMessageReceiver
 import org.avmedia.gShockSmartSyncCompose.ui.others.PreConnectionScreen
 import org.avmedia.gShockSmartSyncCompose.ui.others.RunActionsScreen
 import org.avmedia.gShockSmartSyncCompose.utils.CheckPermissions
+import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
 import org.avmedia.gShockSmartSyncCompose.utils.Utils
 import org.avmedia.gshockapi.EventAction
+import org.avmedia.gshockapi.GShockAPI
 import org.avmedia.gshockapi.GShockAPIMock
 import org.avmedia.gshockapi.ProgressEvents
+import org.avmedia.gshockapi.WatchInfo
 
 class MainActivity : ComponentActivity() {
     // Use FragmentActivity to be able to handle popups like MaterialTimePickerDialog in AlarmsItem
-    private val api = GShockAPIMock(this)
+    private val api = GShockAPI(this)
+    private var deviceManager: DeviceManager
 
     init {
         instance = this
+
+        // do not delete this. DeviceManager needs to be running to save the last device name to reuse on next start.
+        deviceManager = DeviceManager
     }
 
     @Composable
     private fun Init() {
         InactivityWatcher.start(this)
-        // PopupMessageReceiver()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +84,7 @@ class MainActivity : ComponentActivity() {
         LaunchedEffect(Unit) {
             val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
             scope.launch {
-                api().waitForConnection(api().getWatchName())
+                waitForConnectionCached()
             }
         }
     }
@@ -100,7 +108,7 @@ class MainActivity : ComponentActivity() {
     private fun createAppEventsSubscription() {
 
         val eventActions = arrayOf(
-            EventAction("ConnectionSetupComplete") {
+            EventAction("WatchInitializationCompleted") {
                 setContent {
                     GShockSmartSyncTheme {
                         if (api().isActionButtonPressed()) {
@@ -134,12 +142,16 @@ class MainActivity : ComponentActivity() {
                 }
             },
             EventAction("WaitForConnection")
-            {},
+            {
+                setContent {
+                    RunWithChecks()
+                }
+            },
             EventAction("Disconnect")
             {
                 InactivityWatcher.cancel()
-//                val device = ProgressEvents.getPayload("Disconnect") as BluetoothDevice
-//                api().teardownConnection(device)
+                val device = ProgressEvents.getPayload("Disconnect") as BluetoothDevice
+                api().teardownConnection(device)
                 setContent {
                     GShockSmartSyncTheme {
                         Surface(
@@ -156,6 +168,30 @@ class MainActivity : ComponentActivity() {
         )
 
         ProgressEvents.runEventActions(Utils.AppHashCode(), eventActions)
+    }
+
+    private suspend fun waitForConnectionCached() {
+        // Use this variable to control whether we should try to scan each time for the watch,
+        // or reuse the last saved address. If set tto false, the connection is a bit slower,
+        // but the app can connect to multiple watches without pressing "FORGET".
+        // Also, auto-time-sync will work for multiple watches
+
+        // Note: Consequently, we discovered that the Bluetooth scanning cannot be performed in the background,
+        // so actions will fail. If this flag is true, no scanning will be performed.
+        // Leave it to true.
+        val reuseAddress = true
+
+        var deviceAddress: String? = null
+
+        if (reuseAddress) {
+            val savedDeviceAddress = LocalDataStorage.get(applicationContext(), "LastDeviceAddress", "")
+            if (api().validateBluetoothAddress(savedDeviceAddress)) {
+                deviceAddress = savedDeviceAddress
+            }
+        }
+
+        val deviceName = LocalDataStorage.get(applicationContext(), "LastDeviceName", "")
+        api().waitForConnection(deviceAddress, deviceName)
     }
 
     private var requestBluetooth: ActivityResultLauncher<Intent> =
@@ -202,7 +238,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
     companion object {
 
         private var instance: MainActivity? = null
@@ -212,7 +247,7 @@ class MainActivity : ComponentActivity() {
             return instance!!.applicationContext
         }
 
-        fun api(): GShockAPIMock {
+        fun api(): GShockAPI {
             return instance!!.api
         }
     }
