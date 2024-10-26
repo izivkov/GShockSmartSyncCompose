@@ -2,6 +2,7 @@ package org.avmedia.gShockSmartSyncCompose.utils
 
 import android.Manifest
 import android.app.Activity
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,13 +16,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import androidx.core.content.ContextCompat
+import org.avmedia.gShockSmartSyncCompose.ui.common.AppButton
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
-import org.avmedia.gShockSmartSyncCompose.ui.common.PopupMessageReceiver
 import java.util.Timer
 import kotlin.concurrent.schedule
 
@@ -54,20 +51,23 @@ fun CheckPermissions(onPermissionsGranted: @Composable () -> Unit) {
                 !it && activity.shouldShowRequestPermissionRationale(initialPermissions[0])
             }
             permanentlyDenied = !permissionsGranted && !showRationaleDialog
-
-            if (!permissionsGranted && !showRationaleDialog) {
-                // If permissions are permanently denied (Don't ask again selected), set the flag
-                permanentlyDenied = true
-            }
         }
     )
 
-    // Trigger the permission request on first composition
+    // Check permissions before launching the request
     LaunchedEffect(Unit) {
-        launcher.launch(initialPermissions.toTypedArray())
+        val arePermissionsGranted = initialPermissions.all {
+            ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+        }
+
+        if (arePermissionsGranted) {
+            permissionsGranted = true
+        } else {
+            launcher.launch(initialPermissions.toTypedArray())
+        }
     }
 
-    // If permissions are granted, call the provided callback
+    // Trigger callbacks based on permission status
     if (permissionsGranted) {
         onPermissionsGranted()
     }
@@ -79,18 +79,15 @@ fun CheckPermissions(onPermissionsGranted: @Composable () -> Unit) {
             title = { Text(text = "Permissions Required") },
             text = { Text("This app needs location and Bluetooth permissions to function properly.") },
             confirmButton = {
-                TextButton(onClick = {
+                AppButton("Retry",
+                    onClick = {
                     launcher.launch(initialPermissions.toTypedArray())
-                }) {
-                    Text("Retry")
-                }
+                })
             },
             dismissButton = {
-                TextButton(onClick = {
+                AppButton("Exit", onClick = {
                     activity.finish()  // Exit if user doesn't want to grant permissions
-                }) {
-                    Text("Exit")
-                }
+                })
             }
         )
     }

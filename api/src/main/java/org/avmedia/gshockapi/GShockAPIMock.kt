@@ -1,5 +1,7 @@
 package org.avmedia.gshockapi
 
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothAdapter.getDefaultAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.os.Build
@@ -31,20 +33,22 @@ class GShockAPIMock(private val context: Context) {
 
     suspend fun waitForConnection(deviceId: String? = "", deviceName: String? = "") {
         ProgressEvents.onNext("WaitForConnection")
-        // delay(1000)
+        delay(1000)
 
-        ProgressEvents.onNext("DeviceName", "ECB-20")
-        //delay(5000)
+        ProgressEvents.onNext("DeviceName", "GW-B5600")
+        delay(1000)
 
         ProgressEvents.onNext("ConnectionStarted")
-        //delay(2000)
+        delay(1000)
 
         ProgressEvents.onNext("WatchInitializationCompleted")
         ProgressEvents.onNext("ConnectionSetupComplete")
-        //delay(10000)
+        delay(1000)
         ProgressEvents.onNext("ButtonPressedInfoReceived")
 
+        delay(1000)
         // ProgressEvents.onNext("Disconnect")
+        // delay(1000)
     }
 
     private suspend fun init(): Boolean {

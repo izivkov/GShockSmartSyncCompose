@@ -14,7 +14,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -30,21 +30,20 @@ import org.avmedia.gShockSmartSyncCompose.services.InactivityWatcher
 import org.avmedia.gShockSmartSyncCompose.services.NightWatcher
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
-import org.avmedia.gShockSmartSyncCompose.ui.common.PopupMessageReceiver
 import org.avmedia.gShockSmartSyncCompose.ui.others.PreConnectionScreen
 import org.avmedia.gShockSmartSyncCompose.ui.others.RunActionsScreen
 import org.avmedia.gShockSmartSyncCompose.utils.CheckPermissions
 import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
 import org.avmedia.gShockSmartSyncCompose.utils.Utils
 import org.avmedia.gshockapi.EventAction
-import org.avmedia.gshockapi.GShockAPI
 import org.avmedia.gshockapi.GShockAPIMock
 import org.avmedia.gshockapi.ProgressEvents
-import org.avmedia.gshockapi.WatchInfo
+import java.util.Timer
+import kotlin.concurrent.schedule
 
 class MainActivity : ComponentActivity() {
     // Use FragmentActivity to be able to handle popups like MaterialTimePickerDialog in AlarmsItem
-    private val api = GShockAPI(this)
+    private val api = GShockAPIMock(this)
     private var deviceManager: DeviceManager
 
     init {
@@ -56,7 +55,6 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun Init() {
-        InactivityWatcher.start(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,13 +62,22 @@ class MainActivity : ComponentActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         setContent {
-            GShockSmartSyncTheme {
-                Surface(
-                    modifier = Modifier.wrapContentHeight(),
-                    color = MaterialTheme.colorScheme.background,
-                ) {
-                    Init()
-                    RunWithChecks()
+            CheckPermissions {
+                if (!api().isBluetoothEnabled(this)) {
+                    turnOnBLE()
+                }
+
+                InactivityWatcher.start(this)
+                NightWatcher.setupSunriseSunsetTasks(this@MainActivity as Context)
+
+                GShockSmartSyncTheme {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),  // Use full screen size for consistency
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        Init()
+                        RunWithChecks()
+                    }
                 }
             }
         }
@@ -79,7 +86,8 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun run() {
         createAppEventsSubscription()
-        PreConnectionScreen()
+
+        AppScreen { PreConnectionScreen() }
 
         LaunchedEffect(Unit) {
             val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
@@ -91,17 +99,18 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun RunWithChecks() {
+        run()
+    }
 
-        CheckPermissions {
-            NightWatcher.setupSunriseSunsetTasks(this@MainActivity as Context)
-
-            // Check if Bluetooth is enabled
-            if (!api().isBluetoothEnabled(this)) {
-                turnOnBLE()
+    @Composable
+    fun AppScreen(content: @Composable () -> Unit) {
+        GShockSmartSyncTheme {
+            Surface(
+                modifier = Modifier.fillMaxSize(),  // Use full screen size for consistency
+                color = MaterialTheme.colorScheme.background
+            ) {
+                content()
             }
-
-            // Do more checks here
-            run()
         }
     }
 
@@ -109,22 +118,22 @@ class MainActivity : ComponentActivity() {
 
         val eventActions = arrayOf(
             EventAction("WatchInitializationCompleted") {
+
                 setContent {
-                    GShockSmartSyncTheme {
+                    AppScreen {
                         if (api().isActionButtonPressed()) {
                             RunActionsScreen()
                         } else {
                             BottomNavigationBarWithPermissions()
                         }
-                        PopupMessageReceiver()
                     }
                 }
+
             },
             EventAction("ConnectionFailed") {
                 setContent {
-                    GShockSmartSyncTheme {
+                    AppScreen {
                         PreConnectionScreen()
-                        PopupMessageReceiver()
                     }
                 }
             },
@@ -136,7 +145,7 @@ class MainActivity : ComponentActivity() {
                 AppSnackbar(message)
                 api().disconnect(this)
                 setContent {
-                    GShockSmartSyncTheme {
+                    AppScreen {
                         PreConnectionScreen()
                     }
                 }
@@ -150,17 +159,12 @@ class MainActivity : ComponentActivity() {
             EventAction("Disconnect")
             {
                 InactivityWatcher.cancel()
-                val device = ProgressEvents.getPayload("Disconnect") as BluetoothDevice
-                api().teardownConnection(device)
+                val device = ProgressEvents.getPayload("Disconnect") as? BluetoothDevice
+                if (device != null) {
+                    api().teardownConnection(device)
+                }
                 setContent {
-                    GShockSmartSyncTheme {
-                        Surface(
-                            modifier = Modifier.wrapContentHeight(),
-                            color = MaterialTheme.colorScheme.background,
-                        ) {
-                            PreConnectionScreen()
-                        }
-                    }
+                    RunWithChecks()
                 }
             },
             EventAction("HomeTimeUpdated")
@@ -184,7 +188,8 @@ class MainActivity : ComponentActivity() {
         var deviceAddress: String? = null
 
         if (reuseAddress) {
-            val savedDeviceAddress = LocalDataStorage.get(applicationContext(), "LastDeviceAddress", "")
+            val savedDeviceAddress =
+                LocalDataStorage.get(applicationContext(), "LastDeviceAddress", "")
             if (api().validateBluetoothAddress(savedDeviceAddress)) {
                 deviceAddress = savedDeviceAddress
             }
@@ -247,7 +252,7 @@ class MainActivity : ComponentActivity() {
             return instance!!.applicationContext
         }
 
-        fun api(): GShockAPI {
+        fun api(): GShockAPIMock {
             return instance!!.api
         }
     }
