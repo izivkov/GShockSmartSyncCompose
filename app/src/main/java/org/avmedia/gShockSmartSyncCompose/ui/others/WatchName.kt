@@ -14,15 +14,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationContext
 import org.avmedia.gShockSmartSyncCompose.R
+import org.avmedia.gshockapi.WatchInfo
 
 @Composable
 fun WatchName(
     modifier: Modifier,
-    watchName: String = stringResource(id = R.string.no_watch)
+    watchName: String = stringResource(id = R.string.no_watch),
 ) {
-    AppTextLarge(text = watchName, modifier = modifier)
+    AppTextLarge(text = watchName.removePrefix("CASIO").trim(), modifier = modifier)
 }
 
 @Preview(showBackground = true)

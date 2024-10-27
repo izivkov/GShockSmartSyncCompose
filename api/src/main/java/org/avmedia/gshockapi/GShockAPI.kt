@@ -76,8 +76,8 @@ class GShockAPI(private val context: Context) {
         IO.init()
         CachedIO.init()
         getPressedButton()
-
         ProgressEvents.onNext("ButtonPressedInfoReceived")
+
         getAppInfo() // this call re-enables lower-right button after watch reset.
         ProgressEvents.onNext("WatchInitializationCompleted")
         return true

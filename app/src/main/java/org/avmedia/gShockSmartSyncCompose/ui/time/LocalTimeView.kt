@@ -25,6 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppButton
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
+import java.util.TimeZone
 
 @Composable
 fun LocalTimeView(
@@ -96,9 +97,8 @@ fun TextClockComposable(
 
 @Composable
 fun TimeZoneTextView(modifier: Modifier = Modifier, textSize: TextUnit) {
-    // Custom implementation for TimeZoneTextView
     AppText(
-        text = "America/Toronto", // Placeholder, replace with actual timezone logic
+        text = TimeZone.getDefault().id,
         fontSize = textSize,
         modifier = modifier
     )

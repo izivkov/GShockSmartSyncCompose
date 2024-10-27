@@ -12,34 +12,35 @@ import org.avmedia.gShockSmartSyncCompose.utils.Utils
 import org.avmedia.gshockapi.EventAction
 import org.avmedia.gshockapi.ProgressEvents
 import org.avmedia.gshockapi.ble.Connection
+import kotlin.random.Random
 
 class PreConnectionViewModel : ViewModel() {
     private val noWatchString = applicationContext().getString(R.string.no_watch)
-    private val initialValue = LocalDataStorage.get(applicationContext(), "LastDeviceName", noWatchString) as String
+    private val initialValue =
+        LocalDataStorage.get(applicationContext(), "LastDeviceName", noWatchString) as String
 
     private val _watchName = MutableStateFlow(initialValue)
     val watchName: StateFlow<String> = _watchName
 
     init {
-        createSubscription { updatedWatchName ->
-            _watchName.value = updatedWatchName
-        }
+        createSubscription ()
     }
 
     // Method to subscribe to ProgressEvents and handle the "DeviceName" action
-    private fun createSubscription(onTextUpdated: (String) -> Unit) {
+    private fun createSubscription() {
         val eventActions = arrayOf(
             EventAction("DeviceName") {
                 val deviceName = (ProgressEvents.getPayload("DeviceName") as? String)
                     ?.takeIf { it.isNotBlank() } ?: noWatchString
-                onTextUpdated(deviceName)            }
+                _watchName.value = deviceName
+            }
         )
 
         ProgressEvents.runEventActions(Utils.AppHashCode(), eventActions)
     }
 
     fun forget() {
-        viewModelScope.launch {
+         viewModelScope.launch {
             LocalDataStorage.deleteAsync(applicationContext(), "LastDeviceAddress")
             LocalDataStorage.deleteAsync(applicationContext(), "LastDeviceName")
             Connection.breakWait()

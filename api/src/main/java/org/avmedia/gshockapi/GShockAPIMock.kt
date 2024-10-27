@@ -68,11 +68,11 @@ class GShockAPIMock(private val context: Context) {
     }
 
     fun isActionButtonPressed(): Boolean {
-        return false
+        return true
     }
 
     fun isNormalButtonPressed(): Boolean {
-        return true
+        return false
     }
 
     fun isAutoTimeStarted(): Boolean {
