@@ -63,6 +63,7 @@ class GShockAPI(private val context: Context) {
      */
 
     suspend fun waitForConnection(deviceId: String? = "", deviceName: String? = "") {
+        println("...waitForConnection...")
         Connection.stopBleScan()
 
         val connectedStatus =

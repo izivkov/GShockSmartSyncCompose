@@ -18,7 +18,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import kotlinx.coroutines.CoroutineScope
@@ -37,10 +37,8 @@ import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
 import org.avmedia.gShockSmartSyncCompose.utils.Utils
 import org.avmedia.gshockapi.EventAction
 import org.avmedia.gshockapi.GShockAPI
-import org.avmedia.gshockapi.GShockAPIMock
 import org.avmedia.gshockapi.ProgressEvents
-import java.util.Timer
-import kotlin.concurrent.schedule
+import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
     // Use FragmentActivity to be able to handle popups like MaterialTimePickerDialog in AlarmsItem
@@ -90,11 +88,9 @@ class MainActivity : ComponentActivity() {
     private fun run() {
         AppScreen { PreConnectionScreen() }
 
-        LaunchedEffect(Unit) {
-            val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-            scope.launch {
-                waitForConnectionCached()
-            }
+        val coroutineScope = rememberCoroutineScope()
+        coroutineScope.launch {
+            waitForConnectionCached()
         }
     }
 
@@ -153,12 +149,16 @@ class MainActivity : ComponentActivity() {
             },
             EventAction("WaitForConnection")
             {
+                Timber.i("WaitForConnection message received...")
+
                 setContent {
                     RunWithChecks()
                 }
             },
             EventAction("Disconnect")
             {
+                Timber.i("onDisconnect")
+
                 InactivityWatcher.cancel()
                 val device = ProgressEvents.getPayload("Disconnect") as? BluetoothDevice
                 if (device != null) {
@@ -185,7 +185,6 @@ class MainActivity : ComponentActivity() {
         // so actions will fail. If this flag is true, no scanning will be performed.
         // Leave it to true.
         val reuseAddress = true
-
         var deviceAddress: String? = null
 
         if (reuseAddress) {
