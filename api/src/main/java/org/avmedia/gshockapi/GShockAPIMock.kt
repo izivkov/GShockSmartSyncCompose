@@ -35,18 +35,18 @@ class GShockAPIMock(private val context: Context) {
         ProgressEvents.onNext("WaitForConnection")
         delay(1000)
 
-        ProgressEvents.onNext("DeviceName", "GW-B5600")
-        delay(1000)
+        ProgressEvents.onNext("DeviceName", "CASIO GW-B5600")
+        //delay(1000)
 
         ProgressEvents.onNext("ConnectionStarted")
-        delay(1000)
+        // delay(1000)
 
         ProgressEvents.onNext("WatchInitializationCompleted")
         ProgressEvents.onNext("ConnectionSetupComplete")
-        delay(1000)
+        // delay(1000)
         ProgressEvents.onNext("ButtonPressedInfoReceived")
 
-        delay(1000)
+        // delay(1000)
         // ProgressEvents.onNext("Disconnect")
         // delay(1000)
     }
@@ -68,11 +68,11 @@ class GShockAPIMock(private val context: Context) {
     }
 
     fun isActionButtonPressed(): Boolean {
-        return true
+        return false
     }
 
     fun isNormalButtonPressed(): Boolean {
-        return false
+        return true
     }
 
     fun isAutoTimeStarted(): Boolean {
@@ -84,7 +84,7 @@ class GShockAPIMock(private val context: Context) {
     }
 
     suspend fun getWatchName(): String {
-        return "GW-B5600"
+        return "CASIO GW-B5600"
         // return "CASIO ECB-30"
     }
 

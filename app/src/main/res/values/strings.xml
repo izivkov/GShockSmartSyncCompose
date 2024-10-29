@@ -156,5 +156,8 @@
     <string name="max_reminders_reached">Maximum number of reminders reached, Please disable some before selecting new ones" </string>
     <string name="time_offset_ms">Time Offset (ms)</string>
     <string name="time_offset_info">When setting time, add or subrtact these ms to set exact time.</string>
+    <string name="micro_adjustment">Micro Adjustment</string>
+    <string name="fine_time_adjustment">Fine Time Adjustment</string>
+    <string name="_0000">0000</string>
 </resources>
 
