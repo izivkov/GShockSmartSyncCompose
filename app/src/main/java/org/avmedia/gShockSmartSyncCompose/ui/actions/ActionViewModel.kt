@@ -222,9 +222,12 @@ object ActionsViewModel : ViewModel() {
         override fun run(context: Context) {
             Timber.d("running ${this.javaClass.simpleName}")
 
+            val timeOffset = LocalDataStorage.getFineTimeAdjustment(context)
+            val timeMs = System.currentTimeMillis() + timeOffset
+
             // actions are sun on the main lifecycle scope, because the Actions Fragment never gets created.
             mainScope.launch {
-                api().setTime()
+                api().setTime(timeMs = timeMs)
             }
         }
 

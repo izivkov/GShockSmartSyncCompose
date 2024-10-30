@@ -304,7 +304,7 @@ class GShockAPI(private val context: Context) {
      *      setTime("Europe/Sofia")
      *  ```
      */
-    suspend fun setTime(timeZone: String = TimeZone.getDefault().id) {
+    suspend fun setTime(timeZone: String = TimeZone.getDefault().id, timeMs: Long? = null) {
 
         if (!ZoneId.getAvailableZoneIds().contains(timeZone)) {
             Timber.e("GShockAPI", "setTime: Invalid timezone $timeZone passed")
@@ -313,7 +313,7 @@ class GShockAPI(private val context: Context) {
         }
 
         TimeIO.setTimezone(timeZone)
-        TimeIO.set()
+        TimeIO.set(timeMs)
     }
 
     /**

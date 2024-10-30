@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
+import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationContext
+import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
 import org.avmedia.gshockapi.ProgressEvents
 
 class TimeViewModel : ViewModel() {
@@ -35,7 +37,9 @@ class TimeViewModel : ViewModel() {
     fun sendTimeToWatch() {
         viewModelScope.launch {
             try {
-                api().setTime()
+                val timeOffset = LocalDataStorage.getFineTimeAdjustment(applicationContext())
+                val timeMs = System.currentTimeMillis() + timeOffset
+                api().setTime(timeMs = timeMs)
             } catch (e: Exception) {
                 ProgressEvents.onNext("ApiError", e.message ?: "")
             }

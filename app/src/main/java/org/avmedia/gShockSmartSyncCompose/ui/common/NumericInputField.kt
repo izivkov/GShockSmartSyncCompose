@@ -26,8 +26,6 @@ fun NumericInputField(
     range: IntRange,
     fontSize: Int = 18,
 ) {
-    println("Range: $range")
-
     Box(modifier = modifier.padding(start = 12.dp, end = 12.dp, top = 2.dp)) {
         OutlinedTextField(
             value = value,

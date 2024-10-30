@@ -7,7 +7,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -25,13 +28,28 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.NumericInputField
 @Composable
 fun FineAdjustmentRow(
     modifier: Modifier = Modifier,
+    onUpdate: (SettingsViewModel.TimeAdjustment) -> Unit = SettingsViewModel::updateSetting,
     settingsViewModel: SettingsViewModel = viewModel()
 ) {
     val classType = SettingsViewModel.TimeAdjustment::class.java
+    val settings by settingsViewModel.settings.collectAsState()
     val timeAdjustmentSetting: SettingsViewModel.TimeAdjustment =
         settingsViewModel.getSetting(classType)
 
-    val currentValue = timeAdjustmentSetting.fineAdjustment
+    var fineAdjustment by remember { mutableIntStateOf(timeAdjustmentSetting.fineAdjustment) }
+
+    LaunchedEffect(settings) {
+        fineAdjustment = timeAdjustmentSetting.fineAdjustment
+    }
+
+    var fineAdjustmentTextField by remember {
+        mutableStateOf(TextFieldValue(fineAdjustment.toString()))
+    }
+
+    // Synchronize the TextField with `fineAdjustment` whenever it changes
+    LaunchedEffect(fineAdjustment) {
+        fineAdjustmentTextField = TextFieldValue(fineAdjustment.toString())
+    }
 
     Row(
         modifier = modifier,
@@ -42,30 +60,23 @@ fun FineAdjustmentRow(
             fontSize = 20.sp,
             modifier = Modifier.padding(end = 6.dp)
         )
-        InfoButton(infoText = "When setting time, add this value to the current time.")
+        InfoButton(infoText = stringResource(R.string.fine_adjustment_info))
 
         Spacer(modifier = Modifier.weight(1f))
 
-        var fineAdjustment by remember {
-            mutableStateOf(
-                TextFieldValue(
-                    currentValue.toString()
-                        // .padStart(4, '0')
-                )
-            )
-        }
-
         NumericInputField(
-            value = fineAdjustment,
+            value = fineAdjustmentTextField,
             onValueChange = { newValue ->
-                fineAdjustment = newValue
-                // Additional logic, if needed
+                fineAdjustmentTextField = newValue
+                val adjustmentValue = newValue.text.toIntOrNull()
+                    ?: 0  // Fallback to 0 if the text is empty or invalid
+                onUpdate(timeAdjustmentSetting.copy(fineAdjustment = adjustmentValue))
             },
             placeholderText = stringResource(R.string._0000),
             modifier = Modifier.width(IntrinsicSize.Min),
             range = -5000..5000,
             maxLength = 5,
-            )
+        )
     }
 }
 

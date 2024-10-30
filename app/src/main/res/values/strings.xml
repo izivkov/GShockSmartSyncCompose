@@ -154,10 +154,11 @@
     <string name="keep_alive">Keep Alive (uses more battery)</string>
     <string name="enter_timer_time">Enter Timer Time</string>
     <string name="max_reminders_reached">Maximum number of reminders reached, Please disable some before selecting new ones" </string>
-    <string name="time_offset_ms">Time Offset (ms)</string>
-    <string name="time_offset_info">When setting time, add or subrtact these ms to set exact time.</string>
-    <string name="micro_adjustment">Micro Adjustment</string>
-    <string name="fine_time_adjustment">Fine Time Adjustment</string>
+    <string name="fine_time_adjustment">Fine Adjustment</string>
     <string name="_0000">0000</string>
+    <string name="fine_adjustment_info"><![CDATA[
+    When setting the time, some watch models may display a time that is slightly off by a few seconds. This setting allows you to fine-tune the time adjustment.
+    The value, in milliseconds, is added to the time sent from the app to the watch. You can set values between -5000 and 5000. For example,
+    if your watch is 2.5 seconds ahead of the actual time, set this value to -2500 to sync it accurately.
+    ]]></string>
 </resources>
-

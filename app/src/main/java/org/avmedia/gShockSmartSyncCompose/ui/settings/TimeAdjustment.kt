@@ -125,7 +125,6 @@ fun TimeAdjustment(
                     mutableStateOf(
                         TextFieldValue(
                             adjustmentMinutes.toString()
-                                //.padStart(2, '0')
                         )
                     )
                 }

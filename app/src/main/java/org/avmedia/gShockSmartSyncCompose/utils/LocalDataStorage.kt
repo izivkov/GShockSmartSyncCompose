@@ -73,14 +73,6 @@ object LocalDataStorage {
         putBoolean(context, "timeAdjustmentNotification", value)
     }
 
-    fun getTimeAdjustmentTimeOffsetMs(context: Context): String? {
-        return get(context, "timeOffsetMs")
-    }
-
-    fun setTimeAdjustmentTimeOffsetMs(context: Context, value: String) {
-        put(context, "timeOffsetMs", value)
-    }
-
     fun getMirrorPhoneDnd(context: Context): Boolean {
         return getBoolean(context, "mirrorPhoneDnD")
     }
@@ -114,5 +106,13 @@ object LocalDataStorage {
 
     fun setAutoLightNightOnly(context: Context, value: Boolean) {
         putBoolean(context, "autoLightNightOnly", value)
+    }
+
+    fun getFineTimeAdjustment(context: Context): Int {
+        return get(context, "fineTimeAdjustment", "0")?.toInt() ?: 0
+    }
+
+    fun setFineTimeAdjustment(context: Context, fineTimeAdjustment: Int) {
+        return put(context, "fineTimeAdjustment", fineTimeAdjustment.toString())
     }
 }

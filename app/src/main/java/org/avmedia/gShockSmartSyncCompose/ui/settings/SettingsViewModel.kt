@@ -99,12 +99,16 @@ object SettingsViewModel : ViewModel() {
         var adjustmentTimeMinutes: Int = 0,
         var timeAdjustmentNotifications: Boolean =
             LocalDataStorage.getTimeAdjustmentNotification(applicationContext()),
-        var fineAdjustment: Int = 0
+        var fineAdjustment: Int = LocalDataStorage.getFineTimeAdjustment(applicationContext()),
     ) : Setting("Time Adjustment") {
         override fun save() {
             LocalDataStorage.setTimeAdjustmentNotification(
                 applicationContext(),
                 timeAdjustmentNotifications
+            )
+            LocalDataStorage.setFineTimeAdjustment(
+                applicationContext(),
+                fineAdjustment
             )
         }
     }
@@ -329,7 +333,7 @@ object SettingsViewModel : ViewModel() {
         smartSettings.add(powerSavings)
 
         // Time adjustment
-        val timeAdjustment = TimeAdjustment(true, 30)
+        val timeAdjustment = TimeAdjustment(true, 30, false, 0)
         smartSettings.add(timeAdjustment)
 
         // DnD
@@ -367,8 +371,8 @@ object SettingsViewModel : ViewModel() {
             settings.powerSavingMode = powerSavingMode.powerSavingMode
         }
 
+        val timeAdjustment: TimeAdjustment = settingsMap[TimeAdjustment::class.java] as TimeAdjustment
         if (!WatchInfo.alwaysConnected) { // Auto-time-adjustment does not apply for always-connected watches
-            val timeAdjustment: TimeAdjustment = settingsMap[TimeAdjustment::class.java] as TimeAdjustment
             settings.timeAdjustment = timeAdjustment.timeAdjustment
             settings.adjustmentTimeMinutes = timeAdjustment.adjustmentTimeMinutes
             LocalDataStorage.setTimeAdjustmentNotification(applicationContext(), timeAdjustment.timeAdjustmentNotifications)
@@ -382,7 +386,7 @@ object SettingsViewModel : ViewModel() {
 
         val buttonTone: OperationSound = settingsMap[OperationSound::class.java] as OperationSound
         settings.buttonTone = buttonTone.sound
-
+        
         viewModelScope.launch {
             try {
                 api().setSettings(settings)
