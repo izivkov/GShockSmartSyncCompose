@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationContext
+import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
 import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
 import org.avmedia.gshockapi.ProgressEvents
 
@@ -31,6 +32,7 @@ class TimeViewModel : ViewModel() {
     fun sendTimerToWatch(timeMs: Int) {
         viewModelScope.launch {
             api().setTimer(timeMs)
+            AppSnackbar("Timer Set")
         }
     }
 
@@ -39,7 +41,9 @@ class TimeViewModel : ViewModel() {
             try {
                 val timeOffset = LocalDataStorage.getFineTimeAdjustment(applicationContext())
                 val timeMs = System.currentTimeMillis() + timeOffset
+                AppSnackbar("Sending time to watch...")
                 api().setTime(timeMs = timeMs)
+                AppSnackbar("Time Set")
             } catch (e: Exception) {
                 ProgressEvents.onNext("ApiError", e.message ?: "")
             }

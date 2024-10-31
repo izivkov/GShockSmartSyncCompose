@@ -30,6 +30,7 @@ import org.avmedia.gShockSmartSyncCompose.services.InactivityWatcher
 import org.avmedia.gShockSmartSyncCompose.services.NightWatcher
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
+import org.avmedia.gShockSmartSyncCompose.ui.common.PopupMessageReceiver
 import org.avmedia.gShockSmartSyncCompose.ui.others.PreConnectionScreen
 import org.avmedia.gShockSmartSyncCompose.ui.others.RunActionsScreen
 import org.avmedia.gShockSmartSyncCompose.utils.CheckPermissions
@@ -123,6 +124,9 @@ class MainActivity : ComponentActivity() {
                             RunActionsScreen()
                         } else {
                             BottomNavigationBarWithPermissions()
+
+                            // snackbar message receiver
+                            PopupMessageReceiver()
                         }
                     }
                 }

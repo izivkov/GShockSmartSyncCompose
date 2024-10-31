@@ -52,7 +52,6 @@ fun TimerView(
     }
 
     val handleConfirm: (hours: Int, minutes: Int, seconds: Int) -> Unit = {  hours, minutes, seconds ->
-        println("Submitted time: $hours:$minutes:$seconds")
         timeModel.setTimer(hours, minutes, seconds)
         showTimerDialog = false
     }

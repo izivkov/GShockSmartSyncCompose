@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationContext
+import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
 import org.avmedia.gshockapi.Event
 import org.avmedia.gshockapi.EventAction
 import org.avmedia.gshockapi.ProgressEvents
@@ -60,6 +61,7 @@ class EventViewModel : ViewModel() {
             try {
                 val events = _events.value
                 api().setEvents(ArrayList(_events.value))
+                AppSnackbar("Events Set")
             } catch (e: Exception) {
                 ProgressEvents.onNext("ApiError", e.message ?: "")
             }

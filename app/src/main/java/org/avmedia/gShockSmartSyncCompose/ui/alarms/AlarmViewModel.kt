@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationContext
+import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
 import org.avmedia.gshockapi.Alarm
 import org.avmedia.gshockapi.ProgressEvents
 import java.util.Calendar
@@ -59,6 +60,7 @@ class AlarmViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 api().setAlarms(alarms = ArrayList(alarms.value))
+                AppSnackbar("Alarms Set no Watch")
             } catch (e: Exception) {
                 ProgressEvents.onNext("ApiError", e.message ?: "")
             }
