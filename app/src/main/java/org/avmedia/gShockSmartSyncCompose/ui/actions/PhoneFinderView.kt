@@ -30,7 +30,7 @@ fun PhoneFinderView(
 
     ActionItem(
         title = stringResource(id = R.string.find_phone),
-        resourceId = R.drawable.flashlight,
+        resourceId = R.drawable.find_phone,
         isEnabled = isEnabled,
         onEnabledChange = { newValue ->
             isEnabled = newValue // Update the state when the switch is toggled

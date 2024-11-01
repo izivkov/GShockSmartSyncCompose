@@ -34,6 +34,16 @@ fun PreConnectionScreen(
 ) {
     val watchName by ptrConnectionViewModel.watchName.collectAsState()
 
+    val getImageId: (String) -> Int = { watchName ->
+        when {
+            "GA" in watchName || "GMA" in watchName -> R.drawable.ga_b2100
+            "GW" in watchName || "GMW" in watchName -> R.drawable.ic_gw_b5600
+            "DW" in watchName || "DMW" in watchName -> R.drawable.dw_b5600
+            "ECB" in watchName -> R.drawable.ecb_30d
+            else -> R.drawable.ic_gw_b5600
+        }
+    }
+
     GShockSmartSyncTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -54,7 +64,7 @@ fun PreConnectionScreen(
 
                         // WatchImageView equivalent
                         Image(
-                            painter = painterResource(id = R.drawable.ic_gw_b5600),
+                            painter = painterResource(id = getImageId(watchName)),
                             contentDescription = stringResource(id = R.string.image_of_casio_watch),
                             modifier = Modifier
                                 .constrainAs(watchImageView) {
@@ -143,7 +153,7 @@ fun PreConnectionScreen(
             }
         }
     }
-}
+ }
 
 @Preview(showBackground = true)
 @Composable

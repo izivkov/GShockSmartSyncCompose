@@ -95,12 +95,7 @@ class BatteryView @JvmOverloads constructor(
     private var percentageBitmap: Bitmap? = null
 
     init {
-        if (WatchInfo.hasBatteryLevel) {
-            visibility = VISIBLE
-            percentageBitmap = getBitmap(R.drawable.stripes)
-        } else {
-            visibility = GONE
-        }
+        percentageBitmap = getBitmap(R.drawable.stripes)
     }
 
     @SuppressLint("DrawAllocation")

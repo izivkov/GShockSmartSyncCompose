@@ -149,7 +149,7 @@ class GShockAPIMock(private val context: Context) {
         return "0x22 C7 67 B2 F0 78 86 71 6A 76 EC 02"
     }
 
-    suspend fun setTime(timeZone: String = TimeZone.getDefault().id) {
+    suspend fun setTime(timeZone: String = TimeZone.getDefault().id, timeMs: Long? = null) {
         println("Time set to $timeZone")
     }
 

@@ -17,7 +17,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -37,18 +36,12 @@ fun FineAdjustmentRow(
         settingsViewModel.getSetting(classType)
 
     var fineAdjustment by remember { mutableIntStateOf(timeAdjustmentSetting.fineAdjustment) }
+    var text by remember {
+        mutableStateOf(fineAdjustment.toString())
+    }
 
     LaunchedEffect(settings) {
         fineAdjustment = timeAdjustmentSetting.fineAdjustment
-    }
-
-    var fineAdjustmentTextField by remember {
-        mutableStateOf(TextFieldValue(fineAdjustment.toString()))
-    }
-
-    // Synchronize the TextField with `fineAdjustment` whenever it changes
-    LaunchedEffect(fineAdjustment) {
-        fineAdjustmentTextField = TextFieldValue(fineAdjustment.toString())
     }
 
     Row(
@@ -64,18 +57,20 @@ fun FineAdjustmentRow(
 
         Spacer(modifier = Modifier.weight(1f))
 
+        val pattern = remember { Regex("^(0|(-?[1-9][0-9]{0,2}|-?1000|-?[1-4][0-9]{3}|-?5000))$") }
         NumericInputField(
-            value = fineAdjustmentTextField,
-            onValueChange = { newValue ->
-                fineAdjustmentTextField = newValue
-                val adjustmentValue = newValue.text.toIntOrNull()
-                    ?: 0  // Fallback to 0 if the text is empty or invalid
-                onUpdate(timeAdjustmentSetting.copy(fineAdjustment = adjustmentValue))
+            modifier = Modifier
+                .width(IntrinsicSize.Min)
+                .padding(end = 12.dp, start = 12.dp, top = 0.dp, bottom = 0.dp)
+                .weight(2f),
+            value = text,
+            onValueChange = { newText: String ->
+                if (newText.isEmpty() || newText == "-" || newText.matches(pattern)) {
+                    text = newText
+                    onUpdate(timeAdjustmentSetting.copy(fineAdjustment = text.toIntOrNull() ?: 0))
+                }
             },
-            placeholderText = stringResource(R.string._0000),
-            modifier = Modifier.width(IntrinsicSize.Min),
-            range = -5000..5000,
-            maxLength = 5,
+            placeholderText = "0000",
         )
     }
 }

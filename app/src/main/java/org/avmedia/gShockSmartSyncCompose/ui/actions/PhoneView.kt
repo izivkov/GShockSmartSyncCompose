@@ -3,7 +3,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -14,16 +13,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.actions.ActionsViewModel
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppIconFromResource
+import org.avmedia.gShockSmartSyncCompose.ui.common.NumericInputField
 
 @Composable
 fun PhoneView(
@@ -69,21 +68,36 @@ fun PhoneView(
                     text = stringResource(id = R.string.make_phonecall),
                 )
                 Row {
-                    OutlinedTextField(
+//                    TextField(
+//                        value = phoneNumber,
+//                        onValueChange = { newValue ->
+//                            phoneNumber = newValue
+//                            phoneDialAction.phoneNumber = newValue
+//                            onUpdate(phoneDialAction.copy(phoneNumber = newValue))
+//                        },
+//                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+//                        modifier = Modifier
+//                            .weight(1f)
+//                            .padding(end = 80.dp),
+//                        textStyle = TextStyle(fontSize = 20.sp),
+//                        placeholder = {
+//                            AppTextLarge(stringResource(id = R.string._416_555_6789)) // Placeholder text
+//                        }
+//                    )
+
+                    NumericInputField(
                         value = phoneNumber,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 80.dp),
                         onValueChange = { newValue ->
                             phoneNumber = newValue
                             phoneDialAction.phoneNumber = newValue
                             onUpdate(phoneDialAction.copy(phoneNumber = newValue))
                         },
+                        placeholderText = stringResource(id = R.string._416_555_6789),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(end = 80.dp),
-                        textStyle = TextStyle(fontSize = 20.sp),
-                        placeholder = {
-                            AppTextLarge(stringResource(id = R.string._416_555_6789)) // Placeholder text
-                        }
+                        textAlign = TextAlign.Start,
                     )
                 }
             }
