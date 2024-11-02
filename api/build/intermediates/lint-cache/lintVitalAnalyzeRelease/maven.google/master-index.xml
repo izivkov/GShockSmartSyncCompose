@@ -45,6 +45,7 @@
   <androidx.core/>
   <androidx.core.uwb/>
   <androidx.credentials/>
+  <androidx.credentials.registry/>
   <androidx.cursoradapter/>
   <androidx.customview/>
   <androidx.databinding/>
@@ -68,6 +69,7 @@
   <androidx.health.connect/>
   <androidx.heifwriter/>
   <androidx.hilt/>
+  <androidx.ink/>
   <androidx.input/>
   <androidx.interpolator/>
   <androidx.javascriptengine/>
@@ -177,7 +179,9 @@
   <com.android.support.test.uiautomator/>
   <com.android.test/>
   <com.android.tools/>
+  <com.android.tools.adblib/>
   <com.android.tools.analytics-library/>
+  <com.android.tools.apkdeployer/>
   <com.android.tools.apkparser/>
   <com.android.tools.build/>
   <com.android.tools.build.jetifier/>
@@ -202,6 +206,7 @@
   <com.google.ads.interactivemedia.v3/>
   <com.google.ads.mediation/>
   <com.google.ai.client.generativeai/>
+  <com.google.ai.edge.aicore/>
   <com.google.ai.edge.litert/>
   <com.google.ambient.crossdevice/>
   <com.google.android.ads/>

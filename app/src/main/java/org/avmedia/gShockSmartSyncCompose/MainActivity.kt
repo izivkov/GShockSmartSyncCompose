@@ -70,12 +70,13 @@ class MainActivity : ComponentActivity() {
             turnOnBLE()
         }
 
-        createAppEventsSubscription()
-        InactivityWatcher.start(this)
-        NightWatcher.setupSunriseSunsetTasks(this)
 
         setContent {
             CheckPermissions {
+                createAppEventsSubscription()
+                InactivityWatcher.start(this)
+                NightWatcher.setupSunriseSunsetTasks(this)
+
                 GShockSmartSyncTheme {
                     SnackbarController.snackbarHostState = remember { SnackbarHostState() }
 
