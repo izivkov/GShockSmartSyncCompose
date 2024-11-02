@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
@@ -64,18 +65,18 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Initialize watchers and subscriptions only once in onCreate
-        if (!api().isBluetoothEnabled(this)) {
-            turnOnBLE()
-        }
-
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         setContent {
             CheckPermissions {
+                if (!api().isBluetoothEnabled(this)) {
+                    turnOnBLE()
+                }
+
                 createAppEventsSubscription()
+
                 InactivityWatcher.start(this)
-                NightWatcher.setupSunriseSunsetTasks(this)
+                NightWatcher.setupSunriseSunsetTasks(this@MainActivity as Context)
 
                 GShockSmartSyncTheme {
                     SnackbarController.snackbarHostState = remember { SnackbarHostState() }

@@ -26,15 +26,19 @@ fun CheckPermissions(onPermissionsGranted: @Composable () -> Unit) {
     val context = LocalContext.current
     val activity = context as Activity
 
-    val initialPermissions = mutableListOf<String>().apply {
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
-            add(Manifest.permission.ACCESS_FINE_LOCATION)
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            add(Manifest.permission.BLUETOOTH_SCAN)
-            add(Manifest.permission.BLUETOOTH_CONNECT)
+    fun getRequiredPermissions(): Array<String> {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.BLUETOOTH_SCAN,
+                Manifest.permission.BLUETOOTH_CONNECT
+            )
+        } else {
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
         }
     }
+
+    val initialPermissions = getRequiredPermissions()
 
     // State to track if permissions are granted
     var permissionsGranted by remember { mutableStateOf(false) }
@@ -62,7 +66,7 @@ fun CheckPermissions(onPermissionsGranted: @Composable () -> Unit) {
         if (arePermissionsGranted) {
             permissionsGranted = true
         } else {
-            launcher.launch(initialPermissions.toTypedArray())
+            launcher.launch(initialPermissions)
         }
     }
 
@@ -80,7 +84,7 @@ fun CheckPermissions(onPermissionsGranted: @Composable () -> Unit) {
             confirmButton = {
                 AppButton("Retry",
                     onClick = {
-                        launcher.launch(initialPermissions.toTypedArray())
+                        launcher.launch(initialPermissions)
                     })
             },
             dismissButton = {
