@@ -5,7 +5,7 @@ We aim to build a refined, user-friendly interface using Jetpack Compose to enha
 
 ## Project Overview
 
-G-Shock Smart Sync Compose is designed as a thin client for Android that enables seamless synchronization with Casio G-Shock smartwatches. The project focuses on:
+G-Shock Smart Sync Compose is designed as a thin client for Android that enables seamless synchronization with Casio G-Shock watches. The project focuses on:
 - Minimal, functional UI using Jetpack Compose.
 - Direct data transfer to and from the watch without local storage (excluding user preferences).
 - Reliable, offline-first operations with BLE (Bluetooth Low Energy) for watch connection.
