@@ -25,7 +25,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppButton
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
-import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
 import java.util.TimeZone
 
 @Composable

@@ -3,8 +3,6 @@ package org.avmedia.gShockSmartSyncCompose.ui.settings
 import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.content.Context
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
@@ -367,15 +365,20 @@ object SettingsViewModel : ViewModel() {
         settings.lightDuration = lightSetting.duration.value
 
         if (WatchInfo.hasPowerSavingMode) {
-            val powerSavingMode: PowerSavingMode = settingsMap[PowerSavingMode::class.java] as PowerSavingMode
+            val powerSavingMode: PowerSavingMode =
+                settingsMap[PowerSavingMode::class.java] as PowerSavingMode
             settings.powerSavingMode = powerSavingMode.powerSavingMode
         }
 
-        val timeAdjustment: TimeAdjustment = settingsMap[TimeAdjustment::class.java] as TimeAdjustment
+        val timeAdjustment: TimeAdjustment =
+            settingsMap[TimeAdjustment::class.java] as TimeAdjustment
         if (!WatchInfo.alwaysConnected) { // Auto-time-adjustment does not apply for always-connected watches
             settings.timeAdjustment = timeAdjustment.timeAdjustment
             settings.adjustmentTimeMinutes = timeAdjustment.adjustmentTimeMinutes
-            LocalDataStorage.setTimeAdjustmentNotification(applicationContext(), timeAdjustment.timeAdjustmentNotifications)
+            LocalDataStorage.setTimeAdjustmentNotification(
+                applicationContext(),
+                timeAdjustment.timeAdjustmentNotifications
+            )
         }
 
         if (WatchInfo.hasDnD) {
@@ -386,7 +389,7 @@ object SettingsViewModel : ViewModel() {
 
         val buttonTone: OperationSound = settingsMap[OperationSound::class.java] as OperationSound
         settings.buttonTone = buttonTone.sound
-        
+
         viewModelScope.launch {
             try {
                 api().setSettings(settings)

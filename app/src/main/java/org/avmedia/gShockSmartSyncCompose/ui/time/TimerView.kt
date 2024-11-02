@@ -51,10 +51,11 @@ fun TimerView(
         showTimerDialog = false
     }
 
-    val handleConfirm: (hours: Int, minutes: Int, seconds: Int) -> Unit = {  hours, minutes, seconds ->
-        timeModel.setTimer(hours, minutes, seconds)
-        showTimerDialog = false
-    }
+    val handleConfirm: (hours: Int, minutes: Int, seconds: Int) -> Unit =
+        { hours, minutes, seconds ->
+            timeModel.setTimer(hours, minutes, seconds)
+            showTimerDialog = false
+        }
 
     LaunchedEffect(timer) {
     }
@@ -124,7 +125,7 @@ fun TimerView(
                     onDismiss = { handleDismiss() },
                     onSubmit = { hours, minutes, seconds ->
                         // Handle the submitted time in the preview
-                        handleConfirm (hours, minutes, seconds)
+                        handleConfirm(hours, minutes, seconds)
                     }
                 )
             }

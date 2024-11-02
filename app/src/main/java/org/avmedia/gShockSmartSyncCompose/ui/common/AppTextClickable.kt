@@ -42,7 +42,7 @@ fun AppTextClickable(
     onTextLayout: ((TextLayoutResult) -> Unit)? = null,
     style: TextStyle = TextStyle.Default,
     color: Color = Color.Unspecified,
-    onClick:() -> Unit
+    onClick: () -> Unit
 ) {
     val currentFontScale = LocalDensity.current.fontScale
     val fixedFontSizeStyle = TextStyle(

@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun NumericInputField(
+fun AppTextField(
     modifier: Modifier,
     value: String,
     onValueChange: (String) -> Unit,

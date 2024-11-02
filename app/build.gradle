@@ -86,4 +86,7 @@ dependencies {
 
     // Night Watcher
     implementation "com.luckycatlabs:SunriseSunsetCalculator:1.2"
+
+    // snackbar
+    // implementation "com.github.airalpha:flashbar:1.0.1"
 }

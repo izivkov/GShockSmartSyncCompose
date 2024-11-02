@@ -22,7 +22,7 @@ import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.actions.ActionsViewModel
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppIconFromResource
-import org.avmedia.gShockSmartSyncCompose.ui.common.NumericInputField
+import org.avmedia.gShockSmartSyncCompose.ui.common.AppTextField
 
 @Composable
 fun PhoneView(
@@ -68,24 +68,7 @@ fun PhoneView(
                     text = stringResource(id = R.string.make_phonecall),
                 )
                 Row {
-//                    TextField(
-//                        value = phoneNumber,
-//                        onValueChange = { newValue ->
-//                            phoneNumber = newValue
-//                            phoneDialAction.phoneNumber = newValue
-//                            onUpdate(phoneDialAction.copy(phoneNumber = newValue))
-//                        },
-//                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-//                        modifier = Modifier
-//                            .weight(1f)
-//                            .padding(end = 80.dp),
-//                        textStyle = TextStyle(fontSize = 20.sp),
-//                        placeholder = {
-//                            AppTextLarge(stringResource(id = R.string._416_555_6789)) // Placeholder text
-//                        }
-//                    )
-
-                    NumericInputField(
+                    AppTextField(
                         value = phoneNumber,
                         modifier = Modifier
                             .weight(1f)

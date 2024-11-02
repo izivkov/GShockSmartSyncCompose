@@ -9,15 +9,18 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
@@ -31,6 +34,7 @@ import org.avmedia.gShockSmartSyncCompose.services.NightWatcher
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
 import org.avmedia.gShockSmartSyncCompose.ui.common.PopupMessageReceiver
+import org.avmedia.gShockSmartSyncCompose.ui.common.SnackbarController
 import org.avmedia.gShockSmartSyncCompose.ui.others.PreConnectionScreen
 import org.avmedia.gShockSmartSyncCompose.ui.others.RunActionsScreen
 import org.avmedia.gShockSmartSyncCompose.utils.CheckPermissions
@@ -38,14 +42,14 @@ import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
 import org.avmedia.gShockSmartSyncCompose.utils.Utils
 import org.avmedia.gshockapi.EventAction
 import org.avmedia.gshockapi.GShockAPI
-import org.avmedia.gshockapi.GShockAPIMock
 import org.avmedia.gshockapi.ProgressEvents
 import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
     // Use FragmentActivity to be able to handle popups like MaterialTimePickerDialog in AlarmsItem
-    private val api = GShockAPIMock(this)
+    private val api = GShockAPI(this)
     private var deviceManager: DeviceManager
+    private var snackbarHostState: SnackbarHostState? = null
 
     init {
         instance = this
@@ -60,26 +64,34 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+        // Initialize watchers and subscriptions only once in onCreate
+        if (!api().isBluetoothEnabled(this)) {
+            turnOnBLE()
+        }
+
+        createAppEventsSubscription()
+        InactivityWatcher.start(this)
+        NightWatcher.setupSunriseSunsetTasks(this)
 
         setContent {
             CheckPermissions {
-                if (!api().isBluetoothEnabled(this)) {
-                    turnOnBLE()
-                }
-
-                createAppEventsSubscription()
-
-                InactivityWatcher.start(this)
-                NightWatcher.setupSunriseSunsetTasks(this@MainActivity as Context)
-
                 GShockSmartSyncTheme {
-                    Surface(
-                        modifier = Modifier.fillMaxSize(),  // Use full screen size for consistency
-                        color = MaterialTheme.colorScheme.background
-                    ) {
-                        Init()
-                        RunWithChecks()
+                    SnackbarController.snackbarHostState = remember { SnackbarHostState() }
+
+                    PopupMessageReceiver()
+
+                    Scaffold(
+                        snackbarHost = { SnackbarHost(hostState = SnackbarController.snackbarHostState!!) },
+                        modifier = Modifier.fillMaxSize()
+                    ) { _ ->
+                        Surface(
+                            modifier = Modifier.fillMaxSize(),
+                            color = MaterialTheme.colorScheme.background
+                        ) {
+                            Init()
+                            RunWithChecks()
+                        }
                     }
                 }
             }
@@ -124,13 +136,10 @@ class MainActivity : ComponentActivity() {
                             RunActionsScreen()
                         } else {
                             BottomNavigationBarWithPermissions()
-
-                            // snackbar message receiver
                             PopupMessageReceiver()
                         }
                     }
                 }
-
             },
             EventAction("ConnectionFailed") {
                 setContent {
@@ -257,7 +266,7 @@ class MainActivity : ComponentActivity() {
             return instance!!.applicationContext
         }
 
-        fun api(): GShockAPIMock {
+        fun api(): GShockAPI {
             return instance!!.api
         }
     }

@@ -257,7 +257,7 @@ object ActionsViewModel : ViewModel() {
             try {
                 val intent = Intent(Intent.ACTION_VOICE_COMMAND).apply {
                     // setPackage("com.google.android.googlequicksearchbox") // Set package for Google Assistant
-                        setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                    flags = Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
                 }
                 context.startActivity(intent)
             } catch (e: ActivityNotFoundException) {

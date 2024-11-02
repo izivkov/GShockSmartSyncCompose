@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
+import org.avmedia.gShockSmartSyncCompose.ui.common.AppTextField
 import org.avmedia.gShockSmartSyncCompose.ui.common.InfoButton
-import org.avmedia.gShockSmartSyncCompose.ui.common.NumericInputField
 
 @Composable
 fun TimeAdjustment(
@@ -45,10 +45,13 @@ fun TimeAdjustment(
 
     var notifyMe by remember { mutableStateOf(timeAdjustmentSetting.timeAdjustmentNotifications) }
     var adjustmentMinutes by remember { mutableStateOf(timeAdjustmentSetting.adjustmentTimeMinutes.toString()) }
+    var fineAdjustment by remember { mutableStateOf(timeAdjustmentSetting.fineAdjustment.toString()) }
 
     LaunchedEffect(settings, timeAdjustment, notifyMe) {
         timeAdjustment = timeAdjustmentSetting.timeAdjustment
         notifyMe = timeAdjustmentSetting.timeAdjustmentNotifications
+        adjustmentMinutes = timeAdjustmentSetting.adjustmentTimeMinutes.toString()
+        fineAdjustment = timeAdjustmentSetting.fineAdjustment.toString()
     }
     AppCard(
         modifier = Modifier
@@ -101,7 +104,7 @@ fun TimeAdjustment(
                 Spacer(modifier = Modifier.weight(1f))
 
                 val pattern = Regex("^(0|[1-9]|[1-5][0-9])$")
-                NumericInputField(
+                AppTextField(
                     value = adjustmentMinutes,
                     modifier = Modifier
                         .width(IntrinsicSize.Min)

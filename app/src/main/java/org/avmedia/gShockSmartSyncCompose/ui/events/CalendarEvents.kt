@@ -121,7 +121,8 @@ object CalendarEvents {
             val eventId =
                 cur.getLong(cur.getColumnIndexOrThrow(CalendarContract.Instances.EVENT_ID))
 
-            val eventStart = cur.getLong(cur.getColumnIndexOrThrow(CalendarContract.Instances.BEGIN))
+            val eventStart =
+                cur.getLong(cur.getColumnIndexOrThrow(CalendarContract.Instances.BEGIN))
             val currentTimeMillis = System.currentTimeMillis()
 
             // If we haven't seen this EVENT_ID before, it's the first occurrence of the event

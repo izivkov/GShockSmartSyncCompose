@@ -54,7 +54,7 @@ fun WatchTemperature(
                     temperatureText = fmt.format(measure)
                 }
             }
-        }else if (!hasTemperature) {
+        } else if (!hasTemperature) {
             temperatureText = "N/A"
         }
     }

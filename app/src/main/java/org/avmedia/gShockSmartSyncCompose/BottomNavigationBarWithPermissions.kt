@@ -1,6 +1,5 @@
 package org.avmedia.gShockSmartSyncCompose
 
-import android.Manifest
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.Manifest.permission.CALL_PHONE
 import android.Manifest.permission.CAMERA

@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.avmedia.gShockSmartSyncCompose.R
+import org.avmedia.gShockSmartSyncCompose.ui.common.AppTextField
 import org.avmedia.gShockSmartSyncCompose.ui.common.InfoButton
-import org.avmedia.gShockSmartSyncCompose.ui.common.NumericInputField
 
 @Composable
 fun FineAdjustmentRow(
@@ -42,6 +42,8 @@ fun FineAdjustmentRow(
 
     LaunchedEffect(settings) {
         fineAdjustment = timeAdjustmentSetting.fineAdjustment
+        text = fineAdjustment.toString()
+        onUpdate(timeAdjustmentSetting.copy(fineAdjustment = fineAdjustment))
     }
 
     Row(
@@ -58,7 +60,7 @@ fun FineAdjustmentRow(
         Spacer(modifier = Modifier.weight(1f))
 
         val pattern = remember { Regex("^(0|(-?[1-9][0-9]{0,2}|-?1000|-?[1-4][0-9]{3}|-?5000))$") }
-        NumericInputField(
+        AppTextField(
             modifier = Modifier
                 .width(IntrinsicSize.Min)
                 .padding(end = 12.dp, start = 12.dp, top = 0.dp, bottom = 0.dp)
