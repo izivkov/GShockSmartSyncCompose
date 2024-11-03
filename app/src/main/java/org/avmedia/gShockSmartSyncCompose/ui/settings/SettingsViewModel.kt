@@ -370,9 +370,9 @@ object SettingsViewModel : ViewModel() {
             settings.powerSavingMode = powerSavingMode.powerSavingMode
         }
 
-        val timeAdjustment: TimeAdjustment =
-            settingsMap[TimeAdjustment::class.java] as TimeAdjustment
         if (!WatchInfo.alwaysConnected) { // Auto-time-adjustment does not apply for always-connected watches
+            val timeAdjustment: TimeAdjustment =
+                settingsMap[TimeAdjustment::class.java] as TimeAdjustment
             settings.timeAdjustment = timeAdjustment.timeAdjustment
             settings.adjustmentTimeMinutes = timeAdjustment.adjustmentTimeMinutes
             LocalDataStorage.setTimeAdjustmentNotification(
