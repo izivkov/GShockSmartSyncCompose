@@ -437,7 +437,7 @@ class GShockAPI(private val context: Context) {
      *
      * @param context [Context]
      */
-    fun disconnect(context: Context) {
+    fun disconnect() {
         Connection.disconnect()
     }
 

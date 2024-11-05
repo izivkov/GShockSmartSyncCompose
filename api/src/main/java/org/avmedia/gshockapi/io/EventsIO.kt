@@ -81,6 +81,7 @@ object EventsIO {
             return gson.toJson(events)
         }
 
+        @RequiresApi(35)
         fun <T> appendAndTruncate(
             arr1: ArrayList<T>,
             arr2: ArrayList<T>,

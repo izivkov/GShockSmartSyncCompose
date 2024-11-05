@@ -27,7 +27,7 @@ object InactivityWatcher {
 
         job = CoroutineScope(coroutineContext).launch {
             delay(TIMEOUT * 1000)
-            api().disconnect(context)
+            api().disconnect()
             AppSnackbar("Disconnecting due to inactivity")
         }
     }
@@ -41,7 +41,7 @@ object InactivityWatcher {
 
         job = CoroutineScope(coroutineContext).launch {
             delay(TIMEOUT * 1000)
-            api().disconnect(context)
+            api().disconnect()
             AppSnackbar("Disconnecting due to inactivity")
         }
     }

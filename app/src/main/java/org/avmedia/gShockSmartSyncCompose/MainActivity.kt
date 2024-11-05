@@ -163,7 +163,7 @@ class MainActivity : ComponentActivity() {
                     ?: "ApiError! Something went wrong - Make sure the official G-Shock app in not running, to prevent interference."
 
                 AppSnackbar(message)
-                api().disconnect(this)
+                api().disconnect()
                 setContent {
                     AppScreen {
                         PreConnectionScreen()

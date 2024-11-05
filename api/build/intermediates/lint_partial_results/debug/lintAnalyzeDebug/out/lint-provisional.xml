@@ -1,0 +1,661 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<incidents format="6" by="lint 8.5.2" type="conditional_incidents">
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/Event.kt"
+                startOffset="1261"
+                endOffset="1296"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/Event.kt"
+            line="46"
+            column="5"
+            startOffset="1261"
+            endLine="46"
+            endColumn="40"
+            endOffset="1296"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/Event.kt"
+                startOffset="4572"
+                endOffset="4607"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/Event.kt"
+            line="133"
+            column="5"
+            startOffset="4572"
+            endLine="133"
+            endColumn="40"
+            endOffset="4607"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/Event.kt"
+                startOffset="824"
+                endOffset="859"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/Event.kt"
+            line="32"
+            column="5"
+            startOffset="824"
+            endLine="32"
+            endColumn="40"
+            endOffset="859"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/GShockAPI.kt"
+                startOffset="1058"
+                endOffset="1093"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/GShockAPI.kt"
+            line="44"
+            column="1"
+            startOffset="1058"
+            endLine="44"
+            endColumn="36"
+            endOffset="1093"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/GShockAPI.kt"
+                startOffset="14299"
+                endOffset="14334"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/GShockAPI.kt"
+            line="457"
+            column="5"
+            startOffset="14299"
+            endLine="457"
+            endColumn="40"
+            endOffset="14334"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/GShockAPIMock.kt"
+                startOffset="645"
+                endOffset="680"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/GShockAPIMock.kt"
+            line="23"
+            column="1"
+            startOffset="645"
+            endLine="23"
+            endColumn="36"
+            endOffset="680"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/GShockAPIMock.kt"
+                startOffset="8636"
+                endOffset="8671"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/GShockAPIMock.kt"
+            line="298"
+            column="5"
+            startOffset="8636"
+            endLine="298"
+            endColumn="40"
+            endOffset="8671"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/casio/CasioTimeZoneHelper.kt"
+                startOffset="2790"
+                endOffset="2825"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/casio/CasioTimeZoneHelper.kt"
+            line="83"
+            column="1"
+            startOffset="2790"
+            endLine="83"
+            endColumn="36"
+            endOffset="2825"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/casio/MessageDispatcher.kt"
+                startOffset="1099"
+                endOffset="1134"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/casio/MessageDispatcher.kt"
+            line="33"
+            column="5"
+            startOffset="1099"
+            endLine="33"
+            endColumn="40"
+            endOffset="1134"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/casio/MessageDispatcher.kt"
+                startOffset="1923"
+                endOffset="1958"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/casio/MessageDispatcher.kt"
+            line="53"
+            column="5"
+            startOffset="1923"
+            endLine="53"
+            endColumn="40"
+            endOffset="1958"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/casio/MessageDispatcher.kt"
+                startOffset="1735"
+                endOffset="1770"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/casio/MessageDispatcher.kt"
+            line="47"
+            column="5"
+            startOffset="1735"
+            endLine="47"
+            endColumn="40"
+            endOffset="1770"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/casio/MessageDispatcher.kt"
+                startOffset="3657"
+                endOffset="3692"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/casio/MessageDispatcher.kt"
+            line="75"
+            column="5"
+            startOffset="3657"
+            endLine="75"
+            endColumn="40"
+            endOffset="3692"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/AlarmsIO.kt"
+                startOffset="508"
+                endOffset="543"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/AlarmsIO.kt"
+            line="17"
+            column="1"
+            startOffset="508"
+            endLine="17"
+            endColumn="36"
+            endOffset="543"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/DstForWorldCitiesIO.kt"
+                startOffset="240"
+                endOffset="275"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/DstForWorldCitiesIO.kt"
+            line="9"
+            column="1"
+            startOffset="240"
+            endLine="9"
+            endColumn="36"
+            endOffset="275"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/EventsIO.kt"
+                startOffset="852"
+                endOffset="887"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/EventsIO.kt"
+            line="24"
+            column="1"
+            startOffset="852"
+            endLine="24"
+            endColumn="36"
+            endOffset="887"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="NewApi"
+        severity="error"
+        message="">
+        <fix-data minSdk="fffffffffe000000" requiresApi="fffffffc00000000"/>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/EventsIO.kt"
+            line="97"
+            column="24"
+            startOffset="3414"
+            endLine="97"
+            endColumn="34"
+            endOffset="3424"/>
+        <map>
+            <entry
+                name="owner"
+                string="java.util.ArrayList"/>
+            <api-levels id="minSdk"
+                value="fffffffffe000000"/>
+            <api-levels id="requiresApi"
+                value="fffffffc00000000"/>
+            <entry
+                name="name"
+                string="removeLast"/>
+            <entry
+                name="message"
+                string="Call requires API level 35 (current min is %1$s): `java.util.ArrayList#removeLast`"/>
+            <entry
+                name="desc"
+                string="()"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/HomeTimeIO.kt"
+                startOffset="139"
+                endOffset="174"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/HomeTimeIO.kt"
+            line="7"
+            column="1"
+            startOffset="139"
+            endLine="7"
+            endColumn="36"
+            endOffset="174"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/SettingsIO.kt"
+                startOffset="847"
+                endOffset="882"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/SettingsIO.kt"
+            line="28"
+            column="5"
+            startOffset="847"
+            endLine="28"
+            endColumn="40"
+            endOffset="882"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/SettingsIO.kt"
+                startOffset="1012"
+                endOffset="1047"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/SettingsIO.kt"
+            line="33"
+            column="5"
+            startOffset="1012"
+            endLine="33"
+            endColumn="40"
+            endOffset="1047"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/SettingsIO.kt"
+                startOffset="1312"
+                endOffset="1347"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/SettingsIO.kt"
+            line="40"
+            column="5"
+            startOffset="1312"
+            endLine="40"
+            endColumn="40"
+            endOffset="1347"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/TimeAdjustmentIO.kt"
+                startOffset="532"
+                endOffset="567"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/TimeAdjustmentIO.kt"
+            line="19"
+            column="1"
+            startOffset="532"
+            endLine="19"
+            endColumn="36"
+            endOffset="567"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/TimeIO.kt"
+                startOffset="2940"
+                endOffset="2975"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/TimeIO.kt"
+            line="63"
+            column="1"
+            startOffset="2940"
+            endLine="63"
+            endColumn="36"
+            endOffset="2975"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/TimerIO.kt"
+                startOffset="352"
+                endOffset="387"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/TimerIO.kt"
+            line="12"
+            column="1"
+            startOffset="352"
+            endLine="12"
+            endColumn="36"
+            endOffset="387"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/WaitForConnectionIO.kt"
+                startOffset="398"
+                endOffset="433"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/WaitForConnectionIO.kt"
+            line="13"
+            column="1"
+            startOffset="398"
+            endLine="13"
+            endColumn="36"
+            endOffset="433"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="ObsoleteSdkInt"
+        severity="warning"
+        message="Unnecessary; SDK_INT is always >= 26">
+        <fix-replace
+            description="Delete @RequiresApi"
+            replacement=""
+            priority="0">
+            <range
+                file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/utils/WatchDataListener.kt"
+                startOffset="690"
+                endOffset="725"/>
+        </fix-replace>
+        <location
+            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/utils/WatchDataListener.kt"
+            line="21"
+            column="1"
+            startOffset="690"
+            endLine="21"
+            endColumn="36"
+            endOffset="725"/>
+        <map>
+            <condition minGE="fffffffffe000000"/>
+        </map>
+    </incident>
+
+</incidents>
