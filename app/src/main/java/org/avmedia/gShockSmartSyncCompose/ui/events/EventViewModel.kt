@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
+import org.avmedia.gShockSmartSyncCompose.utils.Utils
 import org.avmedia.gshockapi.Event
 import org.avmedia.gshockapi.EventAction
 import org.avmedia.gshockapi.ProgressEvents
@@ -49,7 +50,7 @@ class EventViewModel : ViewModel() {
         )
 
         ProgressEvents.runEventActions(
-            this.javaClass.name + "listenForUpdateRequest",
+            Utils.AppHashCode() + "listenForUpdateRequest",
             eventActions
         )
     }

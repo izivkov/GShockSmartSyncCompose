@@ -3,6 +3,7 @@ package org.avmedia.gShockSmartSyncCompose.services
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.api
 import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationContext
 import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
+import org.avmedia.gShockSmartSyncCompose.utils.Utils
 import org.avmedia.gshockapi.EventAction
 import org.avmedia.gshockapi.ProgressEvents
 
@@ -48,6 +49,6 @@ object DeviceManager {
             },
         )
 
-        ProgressEvents.runEventActions(this.javaClass.name, eventActions)
+        ProgressEvents.runEventActions(Utils.AppHashCode(), eventActions)
     }
 }

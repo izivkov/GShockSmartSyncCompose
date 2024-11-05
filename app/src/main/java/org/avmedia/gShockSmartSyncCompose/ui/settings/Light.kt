@@ -25,7 +25,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.avmedia.gShockSmartSyncCompose.R
+import org.avmedia.gShockSmartSyncCompose.services.NightWatcher
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
+import org.avmedia.gshockapi.ProgressEvents
 import org.avmedia.gshockapi.WatchInfo
 
 @Composable
@@ -76,6 +78,7 @@ fun Light(
                 }
                 AppSwitch(
                     checked = autoLight,
+                    enabled = !night,
                     onCheckedChange = {
                         autoLight = it
                         lightSetting.autoLight = it
@@ -102,6 +105,10 @@ fun Light(
                             night = newValue // Update the state when the switch is toggled
                             lightSetting.nightOnly = newValue
                             onUpdate(lightSetting.copy(nightOnly = night))
+
+                            if (night) {
+                                ProgressEvents.onNext(if (NightWatcher.isNight()) "onSunset" else "onSunrise")
+                            }
                         }
                     )
                 }

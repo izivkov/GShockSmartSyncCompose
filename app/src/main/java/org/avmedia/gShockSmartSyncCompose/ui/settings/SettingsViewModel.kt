@@ -87,6 +87,13 @@ object SettingsViewModel : ViewModel() {
         enum class LIGHT_DURATION(val value: String) {
             TWO_SECONDS("2s"), FOUR_SECONDS("4s")
         }
+
+        override fun save() {
+            LocalDataStorage.setAutoLightNightOnly(
+                applicationContext(),
+                nightOnly
+            )
+        }
     }
 
     data class PowerSavingMode(var powerSavingMode: Boolean = false) :
@@ -114,7 +121,14 @@ object SettingsViewModel : ViewModel() {
     data class DnD(
         var dnd: Boolean = true,
         var mirrorPhone: Boolean = LocalDataStorage.getMirrorPhoneDnd(applicationContext())
-    ) : Setting("DnD")
+    ) : Setting("DnD") {
+        override fun save() {
+            LocalDataStorage.setMirrorPhoneDnD(
+                applicationContext(),
+                mirrorPhone
+            )
+        }
+    }
 
     init {
         val newSettings = arrayListOf(
@@ -125,13 +139,24 @@ object SettingsViewModel : ViewModel() {
             TimeAdjustment(),
             DnD()
         )
-        updateSettingsAndMap(newSettings)
+        updateSettingsAndMap(filter(newSettings))
 
         val coroutineContext: CoroutineContext = Dispatchers.Default + SupervisorJob()
         CoroutineScope(coroutineContext).launch {
             val settingStr = Gson().toJson(api().getSettings())
             updateSettingsAndMap(fromJson(settingStr))
         }
+    }
+
+    private fun filter(settings: ArrayList<Setting>): ArrayList<Setting> {
+        return settings.filter { setting ->
+            when (setting) {
+                is PowerSavingMode -> WatchInfo.hasPowerSavingMode
+                is TimeAdjustment -> !WatchInfo.alwaysConnected
+                is DnD -> WatchInfo.hasDnD
+                else -> true
+            }
+        } as ArrayList<Setting>
     }
 
     @Synchronized
@@ -261,21 +286,6 @@ object SettingsViewModel : ViewModel() {
         return ArrayList(updatedObjects)
     }
 
-    fun getSettings(): ArrayList<Setting> {
-        return filter(_settings.value)
-    }
-
-    private fun filter(settings: ArrayList<Setting>): ArrayList<Setting> {
-        return settings.filter { setting ->
-            when (setting) {
-                is PowerSavingMode -> WatchInfo.hasPowerSavingMode
-                is TimeAdjustment -> !WatchInfo.alwaysConnected
-                is DnD -> WatchInfo.hasDnD
-                else -> true
-            }
-        } as ArrayList<Setting>
-    }
-
     @SuppressLint("SimpleDateFormat")
     private suspend fun getSmartDefaults(
     ): ArrayList<Setting> {
@@ -308,7 +318,11 @@ object SettingsViewModel : ViewModel() {
             Locale.TIME_FORMAT.TWENTY_FOUR_HOURS
         }
         val locale =
-            Locale(timeFormat = timeFormat, dateFormat = dateFormat, dayOfWeekLanguage = language)
+            Locale(
+                timeFormat = timeFormat,
+                dateFormat = dateFormat,
+                dayOfWeekLanguage = language
+            )
         smartSettings.add(locale)
 
         // Button sounds
@@ -387,7 +401,8 @@ object SettingsViewModel : ViewModel() {
             LocalDataStorage.setMirrorPhoneDnD(applicationContext(), dnd.mirrorPhone)
         }
 
-        val buttonTone: OperationSound = settingsMap[OperationSound::class.java] as OperationSound
+        val buttonTone: OperationSound =
+            settingsMap[OperationSound::class.java] as OperationSound
         settings.buttonTone = buttonTone.sound
 
         viewModelScope.launch {

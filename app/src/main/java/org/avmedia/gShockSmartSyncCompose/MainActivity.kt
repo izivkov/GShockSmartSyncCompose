@@ -1,11 +1,13 @@
 package org.avmedia.gShockSmartSyncCompose
 
 import android.Manifest
+import android.app.NotificationManager
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -21,6 +23,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -30,6 +33,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.avmedia.gShockSmartSyncCompose.services.DeviceManager
+import org.avmedia.gShockSmartSyncCompose.services.DnDModeReceiver
 import org.avmedia.gShockSmartSyncCompose.services.InactivityWatcher
 import org.avmedia.gShockSmartSyncCompose.services.NightWatcher
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
@@ -38,12 +42,15 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.PopupMessageReceiver
 import org.avmedia.gShockSmartSyncCompose.ui.common.SnackbarController
 import org.avmedia.gShockSmartSyncCompose.ui.others.PreConnectionScreen
 import org.avmedia.gShockSmartSyncCompose.ui.others.RunActionsScreen
+import org.avmedia.gShockSmartSyncCompose.ui.settings.AutoLightSetter
+import org.avmedia.gShockSmartSyncCompose.ui.settings.DnDSetter
 import org.avmedia.gShockSmartSyncCompose.utils.CheckPermissions
 import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
 import org.avmedia.gShockSmartSyncCompose.utils.Utils
 import org.avmedia.gshockapi.EventAction
 import org.avmedia.gshockapi.GShockAPI
 import org.avmedia.gshockapi.ProgressEvents
+import org.avmedia.gshockapi.WatchInfo
 import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
@@ -57,6 +64,9 @@ class MainActivity : ComponentActivity() {
 
         // do not delete this. DeviceManager needs to be running to save the last device name to reuse on next start.
         deviceManager = DeviceManager
+
+        DnDSetter.start()
+        AutoLightSetter.start()
     }
 
     @Composable
@@ -75,12 +85,9 @@ class MainActivity : ComponentActivity() {
 
                 createAppEventsSubscription()
 
-                InactivityWatcher.start(this)
-                NightWatcher.setupSunriseSunsetTasks(this@MainActivity as Context)
-
                 GShockSmartSyncTheme {
                     SnackbarController.snackbarHostState = remember { SnackbarHostState() }
-
+                    SetupDnD()
                     PopupMessageReceiver()
 
                     Scaffold(
@@ -98,6 +105,14 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    @Composable
+    fun SetupDnD() {
+        val filter = IntentFilter(NotificationManager.ACTION_INTERRUPTION_FILTER_CHANGED)
+        val dndModeReceiver = DnDModeReceiver()
+        registerReceiver(dndModeReceiver, filter)
+        DisposableEffect(Unit) { onDispose { unregisterReceiver(dndModeReceiver) } }
     }
 
     @Composable
@@ -130,6 +145,20 @@ class MainActivity : ComponentActivity() {
     private fun createAppEventsSubscription() {
 
         val eventActions = arrayOf(
+            EventAction("ConnectionSetupComplete") {
+                // if this watch is always connected, like the ECB-30D, set time here
+                // Auto-time adjustment will not happen
+                val context = this@MainActivity
+                if (WatchInfo.alwaysConnected) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        NightWatcher.setupSunriseSunsetTasks(context)
+                        ProgressEvents.onNext(if (NightWatcher.isNight()) "onSunset" else "onSunrise")
+                    }
+                } else {
+                    InactivityWatcher.start(context)
+                }
+            },
+
             EventAction("WatchInitializationCompleted") {
 
                 setContent {
