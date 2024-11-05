@@ -25,7 +25,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.avmedia.gShockSmartSyncCompose.R
-import org.avmedia.gShockSmartSyncCompose.services.NightWatcher
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 import org.avmedia.gshockapi.ProgressEvents
 import org.avmedia.gshockapi.WatchInfo
@@ -41,12 +40,10 @@ fun Light(
     val lightSetting: SettingsViewModel.Light = settingsViewModel.getSetting(classType)
 
     var autoLight by remember { mutableStateOf(lightSetting.autoLight) }
-    var night by remember { mutableStateOf(lightSetting.nightOnly) }
     var lightDuration by remember { mutableStateOf(lightSetting.duration) }
 
-    LaunchedEffect(settings, autoLight, night, lightDuration) {
+    LaunchedEffect(settings, autoLight, lightDuration) {
         autoLight = lightSetting.autoLight
-        night = lightSetting.nightOnly
         lightDuration = lightSetting.duration
     }
 
@@ -78,40 +75,12 @@ fun Light(
                 }
                 AppSwitch(
                     checked = autoLight,
-                    enabled = !night,
                     onCheckedChange = {
                         autoLight = it
                         lightSetting.autoLight = it
                         onUpdate(lightSetting.copy(autoLight = it))
                     }
                 )
-            }
-
-            if (WatchInfo.hasAutoLight && WatchInfo.alwaysConnected) {
-                // Night Only Auto Light Layout
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 0.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    AppText(
-                        text = stringResource(id = R.string.auto_light_at_night_only),
-                        modifier = Modifier.wrapContentWidth(),
-                    )
-                    Checkbox(
-                        checked = night,
-                        onCheckedChange = { newValue ->
-                            night = newValue // Update the state when the switch is toggled
-                            lightSetting.nightOnly = newValue
-                            onUpdate(lightSetting.copy(nightOnly = night))
-
-                            if (night) {
-                                ProgressEvents.onNext(if (NightWatcher.isNight()) "onSunset" else "onSunrise")
-                            }
-                        }
-                    )
-                }
             }
 
             // Illumination Period Layout

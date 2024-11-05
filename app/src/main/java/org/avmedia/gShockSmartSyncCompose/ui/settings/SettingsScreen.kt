@@ -84,7 +84,6 @@ fun SettingsList() {
     ).apply {
         if (WatchInfo.hasPowerSavingMode) add(PowerSavings())
         if (!WatchInfo.alwaysConnected) add(TimeAdjustment())
-        if (WatchInfo.hasDnD) add(DnD())
     }
 
     Column(

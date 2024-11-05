@@ -82,17 +82,9 @@ object SettingsViewModel : ViewModel() {
     data class Light(
         var autoLight: Boolean = false,
         var duration: LIGHT_DURATION = LIGHT_DURATION.TWO_SECONDS,
-        var nightOnly: Boolean = LocalDataStorage.getAutoLightNightOnly(applicationContext())
     ) : Setting("Light") {
         enum class LIGHT_DURATION(val value: String) {
             TWO_SECONDS("2s"), FOUR_SECONDS("4s")
-        }
-
-        override fun save() {
-            LocalDataStorage.setAutoLightNightOnly(
-                applicationContext(),
-                nightOnly
-            )
         }
     }
 
@@ -120,15 +112,7 @@ object SettingsViewModel : ViewModel() {
 
     data class DnD(
         var dnd: Boolean = true,
-        var mirrorPhone: Boolean = LocalDataStorage.getMirrorPhoneDnd(applicationContext())
-    ) : Setting("DnD") {
-        override fun save() {
-            LocalDataStorage.setMirrorPhoneDnD(
-                applicationContext(),
-                mirrorPhone
-            )
-        }
-    }
+    ) : Setting("DnD")
 
     init {
         val newSettings = arrayListOf(
@@ -137,7 +121,6 @@ object SettingsViewModel : ViewModel() {
             Light(),
             PowerSavingMode(),
             TimeAdjustment(),
-            DnD()
         )
         updateSettingsAndMap(filter(newSettings))
 
@@ -153,7 +136,6 @@ object SettingsViewModel : ViewModel() {
             when (setting) {
                 is PowerSavingMode -> WatchInfo.hasPowerSavingMode
                 is TimeAdjustment -> !WatchInfo.alwaysConnected
-                is DnD -> WatchInfo.hasDnD
                 else -> true
             }
         } as ArrayList<Setting>
@@ -165,7 +147,7 @@ object SettingsViewModel : ViewModel() {
         jsonStr:
         {"adjustmentTimeMinutes":23, "autoLight":true,"dateFormat":"MM:DD",
         "language":"Spanish","lightDuration":"4s","powerSavingMode":true,
-        "timeAdjustment":true, "timeFormat":"12h","timeTone":false, "DnD": "false"}
+        "timeAdjustment":true, "timeFormat":"12h","timeTone":false}
         */
 
         // Create a Set to store updated objects and avoid duplicates
@@ -201,14 +183,6 @@ object SettingsViewModel : ViewModel() {
                         val setting: TimeAdjustment =
                             settingsMap[TimeAdjustment::class.java] as TimeAdjustment
                         setting.adjustmentTimeMinutes = value as Int
-                        updatedObjects.add(setting)
-                    }
-                }
-
-                "DnD" -> {
-                    if (WatchInfo.hasDnD) {
-                        val setting: DnD = settingsMap[DnD::class.java] as DnD
-                        setting.dnd = value == true
                         updatedObjects.add(setting)
                     }
                 }
@@ -335,7 +309,7 @@ object SettingsViewModel : ViewModel() {
 
         // Light settings
         val autoLight = false
-        val light = Light(autoLight, Light.LIGHT_DURATION.TWO_SECONDS, false)
+        val light = Light(autoLight, Light.LIGHT_DURATION.TWO_SECONDS)
         smartSettings.add(light)
 
         // Power Save Mode
@@ -347,11 +321,6 @@ object SettingsViewModel : ViewModel() {
         // Time adjustment
         val timeAdjustment = TimeAdjustment(true, 30, false, 0)
         smartSettings.add(timeAdjustment)
-
-        // DnD
-        val dnd =
-            DnD(notificationManager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_ALL)
-        smartSettings.add(dnd)
 
         return smartSettings
     }
@@ -393,12 +362,6 @@ object SettingsViewModel : ViewModel() {
                 applicationContext(),
                 timeAdjustment.timeAdjustmentNotifications
             )
-        }
-
-        if (WatchInfo.hasDnD) {
-            val dnd: DnD = settingsMap[DnD::class.java] as DnD
-            settings.DnD = dnd.dnd
-            LocalDataStorage.setMirrorPhoneDnD(applicationContext(), dnd.mirrorPhone)
         }
 
         val buttonTone: OperationSound =

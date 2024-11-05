@@ -73,41 +73,6 @@ object LocalDataStorage {
         putBoolean(context, "timeAdjustmentNotification", value)
     }
 
-    fun getMirrorPhoneDnd(context: Context): Boolean {
-        return getBoolean(context, "mirrorPhoneDnD")
-    }
-
-    fun setMirrorPhoneDnD(context: Context, value: Boolean) {
-        putBoolean(context, "mirrorPhoneDnD", value)
-    }
-
-    fun getKeepAlive(context: Context): Boolean {
-        return getBoolean(context, "keepAlive")
-    }
-
-    fun setKeepAlive(context: Context, value: Boolean) {
-        putBoolean(context, "keepAlive", value)
-    }
-
-    fun getAllData(context: Context): Flow<String> {
-        return context.dataStore.data.map { preferences ->
-            val allEntries = preferences.asMap()
-            val stringBuilder = StringBuilder()
-            allEntries.forEach { (key, value) ->
-                stringBuilder.append("$key: $value\n")
-            }
-            stringBuilder.toString()
-        }
-    }
-
-    fun getAutoLightNightOnly(context: Context): Boolean {
-        return getBoolean(context, "autoLightNightOnly")
-    }
-
-    fun setAutoLightNightOnly(context: Context, value: Boolean) {
-        putBoolean(context, "autoLightNightOnly", value)
-    }
-
     fun getFineTimeAdjustment(context: Context): Int {
         return get(context, "fineTimeAdjustment", "0")?.toInt() ?: 0
     }

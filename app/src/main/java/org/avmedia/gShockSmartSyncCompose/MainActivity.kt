@@ -33,17 +33,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.avmedia.gShockSmartSyncCompose.services.DeviceManager
-import org.avmedia.gShockSmartSyncCompose.services.DnDModeReceiver
 import org.avmedia.gShockSmartSyncCompose.services.InactivityWatcher
-import org.avmedia.gShockSmartSyncCompose.services.NightWatcher
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppSnackbar
 import org.avmedia.gShockSmartSyncCompose.ui.common.PopupMessageReceiver
 import org.avmedia.gShockSmartSyncCompose.ui.common.SnackbarController
 import org.avmedia.gShockSmartSyncCompose.ui.others.PreConnectionScreen
 import org.avmedia.gShockSmartSyncCompose.ui.others.RunActionsScreen
-import org.avmedia.gShockSmartSyncCompose.ui.settings.AutoLightSetter
-import org.avmedia.gShockSmartSyncCompose.ui.settings.DnDSetter
 import org.avmedia.gShockSmartSyncCompose.utils.CheckPermissions
 import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
 import org.avmedia.gShockSmartSyncCompose.utils.Utils
@@ -57,16 +53,12 @@ class MainActivity : ComponentActivity() {
     // Use FragmentActivity to be able to handle popups like MaterialTimePickerDialog in AlarmsItem
     private val api = GShockAPI(this)
     private var deviceManager: DeviceManager
-    private var snackbarHostState: SnackbarHostState? = null
 
     init {
         instance = this
 
         // do not delete this. DeviceManager needs to be running to save the last device name to reuse on next start.
         deviceManager = DeviceManager
-
-        DnDSetter.start()
-        AutoLightSetter.start()
     }
 
     @Composable
@@ -87,7 +79,6 @@ class MainActivity : ComponentActivity() {
 
                 GShockSmartSyncTheme {
                     SnackbarController.snackbarHostState = remember { SnackbarHostState() }
-                    SetupDnD()
                     PopupMessageReceiver()
 
                     Scaffold(
@@ -105,14 +96,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    @Composable
-    fun SetupDnD() {
-        val filter = IntentFilter(NotificationManager.ACTION_INTERRUPTION_FILTER_CHANGED)
-        val dndModeReceiver = DnDModeReceiver()
-        registerReceiver(dndModeReceiver, filter)
-        DisposableEffect(Unit) { onDispose { unregisterReceiver(dndModeReceiver) } }
     }
 
     @Composable
@@ -149,12 +132,7 @@ class MainActivity : ComponentActivity() {
                 // if this watch is always connected, like the ECB-30D, set time here
                 // Auto-time adjustment will not happen
                 val context = this@MainActivity
-                if (WatchInfo.alwaysConnected) {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        NightWatcher.setupSunriseSunsetTasks(context)
-                        ProgressEvents.onNext(if (NightWatcher.isNight()) "onSunset" else "onSunrise")
-                    }
-                } else {
+                if (!WatchInfo.alwaysConnected) {
                     InactivityWatcher.start(context)
                 }
             },
@@ -163,7 +141,7 @@ class MainActivity : ComponentActivity() {
 
                 setContent {
                     AppScreen {
-                        if (api().isActionButtonPressed()) {
+                        if (api().isActionButtonPressed() || api().isAutoTimeStarted() || api().isFindPhoneButtonPressed()) {
                             RunActionsScreen()
                         } else {
                             BottomNavigationBarWithPermissions()
@@ -194,16 +172,12 @@ class MainActivity : ComponentActivity() {
             },
             EventAction("WaitForConnection")
             {
-                Timber.i("WaitForConnection message received...")
-
                 setContent {
                     RunWithChecks()
                 }
             },
             EventAction("Disconnect")
             {
-                Timber.i("onDisconnect")
-
                 InactivityWatcher.cancel()
                 val device = ProgressEvents.getPayload("Disconnect") as? BluetoothDevice
                 if (device != null) {
