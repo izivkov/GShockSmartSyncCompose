@@ -3,6 +3,7 @@ package org.avmedia.gShockSmartSyncCompose.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -14,8 +15,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 
+// Existing light and dark color schemes
 private val LightColorScheme = lightColorScheme(
     primary = Color(0xFF6750A4),
     onPrimary = Color(0xFFFFFFFF),
@@ -74,27 +76,45 @@ private val DarkColorScheme = darkColorScheme(
     inversePrimary = Color(0xFF6750A4),
 )
 
+// Composable function to provide the color scheme based on Android version and theme
+@Composable
+fun getCurrentColorScheme(darkTheme: Boolean): ColorScheme {
+    val context = LocalContext.current
+
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        // Dynamic color scheme on Android 14 and above
+        if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+    } else {
+        // Fallback to predefined color schemes for older Android versions
+        if (darkTheme) DarkColorScheme else LightColorScheme
+    }
+}
+
 @Composable
 fun GShockSmartSyncTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+    val colorScheme = getCurrentColorScheme(darkTheme)
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            (view.context as Activity).window.statusBarColor = colorScheme.primary.toArgb()
-            ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = darkTheme
+            val activity = view.context as? Activity
+            val window = activity?.window
+
+            if (window != null) {
+                // Use decor fitting system windows for a more immersive layout
+                // WindowCompat.setDecorFitsSystemWindows(window, false)
+
+                // Set the status bar color (still the recommended way as of Android 34+)
+                window.statusBarColor = colorScheme.primary.toArgb()
+
+                // Configure light or dark appearance for the status bar icons
+                val insetsController = WindowCompat.getInsetsController(window, view)
+                insetsController.isAppearanceLightStatusBars = !darkTheme
+            }
         }
     }
 

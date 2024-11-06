@@ -49,7 +49,9 @@ import org.avmedia.gshockapi.WatchInfo
 
 class MainActivity : ComponentActivity() {
     // Use FragmentActivity to be able to handle popups like MaterialTimePickerDialog in AlarmsItem
-    private val api = GShockAPIMock(this)
+    // private val api = GShockAPIMock(this)
+    private val api = GShockAPI(this)
+
     private var deviceManager: DeviceManager
 
     init {
@@ -273,7 +275,8 @@ class MainActivity : ComponentActivity() {
             return instance!!.applicationContext
         }
 
-        fun api(): GShockAPIMock {
+        // fun api(): GShockAPIMock {
+        fun api(): GShockAPI {
             return instance!!.api
         }
     }
