@@ -392,39 +392,6 @@
     </incident>
 
     <incident
-        id="NewApi"
-        severity="error"
-        message="">
-        <fix-data minSdk="fffffffffe000000" requiresApi="fffffffc00000000"/>
-        <location
-            file="${:api*debug*MAIN*sourceProvider*0*javaDir*0}/org/avmedia/gshockapi/io/EventsIO.kt"
-            line="97"
-            column="24"
-            startOffset="3414"
-            endLine="97"
-            endColumn="34"
-            endOffset="3424"/>
-        <map>
-            <entry
-                name="owner"
-                string="java.util.ArrayList"/>
-            <api-levels id="minSdk"
-                value="fffffffffe000000"/>
-            <api-levels id="requiresApi"
-                value="fffffffc00000000"/>
-            <entry
-                name="name"
-                string="removeLast"/>
-            <entry
-                name="message"
-                string="Call requires API level 35 (current min is %1$s): `java.util.ArrayList#removeLast`"/>
-            <entry
-                name="desc"
-                string="()"/>
-        </map>
-    </incident>
-
-    <incident
         id="ObsoleteSdkInt"
         severity="warning"
         message="Unnecessary; SDK_INT is always >= 26">

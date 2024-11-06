@@ -54,7 +54,7 @@ fun Battery(timeModel: TimeViewModel = viewModel()) {
             .rotate(90f)
             .wrapContentHeight(),
         factory = { context ->
-            BatteryView(context, percent = result)
+            BatteryView(context)
         },
         update = { batteryView ->
             // Update the percent value when result changes
@@ -68,7 +68,6 @@ class BatteryView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
-    percent: Int = 0
 ) : View(context, attrs, defStyleAttr) {
     private var radius: Float = 0f
 

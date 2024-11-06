@@ -58,7 +58,7 @@
     <string name="operational_sound">按键音</string>
     <string name="power_saving_mode">省电模式</string>
     <string name="select_language">选择语言</string>
-    <string name="auto_fill_help">"<![CDATA[自动填充值的产生方式：
+    <string name="auto_fill_help"><![CDATA[自动填充值的产生方式：
         <li>时间日期与语言设置均从手机设置中获取</li>
         <li>按键音仅在手机置于勿扰模式时关闭</li>
         <li>在手表电量降至15%时自动开启省电模式</li>

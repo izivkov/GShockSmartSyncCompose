@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import java.text.SimpleDateFormat
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,7 +32,7 @@ fun AppTimePicker(
     initialHour: Int,
     initialMinute: Int,
 ) {
-    val timeFormat = if (SimpleDateFormat().toPattern()
+    val timeFormat = if (SimpleDateFormat("", Locale.getDefault()).toPattern()
             .split(" ")[1][0] == 'h'
     ) TimeFormat.TwelveHour else TimeFormat.TwentyFourHour
 

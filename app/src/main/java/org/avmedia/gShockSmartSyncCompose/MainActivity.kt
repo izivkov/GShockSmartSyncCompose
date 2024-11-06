@@ -1,13 +1,11 @@
 package org.avmedia.gShockSmartSyncCompose
 
 import android.Manifest
-import android.app.NotificationManager
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -17,15 +15,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import kotlinx.coroutines.CoroutineScope
@@ -47,7 +45,6 @@ import org.avmedia.gshockapi.EventAction
 import org.avmedia.gshockapi.GShockAPI
 import org.avmedia.gshockapi.ProgressEvents
 import org.avmedia.gshockapi.WatchInfo
-import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
     // Use FragmentActivity to be able to handle popups like MaterialTimePickerDialog in AlarmsItem
@@ -82,11 +79,16 @@ class MainActivity : ComponentActivity() {
                     PopupMessageReceiver()
 
                     Scaffold(
-                        snackbarHost = { SnackbarHost(hostState = SnackbarController.snackbarHostState!!) },
+                        snackbarHost = {
+                            SnackbarController.snackbarHostState?.let { nonNullHostState ->
+                                SnackbarHost(hostState = nonNullHostState)
+                            }
+                        },
                         modifier = Modifier.fillMaxSize()
-                    ) { _ ->
+                    ) { contentPadding ->
                         Surface(
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier.fillMaxSize()
+                            .padding(contentPadding),
                             color = MaterialTheme.colorScheme.background
                         ) {
                             Init()
@@ -99,18 +101,17 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun run() {
+    private fun Run() {
         AppScreen { PreConnectionScreen() }
 
-        val coroutineScope = rememberCoroutineScope()
-        coroutineScope.launch {
+        LaunchedEffect(Unit) {
             waitForConnectionCached()
         }
     }
 
     @Composable
     private fun RunWithChecks() {
-        run()
+        Run()
     }
 
     @Composable

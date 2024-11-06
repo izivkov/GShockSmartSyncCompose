@@ -1,9 +1,9 @@
 <libraries>
   <library
       name=":@@:api::debug"
-      jars="/home/izivkov/.gradle/caches/transforms-4/93c8f1b68f6c5a99f8ba32e273d0f159/transformed/out/jars/classes.jar:/home/izivkov/.gradle/caches/transforms-4/93c8f1b68f6c5a99f8ba32e273d0f159/transformed/out/jars/libs/R.jar"
+      jars="/home/izivkov/.gradle/caches/transforms-4/137a9c4d53bafd4c50f55a7b1503697d/transformed/out/jars/classes.jar:/home/izivkov/.gradle/caches/transforms-4/137a9c4d53bafd4c50f55a7b1503697d/transformed/out/jars/libs/R.jar"
       resolved="GShock Smart Sync Compose:api:unspecified"
-      folder="/home/izivkov/.gradle/caches/transforms-4/93c8f1b68f6c5a99f8ba32e273d0f159/transformed/out"
+      folder="/home/izivkov/.gradle/caches/transforms-4/137a9c4d53bafd4c50f55a7b1503697d/transformed/out"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"

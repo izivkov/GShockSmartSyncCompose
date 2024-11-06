@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -46,8 +47,8 @@ fun AlarmItem(
     var isEnabled by remember { mutableStateOf(isAlarmEnabled) }
     var showTimePickerDialog by remember { mutableStateOf(false) }
     var selectedTime by remember { mutableStateOf<TimePickerState?>(null) }
-    var alarmHours by remember { mutableStateOf(hours) }
-    var alarmMinutes by remember { mutableStateOf(minutes) }
+    var alarmHours by remember { mutableIntStateOf(hours) }
+    var alarmMinutes by remember { mutableIntStateOf(minutes) }
 
     val handleConfirm: (TimePickerState) -> Unit = { timePickerState ->
         selectedTime = timePickerState
@@ -136,11 +137,15 @@ fun formatTime(hours: Int, minutes: Int): String {
     }
 
     val sdf = SimpleDateFormat("H:mm", Locale.getDefault())
-    val dateObj: Date = sdf.parse(hours.toString() + ":" + minutes.toString())
+    val dateObj: Date = sdf.parse("${hours}:${minutes}")
 
-    val timeFormat = if (java.text.SimpleDateFormat()
-            .toPattern().split(" ")[1][0] == 'h'
-    ) "K:mm aa" else "H:mm"
+    val timeFormat = if (
+        SimpleDateFormat("", Locale.getDefault()).toPattern().split(" ").getOrNull(1)?.firstOrNull() == 'h'
+    ) {
+        "K:mm aa"
+    } else {
+        "H:mm"
+    }
 
     val time = SimpleDateFormat(timeFormat, Locale.getDefault()).format(dateObj)
     return if (timeFormat.contains("aa")) from0to12(time) else time

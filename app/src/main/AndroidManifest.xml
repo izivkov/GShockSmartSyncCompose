@@ -45,7 +45,6 @@
         <activity
                 android:name="org.avmedia.gShockSmartSyncCompose.MainActivity"
                 android:exported="true"
-                android:label="@string/app_name"
                 android:theme="@style/Theme.NavigationBarMedium">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
