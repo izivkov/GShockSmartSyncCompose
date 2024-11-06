@@ -43,7 +43,6 @@ import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
 import org.avmedia.gShockSmartSyncCompose.utils.Utils
 import org.avmedia.gshockapi.EventAction
 import org.avmedia.gshockapi.GShockAPI
-import org.avmedia.gshockapi.GShockAPIMock
 import org.avmedia.gshockapi.ProgressEvents
 import org.avmedia.gshockapi.WatchInfo
 
@@ -90,8 +89,9 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize()
                     ) { contentPadding ->
                         Surface(
-                            modifier = Modifier.fillMaxSize()
-                            .padding(contentPadding),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(contentPadding),
                             color = MaterialTheme.colorScheme.background
                         ) {
                             Init()
@@ -107,7 +107,8 @@ class MainActivity : ComponentActivity() {
     private fun Run() {
         AppScreen { PreConnectionScreen() }
 
-        LaunchedEffect(Unit) {
+        // Ensure a new LaunchedEffect is triggered each time Run() is called by using a unique key
+        LaunchedEffect(key1 = System.currentTimeMillis()) {
             waitForConnectionCached()
         }
     }

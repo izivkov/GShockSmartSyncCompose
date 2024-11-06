@@ -1,5 +1,48 @@
 <libraries>
   <library
+      name="no.nordicsemi.android.kotlin.ble:scanner:1.0.16@aar"
+      jars="/home/izivkov/.gradle/caches/transforms-4/7668b6ec227bea5972b6f4d04fcc4d38/transformed/scanner-1.0.16/jars/classes.jar"
+      resolved="no.nordicsemi.android.kotlin.ble:scanner:1.0.16"
+      folder="/home/izivkov/.gradle/caches/transforms-4/7668b6ec227bea5972b6f4d04fcc4d38/transformed/scanner-1.0.16"
+      manifest="AndroidManifest.xml"
+      resFolder="res"
+      assetsFolder="assets"
+      lintJar="lint.jar"
+      publicResources="public.txt"
+      symbolFile="R.txt"
+      externalAnnotations="annotations.zip"
+      proguardRules="proguard.txt"/>
+  <library
+      name="no.nordicsemi.android.kotlin.ble:client:1.0.16@aar"
+      jars="/home/izivkov/.gradle/caches/transforms-4/760ce7bca0946514c7f9bc572f7abcce/transformed/client-1.0.16/jars/classes.jar"
+      resolved="no.nordicsemi.android.kotlin.ble:client:1.0.16"
+      folder="/home/izivkov/.gradle/caches/transforms-4/760ce7bca0946514c7f9bc572f7abcce/transformed/client-1.0.16"
+      manifest="AndroidManifest.xml"
+      resFolder="res"
+      assetsFolder="assets"
+      lintJar="lint.jar"
+      publicResources="public.txt"
+      symbolFile="R.txt"
+      externalAnnotations="annotations.zip"
+      proguardRules="proguard.txt"/>
+  <library
+      name="com.jakewharton.timber:timber:5.0.1@aar"
+      jars="/home/izivkov/.gradle/caches/transforms-4/91f9557e75332f0c4512fc3ae39e9d11/transformed/timber-5.0.1/jars/classes.jar"
+      resolved="com.jakewharton.timber:timber:5.0.1"
+      folder="/home/izivkov/.gradle/caches/transforms-4/91f9557e75332f0c4512fc3ae39e9d11/transformed/timber-5.0.1"
+      manifest="AndroidManifest.xml"
+      resFolder="res"
+      assetsFolder="assets"
+      lintJar="lint.jar"
+      publicResources="public.txt"
+      symbolFile="R.txt"
+      externalAnnotations="annotations.zip"
+      proguardRules="proguard.txt"/>
+  <library
+      name="org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0@jar"
+      jars="/home/izivkov/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.9.0/f320478990d05e0cfaadd74f9619fd6027adbf37/kotlin-stdlib-jdk7-1.9.0.jar"
+      resolved="org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0"/>
+  <library
       name="com.google.android.material:material:1.12.0@aar"
       jars="/home/izivkov/.gradle/caches/transforms-4/afd39d33054809e7c3c7564cd053b96c/transformed/material-1.12.0/jars/classes.jar"
       resolved="com.google.android.material:material:1.12.0"
@@ -234,19 +277,6 @@
       externalAnnotations="annotations.zip"
       proguardRules="proguard.txt"/>
   <library
-      name="androidx.core:core:1.13.1@aar"
-      jars="/home/izivkov/.gradle/caches/transforms-4/1986bac901e9c5b92f328a1cec0755cd/transformed/core-1.13.1/jars/classes.jar"
-      resolved="androidx.core:core:1.13.1"
-      folder="/home/izivkov/.gradle/caches/transforms-4/1986bac901e9c5b92f328a1cec0755cd/transformed/core-1.13.1"
-      manifest="AndroidManifest.xml"
-      resFolder="res"
-      assetsFolder="assets"
-      lintJar="lint.jar"
-      publicResources="public.txt"
-      symbolFile="R.txt"
-      externalAnnotations="annotations.zip"
-      proguardRules="proguard.txt"/>
-  <library
       name="androidx.lifecycle:lifecycle-livedata:2.6.2@aar"
       jars="/home/izivkov/.gradle/caches/transforms-4/47b438a7ae5084a520b1770d5c00c6d2/transformed/lifecycle-livedata-2.6.2/jars/classes.jar"
       resolved="androidx.lifecycle:lifecycle-livedata:2.6.2"
@@ -316,10 +346,10 @@
       externalAnnotations="annotations.zip"
       proguardRules="proguard.txt"/>
   <library
-      name="androidx.core:core-ktx:1.13.1@aar"
-      jars="/home/izivkov/.gradle/caches/transforms-4/4523ed08688788bd24be4333da6133c4/transformed/core-ktx-1.13.1/jars/classes.jar"
-      resolved="androidx.core:core-ktx:1.13.1"
-      folder="/home/izivkov/.gradle/caches/transforms-4/4523ed08688788bd24be4333da6133c4/transformed/core-ktx-1.13.1"
+      name="androidx.core:core-ktx:1.13.0@aar"
+      jars="/home/izivkov/.gradle/caches/transforms-4/c5fc2a96abac953d0a8c49e4003a019b/transformed/core-ktx-1.13.0/jars/classes.jar"
+      resolved="androidx.core:core-ktx:1.13.0"
+      folder="/home/izivkov/.gradle/caches/transforms-4/c5fc2a96abac953d0a8c49e4003a019b/transformed/core-ktx-1.13.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -329,10 +359,10 @@
       externalAnnotations="annotations.zip"
       proguardRules="proguard.txt"/>
   <library
-      name="no.nordicsemi.android.kotlin.ble:scanner:1.0.16@aar"
-      jars="/home/izivkov/.gradle/caches/transforms-4/7668b6ec227bea5972b6f4d04fcc4d38/transformed/scanner-1.0.16/jars/classes.jar"
-      resolved="no.nordicsemi.android.kotlin.ble:scanner:1.0.16"
-      folder="/home/izivkov/.gradle/caches/transforms-4/7668b6ec227bea5972b6f4d04fcc4d38/transformed/scanner-1.0.16"
+      name="androidx.core:core:1.13.0@aar"
+      jars="/home/izivkov/.gradle/caches/transforms-4/6d33bf879e6f41c48056152d180cf270/transformed/core-1.13.0/jars/classes.jar"
+      resolved="androidx.core:core:1.13.0"
+      folder="/home/izivkov/.gradle/caches/transforms-4/6d33bf879e6f41c48056152d180cf270/transformed/core-1.13.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -341,36 +371,6 @@
       symbolFile="R.txt"
       externalAnnotations="annotations.zip"
       proguardRules="proguard.txt"/>
-  <library
-      name="no.nordicsemi.android.kotlin.ble:client:1.0.16@aar"
-      jars="/home/izivkov/.gradle/caches/transforms-4/760ce7bca0946514c7f9bc572f7abcce/transformed/client-1.0.16/jars/classes.jar"
-      resolved="no.nordicsemi.android.kotlin.ble:client:1.0.16"
-      folder="/home/izivkov/.gradle/caches/transforms-4/760ce7bca0946514c7f9bc572f7abcce/transformed/client-1.0.16"
-      manifest="AndroidManifest.xml"
-      resFolder="res"
-      assetsFolder="assets"
-      lintJar="lint.jar"
-      publicResources="public.txt"
-      symbolFile="R.txt"
-      externalAnnotations="annotations.zip"
-      proguardRules="proguard.txt"/>
-  <library
-      name="com.jakewharton.timber:timber:5.0.1@aar"
-      jars="/home/izivkov/.gradle/caches/transforms-4/91f9557e75332f0c4512fc3ae39e9d11/transformed/timber-5.0.1/jars/classes.jar"
-      resolved="com.jakewharton.timber:timber:5.0.1"
-      folder="/home/izivkov/.gradle/caches/transforms-4/91f9557e75332f0c4512fc3ae39e9d11/transformed/timber-5.0.1"
-      manifest="AndroidManifest.xml"
-      resFolder="res"
-      assetsFolder="assets"
-      lintJar="lint.jar"
-      publicResources="public.txt"
-      symbolFile="R.txt"
-      externalAnnotations="annotations.zip"
-      proguardRules="proguard.txt"/>
-  <library
-      name="org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0@jar"
-      jars="/home/izivkov/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.9.0/f320478990d05e0cfaadd74f9619fd6027adbf37/kotlin-stdlib-jdk7-1.9.0.jar"
-      resolved="org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0"/>
   <library
       name="androidx.savedstate:savedstate:1.2.1@aar"
       jars="/home/izivkov/.gradle/caches/transforms-4/b8b6811b2e1083a32bc5cbe63007fe14/transformed/savedstate-1.2.1/jars/classes.jar"
