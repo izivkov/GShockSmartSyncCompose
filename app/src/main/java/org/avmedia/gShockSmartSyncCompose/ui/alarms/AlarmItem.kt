@@ -4,6 +4,7 @@ import AppSwitch
 import AppText
 import AppTextExtraLarge
 import android.icu.text.SimpleDateFormat
+import android.text.format.DateFormat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +30,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationContext
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 import org.avmedia.gShockSmartSyncCompose.ui.common.AppTimePicker
@@ -139,13 +141,8 @@ fun formatTime(hours: Int, minutes: Int): String {
     val sdf = SimpleDateFormat("H:mm", Locale.getDefault())
     val dateObj: Date = sdf.parse("${hours}:${minutes}")
 
-    val timeFormat = if (
-        SimpleDateFormat("", Locale.getDefault()).toPattern().split(" ").getOrNull(1)?.firstOrNull() == 'h'
-    ) {
-        "K:mm aa"
-    } else {
-        "H:mm"
-    }
+    val is24HourFormat = DateFormat.is24HourFormat(applicationContext())
+    val timeFormat = if (is24HourFormat) { "H:mm" } else { "K:mm aa" }
 
     val time = SimpleDateFormat(timeFormat, Locale.getDefault()).format(dateObj)
     return if (timeFormat.contains("aa")) from0to12(time) else time

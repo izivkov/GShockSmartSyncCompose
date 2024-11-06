@@ -283,7 +283,7 @@ class GShockAPIMock(private val context: Context) {
         println("Settings set: $settings")
     }
 
-    fun disconnect(context: Context) {
+    fun disconnect() {
         println("Disconnected")
     }
 
