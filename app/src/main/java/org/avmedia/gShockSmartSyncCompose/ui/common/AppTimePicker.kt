@@ -1,6 +1,7 @@
 package org.avmedia.gShockSmartSyncCompose.ui.common
 
 import TimeFormat
+import android.text.format.DateFormat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,8 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import java.text.SimpleDateFormat
-import java.util.Locale
+import org.avmedia.gShockSmartSyncCompose.MainActivity.Companion.applicationContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,9 +32,11 @@ fun AppTimePicker(
     initialHour: Int,
     initialMinute: Int,
 ) {
-    val timeFormat = if (SimpleDateFormat("", Locale.getDefault()).toPattern()
-            .split(" ")[1][0] == 'h'
-    ) TimeFormat.TwelveHour else TimeFormat.TwentyFourHour
+    val timeFormat = if (DateFormat.is24HourFormat(applicationContext())) {
+        TimeFormat.TwentyFourHour
+    } else {
+        TimeFormat.TwelveHour
+    }
 
     val timePickerState = rememberTimePickerState(
         initialHour,
