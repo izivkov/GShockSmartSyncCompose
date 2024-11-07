@@ -186,6 +186,7 @@ object ActionsViewModel : ViewModel() {
 
         override fun run(context: Context) {
             Timber.d("running ${this.javaClass.simpleName}")
+            AppSnackbar("When found, lift phone to stop ringing")
             PhoneFinder.ring(context)
         }
 

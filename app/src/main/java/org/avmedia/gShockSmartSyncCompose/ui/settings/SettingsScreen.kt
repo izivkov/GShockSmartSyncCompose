@@ -2,8 +2,10 @@ package org.avmedia.gShockSmartSyncCompose.ui.settings
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -104,12 +106,16 @@ fun BottomRow(
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 26.dp),
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,  // Center vertically
             horizontalArrangement = Arrangement.SpaceEvenly,  // Arrange horizontally, starting from the left
         ) {
-            InfoButton(infoText = stringResource(id = R.string.auto_fill_help))
+            Box(
+                modifier = Modifier.weight(1f).fillMaxWidth().padding(end = 0.dp),
+                contentAlignment = Alignment.CenterEnd  // Aligns content to the right
+            ) {
+                InfoButton(infoText = stringResource(id = R.string.auto_fill_help))
+            }
 
             val buttons = arrayListOf(
                 ButtonData(
@@ -121,7 +127,9 @@ fun BottomRow(
                     onClick = { settingsViewModel.sendToWatch() })
             )
 
-            ButtonsRow(buttons = buttons)
+            ButtonsRow(buttons = buttons, modifier = Modifier.weight(2f))
+
+            Spacer(modifier = Modifier.weight(1f))  // Spacer to push buttons to the right
         }
     }
 }

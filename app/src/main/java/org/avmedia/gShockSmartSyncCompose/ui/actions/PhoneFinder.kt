@@ -23,8 +23,6 @@ class PhoneFinder {
         var resetVolume: () -> Unit? = {}
 
         fun ring(context: Context) {
-            AppSnackbar("When found, lift phone to stop ringing")
-
             // get alarm uri
             var alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
             if (alarmUri == null) {

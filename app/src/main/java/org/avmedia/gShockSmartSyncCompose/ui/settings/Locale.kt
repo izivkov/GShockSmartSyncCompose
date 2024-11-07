@@ -154,7 +154,8 @@ fun Locale(
 
                 LanguageDropdownMenu(
                     modifier = Modifier
-                        .weight(1.5f),
+                        .weight(1f)
+                        .padding(bottom = 2.dp),
                     onUpdate = onUpdate,
                     localeSetting = localeSetting,
                 )
