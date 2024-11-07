@@ -43,6 +43,8 @@ private class GShockManagerImpl(
     context: Context,
 ) : BleManager(context), GSHock {
 
+// object IGShockManager  : BleManager(context), GSHock {
+
     private lateinit var readCharacteristicHolder: BluetoothGattCharacteristic
     private lateinit var writeCharacteristicHolder: BluetoothGattCharacteristic
     var dataReceivedCallback: IDataReceived? = null
