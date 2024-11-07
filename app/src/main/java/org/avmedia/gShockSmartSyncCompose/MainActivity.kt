@@ -14,6 +14,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.core.app.ActivityCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +45,6 @@ import org.avmedia.gShockSmartSyncCompose.utils.LocalDataStorage
 import org.avmedia.gShockSmartSyncCompose.utils.Utils
 import org.avmedia.gshockapi.EventAction
 import org.avmedia.gshockapi.GShockAPI
-import org.avmedia.gshockapi.GShockAPIMock
 import org.avmedia.gshockapi.ProgressEvents
 import org.avmedia.gshockapi.WatchInfo
 
@@ -79,7 +80,6 @@ class MainActivity : ComponentActivity() {
 
                 GShockSmartSyncTheme {
                     SnackbarController.snackbarHostState = remember { SnackbarHostState() }
-                    PopupMessageReceiver()
 
                     Scaffold(
                         snackbarHost = {
@@ -123,10 +123,17 @@ class MainActivity : ComponentActivity() {
     fun AppScreen(content: @Composable () -> Unit) {
         GShockSmartSyncTheme {
             Surface(
-                modifier = Modifier.fillMaxSize(),  // Use full screen size for consistency
+                modifier = Modifier
+                    .fillMaxSize()
+                    .pointerInput(Unit) {
+                        detectTapGestures {
+                            InactivityWatcher.resetTimer(this@MainActivity)
+                        }
+                    },  // Use full screen size for consistency
                 color = MaterialTheme.colorScheme.background
             ) {
                 content()
+                PopupMessageReceiver()
             }
         }
     }
@@ -144,14 +151,12 @@ class MainActivity : ComponentActivity() {
             },
 
             EventAction("WatchInitializationCompleted") {
-
                 setContent {
                     AppScreen {
                         if (api().isActionButtonPressed() || api().isAutoTimeStarted() || api().isFindPhoneButtonPressed()) {
                             RunActionsScreen()
                         } else {
                             BottomNavigationBarWithPermissions()
-                            PopupMessageReceiver()
                         }
                     }
                 }
@@ -201,6 +206,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private suspend fun waitForConnectionCached() {
+
         // Use this variable to control whether we should try to scan each time for the watch,
         // or reuse the last saved address. If set tto false, the connection is a bit slower,
         // but the app can connect to multiple watches without pressing "FORGET".

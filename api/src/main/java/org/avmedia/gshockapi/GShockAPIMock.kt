@@ -32,8 +32,8 @@ class GShockAPIMock(private val context: Context) {
     }
 
     suspend fun waitForConnection(deviceId: String? = "", deviceName: String? = "") {
-        ProgressEvents.onNext("WaitForConnection")
-        delay(1000)
+//        ProgressEvents.onNext("WaitForConnection")
+//        delay(1000)
 
         ProgressEvents.onNext("DeviceName", "CASIO GW-B5600")
         //delay(1000)

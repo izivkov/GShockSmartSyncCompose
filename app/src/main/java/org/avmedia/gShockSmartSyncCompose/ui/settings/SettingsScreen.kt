@@ -111,7 +111,10 @@ fun BottomRow(
             horizontalArrangement = Arrangement.SpaceEvenly,  // Arrange horizontally, starting from the left
         ) {
             Box(
-                modifier = Modifier.weight(1f).fillMaxWidth().padding(end = 0.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(end = 0.dp),
                 contentAlignment = Alignment.CenterEnd  // Aligns content to the right
             ) {
                 InfoButton(infoText = stringResource(id = R.string.auto_fill_help))
@@ -127,9 +130,10 @@ fun BottomRow(
                     onClick = { settingsViewModel.sendToWatch() })
             )
 
-            ButtonsRow(buttons = buttons, modifier = Modifier.weight(2f))
+            ButtonsRow(buttons = buttons, modifier = Modifier.weight(2.5f))
 
-            Spacer(modifier = Modifier.weight(1f))  // Spacer to push buttons to the right
+            Spacer(modifier = Modifier.weight(1f))
+
         }
     }
 }

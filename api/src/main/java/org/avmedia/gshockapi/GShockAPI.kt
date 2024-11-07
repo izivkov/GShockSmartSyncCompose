@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import kotlinx.coroutines.delay
 import org.avmedia.gshockapi.ble.Connection
 import org.avmedia.gshockapi.casio.*
 import org.avmedia.gshockapi.io.*
@@ -63,8 +64,10 @@ class GShockAPI(private val context: Context) {
      */
 
     suspend fun waitForConnection(deviceId: String? = "", deviceName: String? = "") {
-        println("...waitForConnection...")
+
         Connection.stopBleScan()
+
+        delay(1000) // wait to settle after disconnection. The watch thinks it is still connected.
 
         val connectedStatus =
             WaitForConnectionIO.request(context, deviceId, deviceName)
@@ -79,7 +82,7 @@ class GShockAPI(private val context: Context) {
         getPressedButton()
         ProgressEvents.onNext("ButtonPressedInfoReceived")
 
-        getAppInfo() // this call re-enables lower-right button after watch reset.
+        getAppInfo()
         ProgressEvents.onNext("WatchInitializationCompleted")
         return true
     }

@@ -11,6 +11,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.avmedia.gshockapi.ProgressEvents
 import org.avmedia.gshockapi.WatchInfo
@@ -35,7 +36,6 @@ object Connection {
 
     fun disconnect() {
         bleManager?.release()
-
     }
 
     fun isConnected(): Boolean {
