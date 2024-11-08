@@ -14,7 +14,7 @@ import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
 fun RemindersView(
-    onUpdate: (ActionsViewModel.SetEventsAction) -> Unit = ActionsViewModel::updateAction,
+    onUpdate: (ActionsViewModel.SetEventsAction) -> Unit,
     actionsViewModel: ActionsViewModel = viewModel(),
 ) {
     val classType = ActionsViewModel.SetEventsAction::class.java
@@ -44,6 +44,6 @@ fun RemindersView(
 @Preview(showBackground = true)
 @Composable
 fun PreviewReminders() {
-    RemindersView()
+    RemindersView(onUpdate = {})
 }
 

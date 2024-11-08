@@ -26,7 +26,7 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.AppIconFromResource
 
 @Composable
 fun PhotoView(
-    onUpdate: (ActionsViewModel.PhotoAction) -> Unit = ActionsViewModel::updateAction,
+    onUpdate: (ActionsViewModel.PhotoAction) -> Unit,
     actionsViewModel: ActionsViewModel = viewModel()
 ) {
     val classType = ActionsViewModel.PhotoAction::class.java
@@ -127,5 +127,5 @@ fun PhotoView(
 @Preview(showBackground = true)
 @Composable
 fun PreviewPhoto() {
-    PhotoView()
+    PhotoView(onUpdate = {})
 }

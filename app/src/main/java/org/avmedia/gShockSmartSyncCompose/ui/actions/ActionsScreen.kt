@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
@@ -67,19 +68,21 @@ fun ActionList() {
 
     @Composable
     fun createActions(): List<Any> {
+        val actionsViewModel: ActionsViewModel = viewModel()
+
         return listOfNotNull(
             // PhoneFinderView().takeIf { WatchInfo.findButtonUserDefined }, // this should work but it doesn't. Why?
-            if (WatchInfo.findButtonUserDefined) PhoneFinderView() else null,
+            if (WatchInfo.findButtonUserDefined) PhoneFinderView(actionsViewModel::updateAction) else null,
 
-            SetTimeView(),
-            if (WatchInfo.hasReminders) RemindersView() else null,
-            PhotoView(),
-            FlashlightView(),
-            VoiceAssistView(),
-            SkipToNextTrackView(),
-            PrayerAlarmsView(),
+            SetTimeView(actionsViewModel::updateAction),
+            if (WatchInfo.hasReminders) RemindersView(actionsViewModel::updateAction) else null,
+            PhotoView(actionsViewModel::updateAction),
+            FlashlightView(actionsViewModel::updateAction),
+            VoiceAssistView(actionsViewModel::updateAction),
+            SkipToNextTrackView(actionsViewModel::updateAction),
+            PrayerAlarmsView(actionsViewModel::updateAction),
             SeparatorView(),
-            PhoneView(),
+            PhoneView(actionsViewModel::updateAction),
         )
     }
 

@@ -14,6 +14,7 @@ import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
 fun PowerSavings(
+    onUpdate: (SettingsViewModel.PowerSavingMode) -> Unit,
     settingsViewModel: SettingsViewModel = viewModel()
 ) {
     val classType = SettingsViewModel.PowerSavingMode::class.java
@@ -32,6 +33,7 @@ fun PowerSavings(
         onSwitchToggle = { newValue ->
             powerSavingMode = newValue // Update the state when the switch is toggled
             powerSavingModeSetting.powerSavingMode = newValue
+            onUpdate(powerSavingModeSetting.copy(powerSavingMode = newValue))
         }
     )
 }
@@ -39,5 +41,5 @@ fun PowerSavings(
 @Preview(showBackground = true)
 @Composable
 fun PreviewPowerSavings() {
-    PowerSavings()
+    PowerSavings(onUpdate = {})
 }

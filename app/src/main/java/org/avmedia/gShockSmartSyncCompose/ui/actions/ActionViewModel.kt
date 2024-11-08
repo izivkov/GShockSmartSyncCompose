@@ -29,7 +29,7 @@ import java.text.DateFormat
 import java.time.Clock
 import java.util.Date
 
-object ActionsViewModel : ViewModel() {
+class ActionsViewModel : ViewModel() {
     private val _actions = MutableStateFlow<ArrayList<Action>>(arrayListOf())
     val actions: StateFlow<List<Action>> = _actions
 

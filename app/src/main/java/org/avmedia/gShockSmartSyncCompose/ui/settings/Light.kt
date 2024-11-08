@@ -31,7 +31,7 @@ import org.avmedia.gshockapi.WatchInfo
 
 @Composable
 fun Light(
-    onUpdate: (SettingsViewModel.Light) -> Unit = SettingsViewModel::updateSetting,
+    onUpdate: (SettingsViewModel.Light) -> Unit,
     settingsViewModel: SettingsViewModel = viewModel()
 ) {
     val classType = SettingsViewModel.Light::class.java

@@ -14,7 +14,7 @@ import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
 fun SkipToNextTrackView(
-    onUpdate: (ActionsViewModel.NextTrack) -> Unit = ActionsViewModel::updateAction,
+    onUpdate: (ActionsViewModel.NextTrack) -> Unit,
     actionsViewModel: ActionsViewModel = viewModel(),
 ) {
     val classType = ActionsViewModel.NextTrack::class.java
@@ -45,6 +45,6 @@ fun SkipToNextTrackView(
 @Preview(showBackground = true)
 @Composable
 fun PreviewSkipToNextTrack() {
-    SkipToNextTrackView()
+    SkipToNextTrackView(onUpdate = {})
 }
 

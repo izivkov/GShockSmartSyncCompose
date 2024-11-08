@@ -14,6 +14,7 @@ import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
 fun OperationalTone(
+    onUpdate: (SettingsViewModel.OperationSound) -> Unit,
     settingsViewModel: SettingsViewModel = viewModel()
 ) {
     val classType = SettingsViewModel.OperationSound::class.java
@@ -33,12 +34,13 @@ fun OperationalTone(
         onSwitchToggle = { newValue ->
             sound = newValue // Update the state when the switch is toggled
             operationToneSetting.sound = newValue
-        }
+            onUpdate(operationToneSetting.copy(sound = newValue))
+        },
     )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewOperationalTone() {
-    OperationalTone()
+    OperationalTone(onUpdate = {})
 }

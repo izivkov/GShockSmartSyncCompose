@@ -14,7 +14,7 @@ import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
 fun VoiceAssistView(
-    onUpdate: (ActionsViewModel.StartVoiceAssistAction) -> Unit = ActionsViewModel::updateAction,
+    onUpdate: (ActionsViewModel.StartVoiceAssistAction) -> Unit,
     actionsViewModel: ActionsViewModel = viewModel(),
 ) {
     val classType = ActionsViewModel.StartVoiceAssistAction::class.java
@@ -44,6 +44,6 @@ fun VoiceAssistView(
 @Preview(showBackground = true)
 @Composable
 fun PreviewVoiceAssist() {
-    VoiceAssistView()
+    VoiceAssistView(onUpdate = {})
 }
 

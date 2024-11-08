@@ -14,7 +14,7 @@ import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
 fun PhoneFinderView(
-    onUpdate: (ActionsViewModel.FindPhoneAction) -> Unit = ActionsViewModel::updateAction,
+    onUpdate: (ActionsViewModel.FindPhoneAction) -> Unit,
     actionsViewModel: ActionsViewModel = viewModel()
 ) {
     val classType = ActionsViewModel.FindPhoneAction::class.java
@@ -43,6 +43,6 @@ fun PhoneFinderView(
 @Preview(showBackground = true)
 @Composable
 fun PreviewPhoneFinderView() {
-    PhoneFinderView()
+    PhoneFinderView(onUpdate = {})
 }
 

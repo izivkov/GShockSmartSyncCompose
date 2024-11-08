@@ -14,7 +14,7 @@ import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
 fun PrayerAlarmsView(
-    onUpdate: (ActionsViewModel.PrayerAlarmsAction) -> Unit = ActionsViewModel::updateAction,
+    onUpdate: (ActionsViewModel.PrayerAlarmsAction) -> Unit,
     actionsViewModel: ActionsViewModel = viewModel(),
 ) {
     val classType = ActionsViewModel.PrayerAlarmsAction::class.java
@@ -45,6 +45,6 @@ fun PrayerAlarmsView(
 @Preview(showBackground = true)
 @Composable
 fun PreviewPrayerAction() {
-    PrayerAlarmsView()
+    PrayerAlarmsView(onUpdate = {})
 }
 

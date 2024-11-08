@@ -24,6 +24,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.avmedia.gShockSmartSyncCompose.R
 import org.avmedia.gShockSmartSyncCompose.theme.GShockSmartSyncTheme
+import org.avmedia.gShockSmartSyncCompose.ui.actions.ActionsViewModel
 import org.avmedia.gShockSmartSyncCompose.ui.common.ButtonData
 import org.avmedia.gShockSmartSyncCompose.ui.common.ButtonsRow
 import org.avmedia.gShockSmartSyncCompose.ui.common.InfoButton
@@ -79,13 +80,15 @@ fun SettingsScreen() {
 @Composable
 fun SettingsList() {
 
+    val settingsViewModel: SettingsViewModel = viewModel()
+
     val settingsViews = arrayListOf(
-        Locale(),
-        OperationalTone(),
-        Light()
+        Locale(settingsViewModel::updateSetting),
+        OperationalTone(settingsViewModel::updateSetting),
+        Light(settingsViewModel::updateSetting)
     ).apply {
-        if (WatchInfo.hasPowerSavingMode) add(PowerSavings())
-        if (!WatchInfo.alwaysConnected) add(TimeAdjustment())
+        if (WatchInfo.hasPowerSavingMode) add(PowerSavings(settingsViewModel::updateSetting))
+        if (!WatchInfo.alwaysConnected) add(TimeAdjustment(settingsViewModel::updateSetting))
     }
 
     Column(

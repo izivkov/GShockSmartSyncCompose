@@ -23,7 +23,7 @@ import org.json.JSONObject
 import java.text.SimpleDateFormat
 import kotlin.coroutines.CoroutineContext
 
-object SettingsViewModel : ViewModel() {
+class SettingsViewModel : ViewModel() {
     abstract class Setting(open var title: String) {
         open fun save() {}
     }

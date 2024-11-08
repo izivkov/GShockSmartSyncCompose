@@ -33,7 +33,7 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.InfoButton
 
 @Composable
 fun TimeAdjustment(
-    onUpdate: (SettingsViewModel.TimeAdjustment) -> Unit = SettingsViewModel::updateSetting,
+    onUpdate: (SettingsViewModel.TimeAdjustment) -> Unit,
     settingsViewModel: SettingsViewModel = viewModel()
 ) {
     val classType = SettingsViewModel.TimeAdjustment::class.java
@@ -126,7 +126,8 @@ fun TimeAdjustment(
 
             FineAdjustmentRow(
                 modifier = Modifier
-                    .padding(end = 12.dp, start = 12.dp, top = 6.dp)
+                    .padding(end = 12.dp, start = 12.dp, top = 6.dp),
+                onUpdate = onUpdate,
             )
 
             Row(
@@ -155,7 +156,7 @@ fun TimeAdjustment(
 @Preview(showBackground = true)
 @Composable
 fun PreviewTimeAdjustment() {
-    TimeAdjustment()
+    TimeAdjustment(onUpdate = {})
 }
 
 

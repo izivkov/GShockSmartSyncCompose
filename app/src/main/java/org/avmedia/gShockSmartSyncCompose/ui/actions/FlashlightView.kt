@@ -14,20 +14,28 @@ import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
 fun FlashlightView(
-    onUpdate: (ActionsViewModel.ToggleFlashlightAction) -> Unit = ActionsViewModel::updateAction,
+    onUpdate: (ActionsViewModel.ToggleFlashlightAction) -> Unit,
     actionsViewModel: ActionsViewModel = viewModel()
 ) {
+    // Access the class type for the action we need
     val classType = ActionsViewModel.ToggleFlashlightAction::class.java
+
+    // Collect the state of actions from the ViewModel
     val actions by actionsViewModel.actions.collectAsState()
+
+    // Retrieve the flashlight action from the ViewModel
     val flashlightAction: ActionsViewModel.ToggleFlashlightAction =
         actionsViewModel.getAction(classType)
 
+    // Remember the enabled state of the flashlight action
     var isEnabled by remember { mutableStateOf(flashlightAction.enabled) }
 
+    // Update `isEnabled` whenever `actions` or `flashlightAction` changes
     LaunchedEffect(actions, flashlightAction) {
         isEnabled = flashlightAction.enabled
     }
 
+    // Display the ActionItem with updated state and handle changes to `isEnabled`
     ActionItem(
         title = stringResource(id = R.string.toggle_flashlight),
         resourceId = R.drawable.flashlight,
@@ -35,7 +43,7 @@ fun FlashlightView(
         onEnabledChange = { newValue ->
             isEnabled = newValue // Update the state when the switch is toggled
             flashlightAction.enabled = newValue
-            onUpdate(flashlightAction.copy(enabled = newValue))
+            onUpdate(flashlightAction.copy(enabled = newValue)) // Pass the updated action
         },
     )
 }
@@ -43,6 +51,6 @@ fun FlashlightView(
 @Preview(showBackground = true)
 @Composable
 fun PreviewFlashlight() {
-    FlashlightView()
+    FlashlightView(onUpdate={})
 }
 

@@ -36,7 +36,7 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.AppCard
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Locale(
-    onUpdate: (SettingsViewModel.Locale) -> Unit = SettingsViewModel::updateSetting,
+    onUpdate: (SettingsViewModel.Locale) -> Unit,
     settingsViewModel: SettingsViewModel = viewModel()
 ) {
     val classType = SettingsViewModel.Locale::class.java
@@ -167,7 +167,7 @@ fun Locale(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LanguageDropdownMenu(
-    onUpdate: (SettingsViewModel.Locale) -> Unit = SettingsViewModel::updateSetting,
+    onUpdate: (SettingsViewModel.Locale) -> Unit,
     localeSetting: SettingsViewModel.Locale,
     modifier: Modifier,
     settingsViewModel: SettingsViewModel = viewModel()
@@ -221,6 +221,6 @@ fun LanguageDropdownMenu(
 @Preview(showBackground = true)
 @Composable
 fun PreviewLocale() {
-    Locale()
+    Locale(onUpdate = {})
 }
 

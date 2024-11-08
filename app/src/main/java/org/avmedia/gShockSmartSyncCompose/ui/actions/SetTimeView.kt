@@ -14,7 +14,7 @@ import org.avmedia.gShockSmartSyncCompose.R
 
 @Composable
 fun SetTimeView(
-    onUpdate: (ActionsViewModel.SetTimeAction) -> Unit = ActionsViewModel::updateAction,
+    onUpdate: (ActionsViewModel.SetTimeAction) -> Unit,
     actionsViewModel: ActionsViewModel = viewModel(),
 ) {
     val classType = ActionsViewModel.SetTimeAction::class.java
@@ -44,6 +44,6 @@ fun SetTimeView(
 @Preview(showBackground = true)
 @Composable
 fun PreviewSetTime() {
-    SetTimeView()
+    SetTimeView(onUpdate = {})
 }
 

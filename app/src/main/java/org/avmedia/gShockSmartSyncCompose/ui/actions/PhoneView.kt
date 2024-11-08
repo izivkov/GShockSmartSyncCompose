@@ -26,7 +26,7 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.AppTextField
 
 @Composable
 fun PhoneView(
-    onUpdate: (ActionsViewModel.PhoneDialAction) -> Unit = ActionsViewModel::updateAction,
+    onUpdate: (ActionsViewModel.PhoneDialAction) -> Unit,
     actionsViewModel: ActionsViewModel = viewModel(),
 ) {
     val classType = ActionsViewModel.PhoneDialAction::class.java
@@ -102,5 +102,5 @@ fun PhoneView(
 @Preview(showBackground = true)
 @Composable
 fun PreviewPhoneCall() {
-    PhoneView()
+    PhoneView(onUpdate = {})
 }

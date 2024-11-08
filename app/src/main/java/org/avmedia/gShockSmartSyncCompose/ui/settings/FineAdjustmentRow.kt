@@ -27,7 +27,7 @@ import org.avmedia.gShockSmartSyncCompose.ui.common.InfoButton
 @Composable
 fun FineAdjustmentRow(
     modifier: Modifier = Modifier,
-    onUpdate: (SettingsViewModel.TimeAdjustment) -> Unit = SettingsViewModel::updateSetting,
+    onUpdate: (SettingsViewModel.TimeAdjustment) -> Unit,
     settingsViewModel: SettingsViewModel = viewModel()
 ) {
     val classType = SettingsViewModel.TimeAdjustment::class.java
