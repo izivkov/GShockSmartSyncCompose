@@ -47,6 +47,8 @@ import org.avmedia.gshockapi.EventAction
 import org.avmedia.gshockapi.GShockAPI
 import org.avmedia.gshockapi.ProgressEvents
 import org.avmedia.gshockapi.WatchInfo
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
     // Use FragmentActivity to be able to handle popups like MaterialTimePickerDialog in AlarmsItem
@@ -194,9 +196,12 @@ class MainActivity : ComponentActivity() {
                 if (device != null) {
                     api().teardownConnection(device)
                 }
-                setContent {
-                    RunWithChecks()
-                }
+
+                Executors.newSingleThreadScheduledExecutor().schedule({
+                    setContent {
+                        RunWithChecks()
+                    }
+                }, 3L, TimeUnit.SECONDS)
             },
             EventAction("HomeTimeUpdated")
             {},

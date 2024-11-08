@@ -67,8 +67,6 @@ class GShockAPI(private val context: Context) {
 
         Connection.stopBleScan()
 
-        delay(1000) // wait to settle after disconnection. The watch thinks it is still connected.
-
         val connectedStatus =
             WaitForConnectionIO.request(context, deviceId, deviceName)
         if (connectedStatus == "OK") {
